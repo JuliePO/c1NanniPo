@@ -1,6 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void main (void) {
-	
+int main(int argc, char const *argv[])
+{
+	printf("Hello world !\n");	
+	return 0;
+
 }
+//test commit laeti
