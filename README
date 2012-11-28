@@ -1,3 +1,22 @@
-﻿ # Ceci seras un fichier qui vas décrire notre projet 
-test
-test 2 yeah !!
+﻿------
+28 11 12 = Dernières modifications : 
+
+Organisation des dossiers du projet :
+
+les fichiers de la lib glimagimp donnée par le prof se trouvent maintenant dans le dossier lib/ organisés selon le pdf comme suit: 
+
+/lib
+	/src
+	/include
+	Makefile
+	(+ autres fichiers necessaires à la lib)
+ 
+ 
+
+le dossier sample est le dossier donné par le prof: il sert un peu de crash test
+le dossier src/ est la base de notre programme avec le main.c ===> on travail dedans !!
+
+Le makefile de la racine gère notamment le src/main.c et l'executable dans obj/imagimp.
+
+------
+laetitia.
