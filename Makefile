@@ -1,5 +1,5 @@
 # $(BIN) est la nom du binaire genere
-BIN = ./obj/imagimp
+BIN = ./bin/imagimp
 # FLAG
 FLAGS = -Wall -g
 # INCLUDES
