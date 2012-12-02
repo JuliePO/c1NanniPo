@@ -1,3 +1,8 @@
+#ifndef IMAGE_H
+#define IMAGE_H
+#include <stdio.h>
+#include <stdlib.h>
+
 // STRUCTURE DE L'IMAGE 
 typedef struct Image {
 
@@ -16,4 +21,6 @@ typedef struct Image {
 }Image;
 
 //Appel de fonction
-int openImg(Image*, char*);
+void openImg(Image*, char*);
+
+#endif

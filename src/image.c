@@ -31,8 +31,8 @@ void openImg(Image* img, char* nameImg){
 	image = fopen(nameImg, "w");
 	
 	if(image == NULL){
-		printf("Il y a un problème avec l'image");
-		return;
+		printf("Erreur : Impossible d'ouvrir l'image");
+		return NULL;
 	}
 	else{
 
@@ -46,9 +46,9 @@ void openImg(Image* img, char* nameImg){
 			
 			//Récupère la hauteur, la largeur et la résolution de la couleur
 			fscanf(image, "%d %d\n%d\n", img->heightImg, img->widthImg, img->maxValue);
+			//Récupère les pixels et les stock dans un tableau de taille : hauteur * largeur * 3 car chaque pixel est composé de 3 couleurs
 			fread(img->tabPixel, sizeof(unsigned char),(img->heightImg)*(img->widthImg)*3,image);
 			fclose(image);
 		}
 	}
-	
 }
