@@ -4,14 +4,14 @@
 #include <stdlib.h>
 #include <image.h>
 
-// STRUCTURE DU CALQUE
+/************* STRUCTURE DU CALQUE *************/
 struct calque {
 	
 	//Paramètre d'opacité : 0 ou 1
 	int opacity; 
 
 	//Image source
-	Image image_src;
+	Image* image_src;
 
 	//type d'opération
 
@@ -22,6 +22,7 @@ struct calque {
 	struct calque *p_next; //calque suivant
 };
 
+/************* STRUCTURE DE LA LISTE DE CALQUE *************/
 typedef struc LCalque {
 
 	//Taille de la liste
@@ -32,7 +33,7 @@ typedef struc LCalque {
 	struct calque *p_tail; //pointeur vers le dernier element
 }LCalque;
 
-//Appel de fonction
+/************* Appel de fonction *************/
 LCalque* new_LCalque(void);
 LCalque* addCalque(LCalque*, int, Image);
 LCalque* removeCalque(LCalque* p_lcalque, int position);

@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include "outils.h"
 #include "interface.h"
+#include "image.h"
+#include "calque.h"
+#include "structure.h"
 
 /// ///////////////////////////////////////////////////////////////////////////
 /// Tableau representant une image...

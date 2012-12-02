@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// STRUCTURE DE L'IMAGE 
+/************* STRUCTURE DE L'IMAGE *************/
 typedef struct Image {
 
 	//Numero magic : identifie le type de fichier
@@ -20,7 +20,9 @@ typedef struct Image {
 	unsigned char* tabPixel;
 }Image;
 
-//Appel de fonction
+/************* Appel de fonction *************/
 void openImg(Image*, char*);
+void returnImage(calque*, unsigned char*);
+void freeTabImg(Image*);
 
 #endif

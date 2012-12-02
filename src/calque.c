@@ -6,7 +6,7 @@
 //Appel de la structure du calque
 #include "calque.h"
 
-//Création d'une nouvelle liste de calque
+/************* Création d'une nouvelle liste de calque *************/
 LCalque* new_LCalque(void) {
 	
 	//Alloue de la mémoire 
@@ -19,8 +19,8 @@ LCalque* new_LCalque(void) {
 	return p_calque;
 }
 
-//Ajouter un calque à la liste
-LCalque* addCalque(LCalque* p_lcalque, int opacity, Image img) {
+/************* Ajouter un calque à la liste *************/
+LCalque* addCalque(LCalque* p_lcalque, int opacity, Image* img) {
 
 	// On vérifie si notre liste a été allouée
 	if (p_lcalque != NULL) {
@@ -59,7 +59,7 @@ LCalque* addCalque(LCalque* p_lcalque, int opacity, Image img) {
 }
 
 
-//Supprimer un calque selon sa position 
+/************* Supprimer un calque selon sa position *************/
 LCalque* removeCalque(LCalque* p_lcalque, int position) {
 
 	// On vérifie si notre liste a été allouée
@@ -97,7 +97,7 @@ LCalque* removeCalque(LCalque* p_lcalque, int position) {
 					//Relie le calque précédent au calque suivant du calque que l'on veut supprmer 
 					p_tmp->p_prev->p_next = p_tmp->p_next;
                 		}
-				//
+				//Libère espace mémoire
                 		free(p_tmp);
 				//Décrémente de un la taille de la liste
                 		p_lcalque->length--;
