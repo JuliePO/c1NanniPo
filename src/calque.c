@@ -19,13 +19,13 @@ LCalque* new_LCalque(void) {
 	return p_calque;
 }
 
-/************* Ajouter un calque à la liste *************/
+/************* Ajouter un calque à la liste  avec une image *************/
 LCalque* addCalque(LCalque* p_lcalque, int opacity, Image* img) {
 
 	// On vérifie si notre liste a été allouée
 	if (p_lcalque != NULL) {
 		//Création d'un nouveau calque
-		struct calque *new_calque = malloc(sizeof *p_new); 
+		Calque* new_calque = malloc(sizeof *new_calque); 
 
 		// On vérifie si le malloc n'a pas échoué
 		if (new_calque != NULL) {
@@ -58,6 +58,32 @@ LCalque* addCalque(LCalque* p_lcalque, int opacity, Image* img) {
 	return p_lcalque; 
 }
 
+void main(void){
+	LCalque calque;
+	LCalque* pc = &calque;
+	pc = new_LCalque();
+
+	Image image;
+	Image* p = &image;
+	char name[]="../images/image.ppm";
+	openImg(p, name);
+
+	cp = addCalque(pc, 0, p);
+
+	if (pc != NULL)
+	    {
+		Calque *p_temp = pc->p_head;
+		while (p_temp != NULL)
+		{
+			printf("%d %d\n %d\n", p_temp->image_src->heightImg, p_temp->image_src->widthImg, p_temp->image_src->maxValue);
+			printf("It's works !!\n");
+		    fflush(stdout);
+		    p_temp = p_temp->p_next;
+		}
+	    }
+	cp = removeCalque(pc, 1);
+}
+
 
 /************* Supprimer un calque selon sa position *************/
 LCalque* removeCalque(LCalque* p_lcalque, int position) {
@@ -66,7 +92,7 @@ LCalque* removeCalque(LCalque* p_lcalque, int position) {
 	if (p_lcalque != NULL) {
 
 		//Création d'un calque temporaire
-		struct calque *p_tmp = p_lcalque->p_head;
+		Calque *p_tmp = p_lcalque->p_head;
 		int i = 1;
 
 		// Parcours de la liste de calque, tant que i est inférieur à la position souhaitée

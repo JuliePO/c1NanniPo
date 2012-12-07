@@ -2,6 +2,7 @@
 #define IMAGE_H
 #include <stdio.h>
 #include <stdlib.h>
+//#include "calque.h"
 
 /************* STRUCTURE DE L'IMAGE *************/
 typedef struct Image {
@@ -22,7 +23,7 @@ typedef struct Image {
 
 /************* Appel de fonction *************/
 void openImg(Image*, char*);
-void returnImage(calque*, unsigned char*);
+void returnImage(Image*, unsigned char*);
 void freeTabImg(Image*);
 
 #endif

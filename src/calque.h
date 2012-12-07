@@ -2,10 +2,10 @@
 #define CALQUE_H
 #include <stdio.h>
 #include <stdlib.h>
-#include <image.h>
+#include "image.h"
 
 /************* STRUCTURE DU CALQUE *************/
-struct calque {
+typedef struct Calque {
 	
 	//Paramètre d'opacité : 0 ou 1
 	int opacity; 
@@ -18,24 +18,24 @@ struct calque {
 	//liste de LUT
 
 	//Calques 
-	struct calque *p_prev; //calque précédent
-	struct calque *p_next; //calque suivant
-};
+	struct Calque *p_prev; //calque précédent
+	struct Calque *p_next; //calque suivant
+}Calque;
 
 /************* STRUCTURE DE LA LISTE DE CALQUE *************/
-typedef struc LCalque {
+typedef struct LCalque {
 
 	//Taille de la liste
-	size_t lenght;
+	size_t length;
 
 	//Pointeur
-	struct calque *p_head; //pointeur vers le premier element
-	struct calque *p_tail; //pointeur vers le dernier element
+	Calque *p_head; //pointeur vers le premier element
+	Calque *p_tail; //pointeur vers le dernier element
 }LCalque;
 
 /************* Appel de fonction *************/
 LCalque* new_LCalque(void);
-LCalque* addCalque(LCalque*, int, Image);
+LCalque* addCalque(LCalque*, int, Image*);
 LCalque* removeCalque(LCalque* p_lcalque, int position);
 
 #endif
