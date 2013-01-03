@@ -65,56 +65,51 @@ void openImg(Image* img, char* nameImg){
 	Image* p = &image;
 	char name[]="../images/image.ppm";
 	openImg(p, name);
-	unsigned char* tab = (unsigned char *)malloc((p->heightImg)*(p->widthImg)*3*sizeof(unsigned char));
 	printf("%c%c\n %d %d\n %d\n", p->magicNumber[0], p->magicNumber[1], p->heightImg, p->widthImg, p->maxValue);
+	//printf("%s\n", p->tabPixel);
+	printf("\n\n\n\n\n");
+
+	unsigned char* tab =(unsigned char*) malloc((p->widthImg)*(p->heightImg)*3*sizeof(unsigned char));
+
+	printf("apres fonction : ");
+	printf("\n\n\n\n\n");
 	returnImage(p, tab);
-	//printf("%s\n", tab);
-	//initGLIMAGIMP_IHM(p->widthImg,p->heightImg,p->tabPixel,p->widthImg,p->heightImg);
+
+	int i, j, k=0;
+
+	printf("%s\n", tab);
 }*/
 
 
 /************* Retourner l'image ************/
 
-/*void returnImage(Image* img) {
+void returnImage(Image* img) {
 	int i, j, k=0;
-	int l, m, n=0;
+
+	unsigned char* tab =(unsigned char*) malloc((img->widthImg)*(img->heightImg)*3*sizeof(unsigned char));
 	
-	//Tableau temporaire de pixel
-	unsigned char* tab2 =(unsigned char*) malloc((img->widthImg)*(img->heightImg)*3*sizeof(unsigned char));
-	if (tab2 == NULL) {
+	if (tab == NULL) {
 		printf("Erreur d'allocation\n");
 		exit(1);
 	}
 
-	// On parcourt les colonnes du tableau à l'envers
-	for(i=(img->heightImg); i>=0; i--) {
+	// On parcourt les lignes du tableau à l'envers
+	for(i=(img->heightImg); i>0; i--) {
 
-		// puis on parcourt les lignes du tableau
-		for(j=(img->widthImg); j>=0; j--) {
-
+		// puis on parcourt les colonnes du tableau
+		for(j=0; j<(img->widthImg); j++) {
+			
 			// On retourne le tableau de l'image de haut en bas
-			tab2[k++] = img->tabPixel[i*(img->widthImg)*3+j*3];
-			tab2[k++] = img->tabPixel[i*(img->widthImg)*3+j*3+1];
-			tab2[k++] = img->tabPixel[i*(img->widthImg)*3+j*3+2];
+			tab[k++] = img->tabPixel[i*(img->widthImg)*3+j*3];
+			tab[k++] = img->tabPixel[i*(img->widthImg)*3+j*3+1];
+			tab[k++] = img->tabPixel[i*(img->widthImg)*3+j*3+2];
+		}
+	}
 
-		}
-	}
-	
-	
-	//Remplace l'image par l'image retourner
-	//On parcourt les colonnes du tableau
-	for(l=0; l<=(img->heightImg); l++) {
-		
-		// puis on parcourt les lignes du tableau
-		for(m=0; m<=(img->widthImg); m--) {
-			
-			
-			(img->tabPixel[n++])=tab2[n++];
-		}
-	}
+	img->tabPixel = tab;
 
 	return;
-}*/
+}
 
 /************* Libéré l'espace mémoire *************/
 void freeTabImg(Image* img) {
