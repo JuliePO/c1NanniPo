@@ -1,49 +1,64 @@
-# $(BIN) est la nom du binaire genere
-BIN = ./bin/imagimp
+# $(BIN) est la nom du binaire généré
+BIN = libglimagimp.a
+BINDYN = libglimagimp.so
 # FLAG
-CFLAGS = -Wall -g
-LDFLAGS= -lglut -lGL -lGLU -lm -Llib/libglimagimp.so -lglimagimp
-#-Llib/libglimagimp.so
+FLAGS = -Wall -fPIC -g
 # INCLUDES
-INC = ./lib/include/
+INC = ./include
+# LIB DIR FINALE
+LIBFIN = ./lib
 # INCLUDES
-LIBDIR = ./lib
+LIBDIR = .
+# SOURCES
+SRC = ./src
+# Librairies
+LIBS = -lGL -lGLU -lm
 # Compilateur
 CC = gcc
-# SRC
-DIR_SRC = src
-POINTC = $(wildcard *.c)
-SRC = $(wildcard $(DIR_SRC)/*.c)
+# Pour la librairie statique
+AR = ar rcs
 # OBJET
 DIR_OBJ = obj
-#OBJ= $(SRC:$(DIR_SRC)/.c=$(DIR_OBJ)/.o)
-OBJ = $(DIR_OBJ)/calque.o $(DIR_OBJ)/image.o $(DIR_OBJ)/main.o
-OBJ_MAIN = $(DIR_SRC)/main.c lib/include/interface.h lib/include/outils.h $(OBJ)
+## OBJ_MATH : liste des objets de la bibliothèque
+OBJECTS = $(DIR_OBJ)/interface.o $(DIR_OBJ)/outils.o $(DIR_OBJ)/image.o $(DIR_OBJ)/calque.o
 
+# all est la première règle à être exécutée car elle est la première
+# dans le fichier Makefile. Notons que les dépendances peuvent être
+# remplacées par une variable, ainsi que n'importe quel chaine de
+# caractères des commandes
+all: $(OBJECTS)
+	@echo "**** PHASE DE LIEN ****"
+	$(CC) -L$(LIBDIR) $(LIBS) $(OBJECTS) -fPIC -shared -o $(LIBFIN)/$(BINDYN)
 
-all: $(BIN)
+static: $(OBJECTS)
+	@echo "**** PHASE DE LIEN ****"
+	$(AR) $(LIBFIN)/$(BIN) $(OBJECTS)
 
-$(BIN):$(OBJ)
-	@$(CC) -I$(INC) -o $@ $^ -fPIC -L$(LIBDIR) $(LDFLAGS) 
-	@echo "Compilation OK"
-
-$(DIR_OBJ)/main.o: $(OBJ_MAIN)
-	@echo "**** main.o ****"
-	$(CC) -I$(INC) $(CFLAGS) -c $< -o $@ -L$(LIBDIR) $(LDFLAGS)
-	@echo "Creation $@ OK"
-	@echo "****************"
-
-$(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
+$(DIR_OBJ)/%.o: $(SRC)/%.c $(INC)/%.h
 	@echo "**** $@ ****"
-	$(CC) -I$(INC) -o $@ -c $< $(CFLAGS)
-	@echo "Creation $@ OK"
-	@echo "****************"
+	$(CC) -I$(INC) $(FLAGS) -c $< -o $@
+
+test:
+	@cd sample
+	make
+	@cd ../
+
+install: $(OBJECTS) all
+	cp $(LIBFIN)/$(BIN) /usr/lib/
 
 clean:
-	rm -rf $(DIR_OBJ)/*.o
-	@echo "File .o are all removed" 	
+	rm -f $(DIR_OBJ)/*.o
+	find . -name "*~" -exec rm {} \;
 
-mrproper: clean
-	rm -rf $(BIN)
-	@echo "File .o and .exe are all removed"
-	
+bigclean:
+	rm -f $(DIR_OBJ)/*.o $(SRC)/*~ $(INC)/*~ $(LIBFIN)/$(BIN) $(LIBFIN)/$(BINDYN)
+	find . -name "*~" -exec rm {} \;
+
+tar:
+	make clean
+	tar -czvf glimagimp.tgz INSTALL install.sh lib/ sample/ include/
+
+tarsrc:
+	make clean
+	tar -czvf glimagimp_src.tgz INSTALL install.sh include/ lib/ obj/ sample/ src/ Makefile
+

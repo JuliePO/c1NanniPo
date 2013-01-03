@@ -75,7 +75,7 @@ void openImg(Image* img, char* nameImg){
 
 /************* Retourner l'image ************/
 
-void returnImage(Image* img) {
+/*void returnImage(Image* img) {
 	int i, j, k=0;
 	int l, m, n=0;
 	
@@ -114,27 +114,11 @@ void returnImage(Image* img) {
 	}
 
 	return;
-}
+}*/
 
 /************* Libéré l'espace mémoire *************/
 void freeTabImg(Image* img) {
 	free(img->tabPixel);
 	return;
 }	
-
-
-/************* Sauvegarder une image *************/
-/*void saveImg(Image* img, char* file) {
-	File* *new_img = NULL;
-	new_img = fopen(file, "w");
-
-	if(new_img != NULL) {
-		fprintf(new_img, "%s\n", img->magicNumber);
-		fprintf(new_img, "# Commentaire : Nouvelle image ppm");
-		fprintf(new_img, "%d %d\n%d \n", img->widthImg, img->heightImg, img->maxValue);
-		
-		
-	}
-	else 
-		printf("Erreur : Impossible de creer une nouvelle image");
-}*/
+	

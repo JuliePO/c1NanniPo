@@ -136,13 +136,15 @@ void modifOpacity (LCalque* p_lcalque, int position, float opacity){
 			Calque *p_tmp = p_lcalque->p_head;
 
 			// Parcours de la liste de calque
-			while (p_tmp != NULL && position <= p_tmp->id) {
+			while (p_tmp != NULL) {
 
 				if (position == (p_tmp->id)) {				
 					p_tmp->opacity = opacity; 
 				}
 				p_tmp = p_tmp->p_next;
 			}
+			//Libère espace mémoire
+		        free(p_tmp);	
 		}
 		else
 			printf("Ce calque n'existe pas\n");	
@@ -173,6 +175,8 @@ void modifMix (LCalque* p_lcalque, int position, int mix){
 					}
 					p_tmp = p_tmp->p_next;
 				}
+				//Libère espace mémoire
+		        	free(p_tmp);
 			}
 			else
 				printf("Erreur : ce n'est ni une addition, ni une multiplication : 0 = addition et 1 = multiplication\n");
@@ -284,7 +288,6 @@ LCalque* removeCalque(LCalque* p_lcalque, int position) {
 							p_lcalque->p_tail = p_tmp->p_prev;
 							//Supprime le dernier calque ou lien du dernier calque vers le calque suivant est NULL
 							p_lcalque->p_tail->p_next = NULL;
-
 						}
 			
 						//Si c'est le premier calque de la liste
