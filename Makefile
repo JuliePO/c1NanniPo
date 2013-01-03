@@ -2,7 +2,8 @@
 BIN = ./bin/imagimp
 # FLAG
 CFLAGS = -Wall -g
-LDFLAGS= -lglut -lGL -lGLU -lm -lglimagimp -Llib/libglimagimp.so
+LDFLAGS= -lglut -lGL -lGLU -lm -Llib/libglimagimp.so -lglimagimp
+#-Llib/libglimagimp.so
 # INCLUDES
 INC = ./lib/include/
 # INCLUDES
@@ -23,12 +24,14 @@ OBJ_MAIN = $(DIR_SRC)/main.c lib/include/interface.h lib/include/outils.h $(OBJ)
 all: $(BIN)
 
 $(BIN):$(OBJ)
-	@$(CC) -I$(INC) -o $@ $^ -L$(LIBDIR) $(LDFLAGS)
+	@$(CC) -I$(INC) -o $@ $^ -fPIC -L$(LIBDIR) $(LDFLAGS) 
 	@echo "Compilation OK"
 
 $(DIR_OBJ)/main.o: $(OBJ_MAIN)
 	@echo "**** main.o ****"
 	$(CC) -I$(INC) $(CFLAGS) -c $< -o $@ -L$(LIBDIR) $(LDFLAGS)
+	@echo "Creation $@ OK"
+	@echo "****************"
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@echo "**** $@ ****"
