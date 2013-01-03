@@ -41,7 +41,7 @@ void openImg(Image* img, char* nameImg){
 					//Passe la ligne : parcours la ligne jusqu'à qu'il trouve '\n'
 					do {
 						fread(&letter,sizeof(char*),1,image);
-					}while(letter != "\n");
+					}while(*letter != '\n');
 				}			
 			}while(test<1);
 
@@ -75,23 +75,46 @@ void openImg(Image* img, char* nameImg){
 
 /************* Retourner l'image ************/
 
-void returnImage(Image* img, unsigned char* tab) {
+/*void returnImage(Image* img) {
 	int i, j, k=0;
-	// On parcourt les lignes du tableau à l'envers
+	int l, m, n=0;
+	
+	//Tableau temporaire de pixel
+	unsigned char* tab2 =(unsigned char*) malloc((img->widthImg)*(img->heightImg)*3*sizeof(unsigned char));
+	if (tab2 == NULL) {
+		printf("Erreur d'allocation\n");
+		exit(1);
+	}
+
+	// On parcourt les colonnes du tableau à l'envers
 	for(i=(img->heightImg); i>=0; i--) {
 
-		// puis on parcourt les colonnes du tableau
-		for(j=0; j<(img->widthImg); j++) {
+		// puis on parcourt les lignes du tableau
+		for(j=(img->widthImg); j>=0; j--) {
 
 			// On retourne le tableau de l'image de haut en bas
-			tab[k++] = img->tabPixel[i*(img->widthImg)*3+j*3];
-			tab[k++] = img->tabPixel[i*(img->widthImg)*3+j*3+1];
-			tab[k++] = img->tabPixel[i*(img->widthImg)*3+j*3+2];
+			tab2[k++] = img->tabPixel[i*(img->widthImg)*3+j*3];
+			tab2[k++] = img->tabPixel[i*(img->widthImg)*3+j*3+1];
+			tab2[k++] = img->tabPixel[i*(img->widthImg)*3+j*3+2];
 
 		}
 	}
+	
+	
+	//Remplace l'image par l'image retourner
+	//On parcourt les colonnes du tableau
+	for(l=0; l<=(img->heightImg); l++) {
+		
+		// puis on parcourt les lignes du tableau
+		for(m=0; m<=(img->widthImg); m--) {
+			
+			
+			(img->tabPixel[n++])=tab2[n++];
+		}
+	}
+
 	return;
-}
+}*/
 
 /************* Libéré l'espace mémoire *************/
 void freeTabImg(Image* img) {
