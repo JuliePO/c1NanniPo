@@ -22,7 +22,7 @@ typedef struct Image {
 
 /************* Appel de fonction *************/
 void openImg(Image*, char*);
-//void returnImage(Image*);
+void returnImage(Image*);
 void freeTabImg(Image*);
 
 #endif

@@ -79,6 +79,8 @@ LCalque* addCalque(LCalque* p_lcalque, float opacity, int mix) {
 		if (new_img != NULL) {
 		
 			//Propriété de l'image
+			new_img->magicNumber[0] = 'P';
+			new_img->magicNumber[1] = '6';
 			new_img->heightImg = p_lcalque->p_head->image_src->heightImg;
 			new_img->widthImg = p_lcalque->p_head->image_src->widthImg;
 			new_img->maxValue = p_lcalque->p_head->image_src->maxValue;
@@ -260,6 +262,107 @@ void modifMix (LCalque* p_lcalque, int position, int mix){
 
 }*/
 
+/************ Fusionner les calques *************/
+Image* fusionCalque(LCalque* p_lcalque) {
+
+	int i;
+
+	//Création de la nouvelle image
+	Image* final_img = malloc(sizeof *final_img);
+	
+	//Propriété de l'image
+	final_img->magicNumber[0] = 'P';
+	final_img->magicNumber[1] = '6';
+	final_img->heightImg = p_lcalque->p_head->image_src->heightImg;
+	final_img->widthImg = p_lcalque->p_head->image_src->widthImg;
+	final_img->maxValue = p_lcalque->p_head->image_src->maxValue;
+	
+	//Alloue de la mémoire
+	final_img->tabPixel = (unsigned char*) malloc((final_img->widthImg)*(final_img->heightImg)*3*sizeof(unsigned char));
+	
+	// On vérifie si notre liste a été allouée
+	if (p_lcalque != NULL) {
+		
+		//Vérifie qu'il y a plus d'un calque
+		if(p_lcalque->length > 1) {
+			
+			//Création d'un calque temporaire pour parcourir la liste de calque
+			Calque *p_tmp = p_lcalque->p_head;
+
+			// Parcours de la liste de calque
+			while (p_tmp != NULL) {
+
+				//Si le mode de fusion est une ADDITION
+				if(p_tmp->mix == 0) {
+
+					if(p_tmp->id == 0) {
+
+						//Parcours le tableau de pixel et multiplie par son opacite
+						for(i=0; i< ((p_lcalque->p_head->image_src->widthImg) * (p_lcalque->p_head->image_src->heightImg)* 3); i++) {
+							final_img->tabPixel[i] = (p_lcalque->p_head->image_src->tabPixel[i]) * (p_tmp->opacity);
+
+						}
+					}
+					else {
+						
+						//Parcours le tableau de pixel et fusion des calques
+						for(i=0; i< ((p_lcalque->p_head->image_src->widthImg) * (p_lcalque->p_head->image_src->heightImg)* 3); i++) {
+							final_img->tabPixel[i] = (p_tmp->p_prev->image_src->tabPixel[i]) + (p_tmp->image_src->tabPixel[i]) * (p_tmp->opacity);
+						}
+
+					}
+
+				}
+				//Si le mode de fusion est une MULTIPLICATION
+				else {
+
+					if(p_tmp->id == 0) {
+
+						//Parcours le tableau de pixel et multiplie par son opacite
+						for(i=0; i< ((p_lcalque->p_head->image_src->widthImg) * (p_lcalque->p_head->image_src->heightImg)* 3); i++) {
+							final_img->tabPixel[i] = (p_lcalque->p_head->image_src->tabPixel[i]) * (p_tmp->opacity);
+
+						}
+					}
+					else {
+						
+						//Parcours le tableau de pixel et fusion des calques
+						for(i=0; i< ((p_lcalque->p_head->image_src->widthImg) * (p_lcalque->p_head->image_src->heightImg)* 3); i++) {
+							final_img->tabPixel[i] = (1 - (p_tmp->opacity)) * (p_tmp->p_prev->image_src->tabPixel[i]) + (p_tmp->image_src->tabPixel[i]) * (p_tmp->opacity);
+						}
+					}
+
+				}
+							
+				p_tmp = p_tmp->p_next;
+			}
+			//Libère espace mémoire
+			free(p_tmp);
+
+		}
+		//Si il y a qu'un seul calque
+		else {
+
+			//Parcours le tableau de pixel et multiplie par son opacite
+			for(i=0; i< ((p_lcalque->p_head->image_src->widthImg) * (p_lcalque->p_head->image_src->heightImg)* 3); i++) {
+
+				final_img->tabPixel[i] = (p_lcalque->p_head->image_src->tabPixel[i]) * (p_lcalque->p_head->opacity);
+
+			}
+
+		}
+
+	}
+	else
+		printf("Cette liste de calque n'existe pas");
+
+	returnImage(final_img);
+
+	return final_img;
+}
+
+/************* Fusionner les images des calques : addition *************/
+/************* Fusionner les images des calques : multiplication *************/
 
 /************* Supprimer un calque selon sa position *************/
 LCalque* removeCalque(LCalque* p_lcalque, int position) {
