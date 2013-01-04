@@ -44,6 +44,7 @@ LCalque* new_LCalque(void);
 LCalque* addCalqueImg(LCalque*, float, int, Image*);
 LCalque* addCalque(LCalque*, float, int);
 LCalque* removeCalque(LCalque*, int);
+Image* fusionCalque(LCalque*);
 void modifOpacity (LCalque*, int, float);
 void modifMix (LCalque*, int, int);
 #endif

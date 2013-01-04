@@ -20,12 +20,25 @@ int main(void) {
 	Image* p = &image;
 	char name[]="../images/daisuke.ppm";
 	openImg(p, name);
-	returnImage(p);
 
-	pc = addCalqueImg(pc, 0, 0, p);
+	Image image2;
+	Image* p2 = &image2;
+	char name2[]="../images/image.ppm";
+	openImg(p2, name2);
 
-	initGLIMAGIMP_IHM(p->widthImg,p->heightImg,p->tabPixel,p->widthImg + 30,p->heightImg);
+	Image image_final;
+	Image* pf = &image_final;
 
+	pc = addCalqueImg(pc, 0.5, 0, p);
+	//pc = addCalque(pc, 1, 0);
+	//pc = addCalqueImg(pc, 0.5, 0, p2);
+
+	printf("%d\n", pc->length);
+
+	pf = fusionCalque(pc);	
+
+	initGLIMAGIMP_IHM(pf->widthImg,pf->heightImg,pf->tabPixel,pf->widthImg + 30,pf->heightImg);
+	
 
 	return 0;
 }
