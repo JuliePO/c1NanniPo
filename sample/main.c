@@ -31,34 +31,17 @@ void mondessin() {
 	fixeCouleur(1.0,1.0,1.0);
 }
 
+
 int main(void) {
-<<<<<<< Updated upstream
 	
 	LCalque calque;
 	LCalque* pc = &calque;
 	pc = new_LCalque();
 
-||||||| merged common ancestors
-=======
-	//initialisation de la structure d'une image
->>>>>>> Stashed changes
 	Image image;
-	//création d'un pointeur
 	Image* p = &image;
-<<<<<<< Updated upstream
 	char name[]="../images/daisuke.ppm";
-||||||| merged common ancestors
-	char name[]="../images/image.ppm";
-=======
-	//chemin de l'image
-	char name[]="../images/hara_fumina.ppm";
-		//fonctions d'interface
-
-	fixeFonctionDessin(mondessin);
-	//ouverture de l'image
->>>>>>> Stashed changes
 	openImg(p, name);
-<<<<<<< Updated upstream
 
 	Image image2;
 	Image* p2 = &image2;
@@ -74,20 +57,10 @@ int main(void) {
 
 	printf("%d\n", pc->length);
 
-	pf = fusionCalque(pc);	
+	pf = fusionCalque(pc);
 
 	initGLIMAGIMP_IHM(pf->widthImg,pf->heightImg,pf->tabPixel,pf->widthImg + 30,pf->heightImg);
-	
-
-||||||| merged common ancestors
-	printf("%c%c\n %d %d\n %d\n", p->magicNumber[0], p->magicNumber[1], p->heightImg, p->widthImg, p->maxValue);
-	initGLIMAGIMP_IHM(p->widthImg,p->heightImg,p->tabPixel,p->widthImg,p->heightImg);
-=======
 
 
-	printf("%c%c\n %d %d\n %d\n", p->magicNumber[0], p->magicNumber[1], p->heightImg, p->widthImg, p->maxValue);	
-
-	initGLIMAGIMP_IHM(p->widthImg,p->heightImg,p->tabPixel,p->widthImg+300,p->heightImg);
->>>>>>> Stashed changes
 	return 0;
 }

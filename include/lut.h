@@ -31,7 +31,10 @@ typedef struct LLUT {
 
 /************* Appel des fonctions *************/
 
-int initLUT (LUT*);
+//
+int initLUT(LUT*);
+void applyLUT(LUT*, Image*);
+void delLUT(LUT*);
 
 ////effets sur l'images
 
@@ -43,6 +46,6 @@ void addLum(LUT*, int);
 void dimLum(LUT*, int);
 //effets sur les couleurs
 void invert(LUT*);
-void Sepia(LUT*, int);
+void sepia(LUT*, int);
 
 #endif
