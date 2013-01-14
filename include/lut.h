@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "image.h"
+#include "calque.h"
+
 /************* Structure du LUT *************/
 typedef struct LUT {
 	// Définition de 3 tableaux pour chacune des composantes 
@@ -31,7 +34,6 @@ typedef struct LLUT {
 
 /************* Appel des fonctions *************/
 
-//
 int initLUT(LUT*);
 void applyLUT(LUT*, Image*);
 void delLUT(LUT*);
@@ -46,6 +48,8 @@ void addLum(LUT*, int);
 void dimLum(LUT*, int);
 //effets sur les couleurs
 void invert(LUT*);
-void sepia(LUT*, int);
+void B_W(Image*);
+void colorize(LUT*, int, int, int);
+void sepia (LUT*, Image*);
 
 #endif
