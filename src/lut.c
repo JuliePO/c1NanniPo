@@ -1,10 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 //Appel de la structure d'une lut
+
+#include "lut.h"
+#include "image.h"
+#include "calque.h"
+
+/*
+//test en local
 #include "../include/lut.h"
 #include "../include/image.h"
 #include "../include/calque.h"
-
+*/
 
 //initialisation de la lut
 int initLUT(LUT* lut) {
@@ -41,8 +48,7 @@ void remplirTab(Calque* calque, LUT* lut) {
 void addLum(LUT* lut, int nb){
 	int i;
  
- 	for(i=0;i<256;i++)
- 		{
+ 	for(i=0;i<256;i++) {
  		if((lut->tabLutR[i]+nb)<0)
  			lut->tabLutR[i] = 0;
  		else if((lut->tabLutR[i]+nb)>255)
@@ -63,7 +69,7 @@ void addLum(LUT* lut, int nb){
  			lut->tabLutB[i] = 255;
  		else
    			lut->tabLutB[i] = lut->tabLutB[i]+nb;
-		}
+	}
 }
 
 //il s'agit d'ajouté une valeur négative choisie aux valeurs des pixels 
@@ -71,8 +77,7 @@ void addLum(LUT* lut, int nb){
 void dimLum(LUT* lut, int nb){
 	int i;
  
- 	for(i=0;i<256;i++)
- 		{
+ 	for(i=0;i<256;i++) {
  		if((lut->tabLutR[i]-nb)<0)
  			lut->tabLutR[i] = 0;
  		else if((lut->tabLutR[i]-nb)>255)
@@ -93,8 +98,111 @@ void dimLum(LUT* lut, int nb){
  			lut->tabLutB[i] = 255;
  		else
    			lut->tabLutB[i] = lut->tabLutB[i]-nb;
-		}
+	}
 }
+
+
+
+// effets sur le contraste :
+// le contraste joue sur une différence de luminescence
+// Augmenter un contraste ou le diminuer c'est jouer entre 2 plages de luminescences
+// en accentuant leur rapport
+
+
+
+
+void addContraste(LUT* lut, int nb) {
+	int i;
+	
+	for(i=0;i<256;i++) {
+
+		if(lut->tabLutR[i] < 128) {
+			// couche des rouges
+			if((lut->tabLutR[i]-nb)>128)
+				lut->tabLutR[i] = 128;
+			else
+				lut->tabLutR[i] = lut->tabLutR[i]-nb;
+			
+			// couche des verts
+			if((lut->tabLutV[i]-nb)>128)
+				lut->tabLutV[i] = 128;
+			else
+				lut->tabLutV[i] = lut->tabLutV[i]-nb;
+			
+			// couche des bleus
+			if((lut->tabLutB[i]-nb)>128)
+				lut->tabLutB[i] = 128;
+			else
+				lut->tabLutB[i] = lut->tabLutB[i]-nb;
+		}
+			
+		else if (lut->tabLutR[i] >= 128) {
+			// rouge
+			if((lut->tabLutR[i]+nb)<128)
+				lut->tabLutR[i] = 128;
+			else
+				lut->tabLutR[i] = lut->tabLutR[i]+nb;
+			
+			// vert	
+			if((lut->tabLutV[i]+nb)<128)
+				lut->tabLutV[i] = 128;
+			else
+				lut->tabLutV[i] = lut->tabLutV[i]+nb;
+			
+			// bleu	
+			if((lut->tabLutB[i]+nb)<128)
+				lut->tabLutB[i] = 128;
+			else
+				lut->tabLutB[i] = lut->tabLutB[i]+nb;
+		}
+	}
+}	
+
+// pour diminuer le contrast on fait le processus inverse
+
+void dimContraste(LUT* lut, int nb) {
+	int i;
+
+	for(i=0;i<256;i++) {
+
+		if(lut->tabLutR[i] < 128) {
+			if((lut->tabLutR[i]+nb)>128)
+				lut->tabLutR[i] = 128;
+			else
+				lut->tabLutR[i] = lut->tabLutR[i]+nb;
+				
+			if((lut->tabLutV[i]+nb)>128)
+				lut->tabLutV[i] = 128;
+			else
+				lut->tabLutV[i] = lut->tabLutV[i]+nb;
+				
+			if((lut->tabLutB[i]+nb)>128)
+				lut->tabLutB[i] = 128;
+			else
+				lut->tabLutB[i] = lut->tabLutB[i]+nb;
+		}
+			
+		else if (lut->tabLutR[i] >= 128) {
+			if((lut->tabLutR[i]-nb)<128)
+				lut->tabLutR[i] = 128;
+			else
+				lut->tabLutR[i] = lut->tabLutR[i]-nb;
+				
+			if((lut->tabLutV[i]-nb)<128)
+				lut->tabLutV[i] = 128;
+			else
+				lut->tabLutV[i] = lut->tabLutV[i]-nb;
+				
+			if((lut->tabLutB[i]-nb)<128)
+				lut->tabLutB[i] = 128;
+			else
+				lut->tabLutB[i] = lut->tabLutB[i]-nb;
+		}
+	}
+}	
+
+
+
 
 
 
@@ -154,8 +262,11 @@ void sepia (LUT* lut, Image* img) {
 	colorize(lut, 100, 50, 0);
 }
 
+
+/*
 int main(int argc, char const *argv[]) {
 
 	printf("ça compile \n");
 	return 0;
 }
+*/
