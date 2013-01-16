@@ -20,5 +20,4 @@ typedef struct Histogramme {
 Histogramme* createHistogramme(Image*, int);
 void SaveHisto(Histogramme*, char*);
 int maxHisto(Image*, Histogramme*);
-void removeHistogramme (Histogramme*);
 #endif

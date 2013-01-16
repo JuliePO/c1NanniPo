@@ -117,8 +117,6 @@ int returnImage(Image* img) {
 /************ Creation d'une image à partir d'une autre image : copie ************/
 int copyImg(Image* new_img, Image* img){
 
-	int i;
-
 	//Propriété de l'image
 	new_img->magicNumber[0] = 'P';
 	new_img->magicNumber[1] = '6';

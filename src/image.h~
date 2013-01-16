@@ -24,7 +24,6 @@ typedef struct Image {
 int openImg(Image*, char*);
 int returnImage(Image*);
 int saveImg(Image*, char*);
-int copyImg(Image*, Image*);
 void freeTabImg(Image*);
 
 #endif

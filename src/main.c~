@@ -428,7 +428,7 @@ int main(int argc, char** argv) {
 				printf("Fin du programme\n");
 				
 				//Supprimer les elements 
-				removeAll(p, pf, pic, pc, ph, histo);
+				removeAll(p, pf, pic, p_courant, p_suppr, pc, ph, histo);
 
 				//Fin du programme
 				exit(0);

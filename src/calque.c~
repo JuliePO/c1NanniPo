@@ -689,15 +689,21 @@ void removeLCalque(LCalque* p_lcalque) {
 	//Si la liste n'est pas vide
 	if (p_lcalque->length != 0) {
 
+		printf("etape 1\n");
+
 		//Tant que la liste n'est pas vide
 		while (p_lcalque->p_head != NULL) {
 
+			printf("etape 2\n");
 			Calque *p_temp = p_lcalque->p_head;
 			freeTabImg(p_temp->image_src);
 			p_lcalque->p_head = p_temp->p_next;
 			free(p_temp);
 		}
+		printf("etape 3 \n");
 		
 	}
+	printf("etape 4 \n");
 	free(p_lcalque);
+	printf("etape 5 \n");
 }
