@@ -45,8 +45,8 @@ LLUT* removeLut(LLUT*, int);
 ////effets sur l'images
 
 //effets sur le contrast
-void addCon(LLUT*, int);
-void dimCon(LLUT*, int);
+void addContraste(LLUT*, int);
+void dimContraste(LLUT*, int);
 //effets sur la luminosité
 void addLum(LLUT*, int);
 void dimLum(LLUT*, int);

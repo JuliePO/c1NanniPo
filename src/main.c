@@ -12,6 +12,7 @@
 #include "historique.h"
 #include "histogramme.h"
 #include "ihm.h"
+#include "lut.h"
 
 /********** VARIABLE ***********/
 #define EPSILON 0.0001;
@@ -34,6 +35,10 @@ LCalque* pc = &calque;
 
 Calque* p_courant;
 Calque* p_suppr;
+
+//LUT liste
+LLUT liste_lut;
+LLUT* p_llut = &liste_lut;
 
 //Image : première image, image finale et image du calque courant
 Image image;
@@ -61,6 +66,7 @@ int main(int argc, char** argv) {
 	char adress[100]; //Adresse des images de calque
 	char adressH[100]; //Adresse de l'histogramme
 	char adressF[100]; //Adresse de l'image final
+	int intensite;
 
 	/****** INITIALISATION DES ELEMENTS *****/
 
@@ -69,6 +75,9 @@ int main(int argc, char** argv) {
 	
 	//Initialisation de la liste des calques
 	pc = new_LCalque();
+
+	//Initialisation de la liste des lut
+	p_llut=new_LLUT();
 
 	//Calque courant
 	p_courant = pc->p_head;
@@ -417,6 +426,30 @@ int main(int argc, char** argv) {
 				//Sauvegarde de l'histogramme
 				SaveHisto(histo, adressH);
 				break;
+
+			//Touche u rajouter une lut
+			case 'u' : 
+				printf("\nEntrer l'intensite : ");
+				scanf("%d", &intensite);
+
+				addContraste(p_llut, intensite);
+				
+				break;
+
+			case 'y' :
+				if (p_llut != NULL) {
+					//Création du calque temporaire pour parcourrir la liste de calque
+					LUT *p_temp = p_llut->l_head;
+
+					printf("\n");
+					//Parcourt la liste de calque
+					while (p_temp != NULL) {
+						applyLUT(pic, p_temp);
+					    	p_temp = p_temp->l_next;
+					}
+					free(p_temp);
+				}
+				break; 
 
 			case 'g' : 
 				//Afficher autre chose
