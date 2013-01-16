@@ -173,5 +173,6 @@ int maxHisto(Image* img, Histogramme* histo) {
 
 /******** Désallocation Histogramme ***********/
 void removeHistogramme (Histogramme* histo) {
+	//free(histo->values);
 	free(histo);
 }

@@ -41,6 +41,7 @@ typedef struct LCalque {
 
 /************* Appel de fonction *************/
 LCalque* new_LCalque(void);
+<<<<<<< HEAD:src/calque.h
 int addCalqueImg(LCalque*, float, int, char* nameImg);
 int addCalque(LCalque*, float, int);
 int addCalqueImgId(LCalque*, float, int, Image*, int);
@@ -60,4 +61,12 @@ int fusionCalque(LCalque*, Image*);
 int valeur_propre(int);
 
 void removeLCalque(LCalque*);
+=======
+LCalque* addCalqueImg(LCalque*, float, int, Image*);
+LCalque* addCalque(LCalque*, float, int);
+LCalque* removeCalque(LCalque*, int);
+Image* fusionCalque(LCalque*);
+void modifOpacity (LCalque*, int, float);
+void modifMix (LCalque*, int, int);
+>>>>>>> 1b600d2b714ad4741f07fad3a18aa2e643efe00b:include/calque.h
 #endif

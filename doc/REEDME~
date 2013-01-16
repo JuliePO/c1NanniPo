@@ -1,0 +1,78 @@
+/************ PROGRAMMME IMAGIMP *****************/
+
+Bonjour, nous vous remercions d'utiliser le programme IMAGIMP.
+
+/--------- Les consignes avant utilisation ---------/
+
+Pour utiliser ce programme vous aurez besoin d'intaller le package GLUT
+
+1 - Pour installer le package GLUT, si vous vous trouvez sur Ubuntu, allez sur votre terminal et taper :
+
+		sudo apt-get install freeglut3 freeglut3-dev
+
+	Si vous possedez une version d'Ubuntu inférieur à la version 11.10 alors taper également la ligne ci-dessous :
+
+		sudo apt-get install binutils-gold
+
+	Si vous êtes sur Fedora, allez sur votre terminal est taper :
+
+		sudo yum install freeglut-devel
+
+/--------- Installation du programme ---------/
+Pour installer le programme suivez les consignes suivantes (si vous vous trouvez dans le répertoire du programme) :
+
+1 - Ecrivez dans votre terminal :
+
+		cd lib
+		make
+
+2 - Pour installer la librairie taper dans votre terminal :
+
+		. ./install.sh
+
+3 - Retourner à la racine du projet et lancer le programme :
+
+		./bin/imagimp images/votreimage.ppm 
+		(remplacer votreimage par le nom de votre image)
+
+Si vous rencontrez cette erreur lors de l'exécution de votre programme :
+
+	"error while loading shared libraries: libglimagimp.so: cannot open shared object file: No such file or directory"
+
+Effectuer les opérations suivante :
+
+1 - retourner dans le repertoire utilisateur
+	
+		cd ..
+
+2 - utiliser cette commande pour vérifier que vous possedez bien le fichier .bashrc dans votre répertoire
+
+		ls -a
+
+3 - Modifier le fichier à l'aide de la commande suivante :
+
+		gedit .bashrc (si vous possedez gedit)
+
+		ou
+
+		vi .bashrc
+
+4 - Rajouter ces deux lignes à la fin de votre fichier
+
+		LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/the/lib/
+		export LD_LIBRARY_PATH 
+		(remplacer /path/to/the/lib/ par le chemin vers le repertoire lib du projet, par exemple /home/user/projetC/c1NanniPo)
+
+5 - Quitter le fichier après avoir sauvegarder. Si vous avez utilisé la commande vi alors quittez en appuyant sur [ESQ] puis taper :wq
+
+6 - Retournez dans le répertoire du projet (à l'aide de cd) et réexécuter le programme.
+
+/--------- Utilisation ---------/
+Si vous avez besoin d'aide pour les touches appuyer sur [F1].
+
+Si vous voulez taper une valeur (par exemple la valeur de l'opacite d'un calque), retournez sur le terminal et entrer votre valeur avant d'appuyer sur le bouton [ENTREE], puis retournez sur la fenêtre du programme pour pouvoir effectuer d'autres actions.
+
+/********************************************************************************/
+*		Projet réaliser par Laetitia NANNI et Julie PO			*
+*				IMAC 1 - 2012/2013				*
+/********************************************************************************/

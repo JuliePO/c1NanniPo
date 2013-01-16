@@ -58,6 +58,4 @@ void afficheLCalque(LCalque*);
 int calqueCourant(Calque*, Image*);
 int fusionCalque(LCalque*, Image*);
 int valeur_propre(int);
-
-void removeLCalque(LCalque*);
 #endif

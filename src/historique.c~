@@ -56,19 +56,35 @@ int addHistory (LHistorique* pile, Calque* p_courant, int action) {
 				
 					// On vérifie si notre calque a été allouée
 					if (p_courant != NULL) {
-	
-						new_calque->opacity = p_courant->opacity; 
-						new_calque->mix = p_courant->mix; 
-						new_calque->id = p_courant->id;
-						new_calque->p_prev = p_courant->p_prev;
-						new_calque->p_next = p_courant->p_next;
 
-						new_calque->image_src = new_img;
+						//Si on retire un calque : stock juste l'id du calque, tout le reste à 0 ou NULL
+						//if (action == 1) {
 
-						if(copyImg(new_img, p_courant->image_src) == 0) {
-							printf("Probleme au moment de la copie de l'image\n");
-							return 0;
-						}
+							/*new_calque->id = (p_courant->id); 
+							new_calque->opacity = 0; 
+							new_calque->mix = 0; 
+							new_calque->image_src = NULL;
+							new_calque->p_prev = NULL;
+							new_calque->p_next = NULL;*/
+						//}
+
+						//Si c'est une modification ou un ajout de calque
+						//else if(action >= 2 || action == 0) {
+			
+								
+							new_calque->opacity = p_courant->opacity; 
+							new_calque->mix = p_courant->mix; 
+							new_calque->id = p_courant->id;
+							new_calque->p_prev = p_courant->p_prev;
+							new_calque->p_next = p_courant->p_next;
+
+							new_calque->image_src = new_img;
+
+							if(copyImg(new_img, p_courant->image_src) == 0) {
+								printf("Probleme au moment de la copie de l'image\n");
+								return 0;
+							}
+						//}
 
 						//Ajoute le nouveau calque à la pile
 						new_event->calqueH = new_calque;

@@ -1,15 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 //Appel de la structure d'une lut
-/*
+
 #include "lut.h"
 #include "image.h"
 
-*/
+
 //test en local
-#include "../include/lut.h"
+/*#include "../include/lut.h"
 #include "../include/image.h"
-#include "../include/calque.h"
+#include "../include/calque.h"*/
 
 
 
@@ -486,10 +486,11 @@ void sepia (LUT* lut, Image* img) {
 	colorize(lut, 100, 50, 0);
 }
 
-
+/*
 
 int main(int argc, char const *argv[]) {
 
 	printf("ça compile \n");
 	return 0;
 }
+*/
