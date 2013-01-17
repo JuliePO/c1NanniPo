@@ -17,7 +17,7 @@ SRC = $(wildcard $(DIR_SRC)/*.c)
 # OBJET
 DIR_OBJ = obj
 #OBJ= $(SRC:$(DIR_SRC)/.c=$(DIR_OBJ)/.o)
-OBJ = $(DIR_OBJ)/calque.o $(DIR_OBJ)/image.o $(DIR_OBJ)/historique.o $(DIR_OBJ)/histogramme.o $(DIR_OBJ)/ihm.o $(DIR_OBJ)/lut.o $(DIR_OBJ)/main.o
+OBJ = $(DIR_OBJ)/image.o $(DIR_OBJ)/lut.o $(DIR_OBJ)/calque.o $(DIR_OBJ)/historique.o $(DIR_OBJ)/histogramme.o $(DIR_OBJ)/ihm.o $(DIR_OBJ)/main.o
 OBJ_MAIN = $(DIR_SRC)/main.c lib/include/interface.h lib/include/outils.h $(OBJ)
 OBJ_IHM = $(DIR_SRC)/ihm.c lib/include/interface.h lib/include/outils.h
 
