@@ -11,7 +11,7 @@
 
 
 
-void mondessin() {	
+void drawMain() {	
 
 	/*header main-menu*/
 	// variable: h1 : hauteur du bas, h2 : hauteur du haut, ht : hauteur du text
@@ -70,9 +70,9 @@ void mondessin() {
 
 
 }
-void dessinMenuCalque() {
+void drawMenuLayer() {
 	
-	mondessin();
+	drawMain();
 
 	/* marquer de position */
 	float h1,h2,ht;
@@ -115,7 +115,7 @@ void dessinMenuCalque() {
 	writeString(0.756,0.45,"+  = Operation =  *");
 }
 
-void dessinMenuHistogramme() {
+void drawMenuHistogramme() {
 
 	/* marquer de position */
 	float h1,h2,ht;
@@ -147,9 +147,9 @@ void dessinMenuHistogramme() {
 	writeString(0.70,0.11,"Sauver l'histogramme");
 }
 
-void dessinMenuLut() {
+void drawMenuLut() {
 	
-	mondessin();
+	drawMain();
 
 	/* marquer de position */
 	float h1,h2,ht;
