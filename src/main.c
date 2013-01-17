@@ -632,7 +632,7 @@ int main(int argc, char** argv) {
 
 				if (menu == 2) {
 					// navigation calque précédent
-					if (x > (widthWin*0.74)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.80)) && y < (heightWin-(heightWin*0.85)) ) {
+					if (x > (widthWin*0.74)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.85)) && y < (heightWin-(heightWin*0.80)) ) {
 						if(p_courant->p_prev == NULL)
 							printf("Premier calque, impossible d'aller plus loin\n");
 						else {
@@ -641,7 +641,7 @@ int main(int argc, char** argv) {
 						}
 					}			
 					// navigation calque suivant
-					if (x > (widthWin*0.86)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.80)) && y < (heightWin-(heightWin*0.85)) ) {
+					if (x > (widthWin*0.86)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.85)) && y < (heightWin-(heightWin*0.80)) ) {
 						//Si c'est le dernier calque
 						if(p_courant->p_next == NULL)
 							printf("Dernier calque, impossible d'aller plus loin\n");
@@ -688,7 +688,7 @@ int main(int argc, char** argv) {
 						addHistory(ph, p_courant, 2);
 					}
 					//remplir le calque d'une couleur unie
-					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.49)) && y < (heightWin-(heightWin*0.54)) ) {
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.54)) && y < (heightWin-(heightWin*0.49)) ) {
 						ACTIONlayerColor();
 					}
 					// changer le mode d'opération du calque
