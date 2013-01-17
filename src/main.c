@@ -50,6 +50,9 @@ Image* pf = &image_final;
 Image image_courant;
 Image* pic = &image_courant;
 
+
+
+
 /********** MAIN **********/
 int main(int argc, char** argv) {
 
@@ -101,16 +104,18 @@ int main(int argc, char** argv) {
 		float value;
 
 		//Fond blanc de l'histogramme
-		fixeCouleur(255,255,255);
-		drawCarre(0.35,0,1,1);
+		fixeCouleur(1,1,1);
+		drawCarre(0,0,1,1);
+		fixeCouleur(0,1,0);
+		drawCarre(0.64,0.38,0.98,0.88);
 
 		//Battonnet noir pour afficher l'histogramme
 		fixeCouleur(0,0,0);
-		//Dessin un baton qui a la hauteur de la valeur en pourcentage
-		for(j=256; j>0; j--) {
+		//Dessin un baton qui a la hauteur de la valeur en pourcentage 
+		for(j=256; j>=0; j--) {
 
-			value = (histo->values[j])/100.0; //Met les valeurs en pourcentage
-			drawLigne((((0.6*i)/255)+0.4),0,(((0.6*i)/255)+0.4),value);
+			value = (0.49*((histo->values[j])/100.0))+0.40; //Met les valeurs en pourcentage
+			drawLigne((((0.34*i)/255)+0.64),0.40,(((0.34*i)/255)+0.64),value);
 			i++;
 		}
 	}
@@ -429,10 +434,10 @@ int main(int argc, char** argv) {
 
 			//Touche u rajouter une lut
 			case 'u' : 
-				printf("\nEntrer l'intensite : ");
-				scanf("%d", &intensite);
+				
 
-				addContraste(p_llut, intensite);
+				invert(p_llut);
+				printf("invert OK\n");
 				
 				break;
 
@@ -441,7 +446,6 @@ int main(int argc, char** argv) {
 					//Création du calque temporaire pour parcourrir la liste de calque
 					LUT *p_temp = p_llut->l_head;
 
-					printf("\n");
 					//Parcourt la liste de calque
 					while (p_temp != NULL) {
 						applyLUT(pic, p_temp);
@@ -454,6 +458,8 @@ int main(int argc, char** argv) {
 			case 'g' : 
 				//Afficher autre chose
 				fixeFonctionDessin(mondessin);
+				
+
 				break;
 
 			//Touche Escape : fin du programme
@@ -565,9 +571,34 @@ int main(int argc, char** argv) {
 
 	}
 
+	/* GESTION CLICKS SOURIS = BOUTONS*/
+	void clickMouse(int button,int state,int x,int y) {
+		//float widthWin = widthImg + 300;
+		//float x1, x2, y1, y2;
+		// button ajout de calque
+		if (button == GLUT_LEFT_BUTTON) {
+			if(state == GLUT_DOWN) {
+
+				//x1 = widthWin - (widthWin - 0.63*widthWin);
+				//cible du bouton ajout de calque (si image = image.ppm)
+				if (x > 609 && x < 691 && y > 18 && y < 45) {
+					fixeFonctionDessin(dessinMenuCalque);
+					printf("%d %d\n",x,y);
+
+				}
+
+
+			}
+		
+		}
+	}
+
+
 	//Fonction pour la gestion du clavier
 	fixeFonctionClavier(kbdFunc);
 	fixeFonctionClavierSpecial(kbdSpFunc);
+	fixeFonctionClicSouris(clickMouse);
+
 
 	//Fusion des calques
 	fusionCalque(pc, pf);
@@ -578,8 +609,12 @@ int main(int argc, char** argv) {
 	//Afficher les infos
 	info(p_courant);
 	//Creation de la fenetre
-	initGLIMAGIMP_IHM(pf->widthImg,pf->heightImg,pf->tabPixel,pf->widthImg + 300,pf->heightImg);
+	initGLIMAGIMP_IHM(pf->widthImg,pf->heightImg,pf->tabPixel,pf->widthImg + 300,pf->heightImg+60);
 
 
 	return 0;
 }
+
+
+
+

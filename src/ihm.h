@@ -11,7 +11,10 @@
 
 /************* Appel des fonctions *************/
 void mondessin();
+void dessinMenuCalque();
 void info(Calque*);
 void help();
 void removeAll(Image*, Image*, Image*, LCalque*, LHistorique*, Histogramme*);
+
+
 #endif
