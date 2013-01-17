@@ -12,6 +12,7 @@
 #include "historique.h"
 #include "histogramme.h"
 #include "ihm.h"
+#include "lut.h"
 
 /********** VARIABLE ***********/
 #define EPSILON 0.0001;
@@ -34,6 +35,10 @@ LCalque* pc = &calque;
 
 Calque* p_courant;
 Calque* p_suppr;
+
+//LUT liste
+/*LLUT liste_lut;
+LLUT* p_llut = &liste_lut;*/
 
 //Image : première image, image finale et image du calque courant
 Image image;
@@ -61,6 +66,7 @@ int main(int argc, char** argv) {
 	char adress[100]; //Adresse des images de calque
 	char adressH[100]; //Adresse de l'histogramme
 	char adressF[100]; //Adresse de l'image final
+	int intensite;
 
 	/****** INITIALISATION DES ELEMENTS *****/
 
@@ -69,6 +75,9 @@ int main(int argc, char** argv) {
 	
 	//Initialisation de la liste des calques
 	pc = new_LCalque();
+
+	//Initialisation de la liste des lut
+	//p_llut=new_LLUT(p_llut);
 
 	//Calque courant
 	p_courant = pc->p_head;
@@ -418,6 +427,27 @@ int main(int argc, char** argv) {
 				SaveHisto(histo, adressH);
 				break;
 
+			//Touche u rajouter une lut
+			case 'u' : 
+				int r, v, b;
+
+				printf("Entrer une valeur de rouge : ");
+				scanf("%d", &r);
+
+				printf("Entrer une valeur de rouge : ");
+				scanf("%d", &v);
+
+				printf("Entrer une valeur de rouge : ");
+				scanf("%d", &b);
+
+				colorize(p_courant->p_llut, r, v, b);
+				
+				break;
+
+			case 'y' :
+				sepia(p_courant->p_llut, p_courant->image_src);
+				break; 
+
 			case 'g' : 
 				//Afficher autre chose
 				fixeFonctionDessin(mondessin);
@@ -428,7 +458,7 @@ int main(int argc, char** argv) {
 				printf("Fin du programme\n");
 				
 				//Supprimer les elements 
-				removeAll(p, pf, pic, p_courant, p_suppr, pc, ph, histo);
+				removeAll(p, pf, pic, pc, ph, histo);
 
 				//Fin du programme
 				exit(0);

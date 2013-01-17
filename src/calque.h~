@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "image.h"
-//#include "LUT.h"
+#include "lut.h"
 
 /************* STRUCTURE DU CALQUE *************/
 typedef struct Calque {
@@ -21,7 +21,7 @@ typedef struct Calque {
 	int mix;
 
 	//liste de LUT
-	//LLUT* list_lut;
+	LLut* p_llut;
 
 	//Calques 
 	struct Calque *p_prev; //calque précédent
@@ -58,4 +58,6 @@ void afficheLCalque(LCalque*);
 int calqueCourant(Calque*, Image*);
 int fusionCalque(LCalque*, Image*);
 int valeur_propre(int);
+
+void removeLCalque(LCalque*);
 #endif

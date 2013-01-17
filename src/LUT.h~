@@ -1,32 +1,17 @@
-#ifndef LUT_H
-#define LUT_H
-#include <stdio.h>
-#include <stdlib.h>
+typedef struct structure_LUT
+ {
+  // 3 tableaux Rouge Vert Bleu
+  unsigned char tabR[256];
+  unsigned char tabV[256];
+  unsigned char tabB[256];
+  
+  struct structure_LUT* next ;
+  struct structure_LUT* previous ;
+  int num; //numero operation speciale gris/sepia et nuit
+ }LUT;
 
-/************* Structure du LUT *************/
-typedef struct LUT {
-	// Définition de 3 tableaux pour chacune des composantes!
-	unsigned char tabLutR[256];
-	unsigned char tabLutV[256];
-	unsigned char tabLutB[256];
-
-	//Calques 
-	struct LUT *l_prev; //calque précédent
-	struct LUT *l_next; //calque suivant
-
-}LUT;
-
-
-typedef struct LLUT {
-
-	//Taille de la liste
-	size_t length;
-
-	//Pointeur
-	LUT *l_head; //pointeur vers le premier element
-	LUT *l_tail; //pointeur vers le dernier element
-}LLUT;
-
-/************* Appel des fonctions *************/
-
-#endif
+LUT* creer_init_LUT (void);
+int init_LUT (LUT*);
+void addcontrast_LUT(LUT*, int);
+void dimcontrast_LUT(LUT*, int);
+void addLUM_LUT(LUT*, int);

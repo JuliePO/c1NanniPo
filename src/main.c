@@ -36,10 +36,6 @@ LCalque* pc = &calque;
 Calque* p_courant;
 Calque* p_suppr;
 
-//LUT liste
-LLUT liste_lut;
-LLUT* p_llut = &liste_lut;
-
 //Image : première image, image finale et image du calque courant
 Image image;
 Image* p = &image;
@@ -70,18 +66,17 @@ int main(int argc, char** argv) {
 	char adress[100]; //Adresse des images de calque
 	char adressH[100]; //Adresse de l'histogramme
 	char adressF[100]; //Adresse de l'image final
-	int intensite;
+	int intensite; //Pour les modifications de luminosite et de contraste
+	int r, v, b; //Pour la colorisation 
 
 	/****** INITIALISATION DES ELEMENTS *****/
 
 	//Initialisation de l'historique
 	ph = initHistory();
+	p_redo = initHistory();
 	
 	//Initialisation de la liste des calques
 	pc = new_LCalque();
-
-	//Initialisation de la liste des lut
-	p_llut=new_LLUT();
 
 	//Calque courant
 	p_courant = pc->p_head;
@@ -209,6 +204,9 @@ int main(int argc, char** argv) {
 	void kbdFunc(unsigned char c, int x, int y) {
 	
 		switch(c) {
+
+			/******** CALQUES ******/
+
 			//Touche p : Afficher l'id du calque courant
 			case 'p' :
 				printf("\nID du calque courant : %d\n", p_courant->id);
@@ -387,6 +385,8 @@ int main(int argc, char** argv) {
 				addHistory(ph, p_courant, 4);
 				break;
 
+			/******** HISTORIQUE ******/
+
 			//Touche x : Afficher l'historique
 			case 'x' :
 				AfficheHistory(ph);
@@ -406,6 +406,8 @@ int main(int argc, char** argv) {
 				AfficheHistory(p_redo);
 				printf("taille : %d\n\n", p_redo->length);
 				break;
+
+			/******** HISTOGRAMME ******/
 				
 			//Touche t : Afficher l'histogramme
 			case 't' : 
@@ -441,42 +443,164 @@ int main(int argc, char** argv) {
 				SaveHisto(histo, adressH);
 				break;
 
-			//Touche u rajouter une lut
+			/******** EFFETS : LUT ******/
+
+			//Touche u : Ajout de luminosite
 			case 'u' : 
-				
+				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
+				scanf("%d", &intensite);
 
-				invert(p_llut);
-				printf("invert OK\n");
-				
-				break;
-
-			case 'y' :
-				if (p_llut != NULL) {
-					//Création du calque temporaire pour parcourrir la liste de calque
-					LUT *p_temp = p_llut->l_head;
-
-					//Parcourt la liste de calque
-					while (p_temp != NULL) {
-						applyLUT(pic, p_temp);
-					    	p_temp = p_temp->l_next;
+				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+				if(intensite < 0 || intensite > 255) {
+					while(intensite < 0 || intensite > 255) {
+						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+						printf("Entrer une valeur d'intensite :");
+						scanf("%d", &intensite);
 					}
-					free(p_temp);
 				}
+
+				addLum(p_courant->p_llut, intensite);
+				//Ajout de l'action dans l'historique
+				addHistory(ph, p_courant, 5);
+
+				break;
+			//Touche y : Diminution de la luminosite
+			case 'y' :
+				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
+				scanf("%d", &intensite);
+
+				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+				if(intensite < 0 || intensite > 255) {
+					while(intensite < 0 || intensite > 255) {
+						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+						printf("Entrer une valeur d'intensite :");
+						scanf("%d", &intensite);
+					}
+				}
+
+				dimLum(p_courant->p_llut, intensite);
+				//Ajout de l'action dans l'historique
+				addHistory(ph, p_courant, 5);
+
 				break; 
 
-			case 'g' : 
-				//Afficher autre chose
-				fixeFonctionDessin(mondessin);
-				
+			//Touche j : Ajout de contraste
+			case 'j' :
+				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
+				scanf("%d", &intensite);
+
+				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+				if(intensite < 0 || intensite > 255) {
+					while(intensite < 0 || intensite > 255) {
+						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+						printf("Entrer une valeur d'intensite :");
+						scanf("%d", &intensite);
+					}
+				}
+
+				addContraste(p_courant->p_llut, intensite);
+				//Ajout de l'action dans l'historique
+				addHistory(ph, p_courant, 5);
 
 				break;
+
+			//Touche k : Diminution du contraste
+			case 'k' :
+				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
+				scanf("%d", &intensite);
+					
+				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+				if(intensite < 0 || intensite > 255) {
+					while(intensite < 0 || intensite > 255) {
+						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+						printf("Entrer une valeur d'intensite :");
+						scanf("%d", &intensite);
+					}
+				}
+
+				dimContraste(p_courant->p_llut, intensite);
+				//Ajout de l'action dans l'historique
+				addHistory(ph, p_courant, 5);
+
+				break;
+
+			//Touche v : Inversion des couleurs
+			case 'v' :
+				invert(p_courant->p_llut);
+				//Ajout de l'action dans l'historique
+				addHistory(ph, p_courant, 5);
+				break;
+
+			//Touche b : Passage de l'image en noir et blanc
+			case 'b' :
+				B_W(p_courant->image_src);
+				//Ajout de l'action dans l'historique
+				addHistory(ph, p_courant, 4);
+				break;
+
+			//Touche g : Colorisation de l'image
+			case 'g' : 
+				printf("Entrer une valeur de rouge (entre 0 et 255) : ");
+				scanf("%d", &r);
+
+				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+				if(r < 0 || r > 255) {
+					while(r < 0 || r > 255) {
+						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+						printf("Entrer une valeur de rouge :");
+						scanf("%d", &r);
+					}
+				}
+
+				printf("Entrer une valeur de rouge (entre 0 et 255) : ");
+				scanf("%d", &v);
+
+				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+				if(v < 0 || v > 255) {
+					while(v < 0 || v > 255) {
+						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+						printf("Entrer une valeur de vert :");
+						scanf("%d", &v);
+					}
+				}
+
+				printf("Entrer une valeur de rouge (entre 0 et 255) : ");
+				scanf("%d", &b);
+
+				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+				if(b < 0 || b > 255) {
+					while(b < 0 || b > 255) {
+						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+						printf("Entrer une valeur de bleu :");
+						scanf("%d", &b);
+					}
+				}
+
+				colorize(p_courant->p_llut, r, v, b);
+				//Ajout de l'action dans l'historique
+				addHistory(ph, p_courant, 5);
+				break;
+
+			//Touche e : Sepia
+			case 'e' :
+				p_courant->p_llut = removeLut(p_courant->p_llut, p_courant->p_llut->l_tail->id);
+				addHistory(ph, p_courant, 6);
+				//sepia(p_courant->p_llut, p_courant->image_src);
+				//Ajout de l'action dans l'historique
+				//addHistory(ph, p_courant, 7);
+				break;
+
+			//Touche espace : supprimer une lut
+			/*case 32 :
+				printf("test");
+				break;*/
 
 			//Touche Escape : fin du programme
 			case 27 :
 				printf("Fin du programme\n");
 				
 				//Supprimer les elements 
-				removeAll(p, pf, pic, pc, ph, histo);
+				removeAll(p, pf, pic, pc, ph, p_redo, histo);
 
 				//Fin du programme
 				exit(0);
@@ -509,6 +633,11 @@ int main(int argc, char** argv) {
 			//Touche F1 : Afficher l'aide
 			case GLUT_KEY_F1 :
 				help();
+				break;
+
+			//Touche F2 : Afficher la liste de luts du calque courant
+			case GLUT_KEY_F2 :
+				afficheLLut(p_courant->p_llut);
 				break;
 
 			//Touche FLECHE BAS : Aller sur le calque précédent
@@ -595,7 +724,7 @@ int main(int argc, char** argv) {
 				if (x > (widthWin*0.02)  && x < (widthWin*0.05) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
 					printf("Fin du programme\n");
 					//Supprimer les elements 
-					removeAll(p, pf, pic, pc, ph, histo);
+					removeAll(p, pf, pic, pc, ph, p_redo, histo);
 					//Fin du programme
 					exit(0);
 				}
@@ -653,6 +782,8 @@ int main(int argc, char** argv) {
 	fixeFonctionClavierSpecial(kbdSpFunc);
 	fixeFonctionClicSouris(clickMouse);
 
+	//Affichage des dessins (histogramme, boutons)
+	//fixeFonctionDessin(mondessin);
 
 	//Fusion des calques
 	fusionCalque(pc, pf);

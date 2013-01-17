@@ -222,7 +222,7 @@ void help(void) {
 	printf("[h] : Sauvegarder l'histogramme en image ppm\n");
 }
 
-void removeAll(Image* p, Image* pf, Image* pic, LCalque* pc, LHistorique* ph, Histogramme* histo) {
+void removeAll(Image* p, Image* pf, Image* pic, LCalque* pc, LHistorique* ph, LHistorique* p_redo, Histogramme* histo) {
 	//Supprimer les images
 	freeTabImg(p);
 	freeTabImg(pf);
@@ -231,6 +231,7 @@ void removeAll(Image* p, Image* pf, Image* pic, LCalque* pc, LHistorique* ph, Hi
 	//Supprimmer les listes de calque, l'historique et l'histogramme
 	removeLCalque(pc); //Supprimer la liste de calque
 	removeHistory (ph); //Supprimer l'historique
+	removeHistory (p_redo); //Supprimer l'historique redo
 	removeHistogramme (histo); //Supprimer l'histogramme
 }
 

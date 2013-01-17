@@ -277,6 +277,16 @@ void AfficheHistory (LHistorique* pile) {
 				printf("Suppression de la derniere lut du calque %d\n", id);
 				break;
 
+			case 7 : //Suppression de lut
+				id = p_temp->calqueH->id;
+				printf("Ajout d'une lut dans le liste du luts du calque %d\n", id);
+				break;
+
+			case 8 : //Suppression de lut
+				id = p_temp->calqueH->id;
+				printf("Suppression de la derniere lut du calque %d\n", id);
+				break;
+
 
 		}
 		p_temp = p_temp->prev;

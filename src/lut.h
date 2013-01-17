@@ -39,6 +39,7 @@ void applyLUT(Image*, Lut*);
 LLut* removeLut(LLut*, int);
 int copyLLut(LLut*, LLut*);
 int copyLut(Lut*, Lut*);
+void afficheLLut(LLut*);
 
 void addLum(LLut*, int);
 void dimLum(LLut*, int);
@@ -47,7 +48,7 @@ void dimContraste(LLut*, int);
 void invert(LLut*);
 void B_W(Image*);
 void colorize(LLut*, int, int, int);
-void sepia (Lut*, Image*);
+void sepia (LLut*, Image*);
 
 void removeLLut(LLut*);
 #endif

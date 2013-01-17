@@ -206,7 +206,7 @@ int addCalqueImgId(LCalque* p_lcalque, float opacity, int mix, Image* img, int i
 		// On vérifie si le malloc n'a pas échoué
 		if (new_calque != NULL) {
 			new_calque->opacity = opacity; 
-			new_calque->mix = mix; 
+			new_calque->mix = mix;
 
 			//Création de la nouvelle image
 			Image* new_img = malloc(sizeof *new_img);

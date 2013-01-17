@@ -16,7 +16,7 @@ void dessinMenuHistogramme();
 void dessinMenuLut();
 void info(Calque*);
 void help();
-void removeAll(Image*, Image*, Image*, LCalque*, LHistorique*, Histogramme*);
+void removeAll(Image*, Image*, Image*, LCalque*, LHistorique*, LHistorique*, Histogramme*);
 
 
 #endif

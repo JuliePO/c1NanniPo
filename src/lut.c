@@ -14,6 +14,20 @@ LLut* new_LLut(LLut* p_llut) {
 		p_llut->l_head = NULL;
 		p_llut->l_tail = NULL;
 	}
+
+	//Rajout de la lut fantome
+	Lut *new_lut = malloc(sizeof *new_lut);
+
+	if (new_lut != NULL) {
+		if(addLUT(p_llut,new_lut) == 0) {
+			printf("Erreur au moment de la creation de la lut fantome\n");
+		}
+	}
+	else {
+		printf("Probleme d'allocation de la lut\n");
+		return 0;
+	}
+
 	return p_llut;
 }
 
@@ -88,6 +102,23 @@ void applyLUT(Image* img, Lut* lut) {
 	}
 }
 
+/*********** Afficher le liste de lut d'un calque ****************/
+void afficheLLut(LLut* p_llut) {
+	if (p_llut != NULL) {
+		//Création du calque temporaire pour parcourrir la liste de calque
+		Lut *lut_tmp = p_llut->l_head;
+
+		printf("\n");
+		//Parcourt la liste de calque
+		while (lut_tmp != NULL) {
+			printf("ID : %d\n", lut_tmp->id);
+			printf("\n");
+		    	lut_tmp = lut_tmp->l_next;
+		}
+		free(lut_tmp);
+	}
+}
+
 /************* Supprimer une lut selon sa position *************/
 LLut* removeLut(LLut* p_llut, int position) {
 
@@ -95,7 +126,7 @@ LLut* removeLut(LLut* p_llut, int position) {
 	if (p_llut != NULL) {
 
 		//Verifie que que le lut existe
-		if(p_llut->length >= position + 1) {
+		if(p_llut->length >= position) {
 
 			//Vérifie s'il reste au moins un lut, si c'est le dernier lut alors ne le supprime pas
 			if(p_llut->length > 1) {
@@ -251,6 +282,7 @@ int copyLut(Lut* p_lut, Lut* new_lut) {
 		printf("La lut n'existe pas\n");
 		return 0;
 	}
+	return 1;
 }
 
 /******Effets**********/
@@ -526,9 +558,9 @@ void colorize(LLut* p_llut, int R, int V, int B) {
 	}
 }
 
-void sepia (Lut* lut, Image* img) {
+void sepia (LLut* p_llut, Image* img) {
 	B_W(img);
-	colorize(lut, 100, 50, 0);
+	colorize(p_llut, 100, 50, 0);
 }
 
 
