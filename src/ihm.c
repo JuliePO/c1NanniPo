@@ -74,19 +74,19 @@ void dessinMenuCalque() {
 	
 	mondessin();
 
+	/* marquer de position */
 	float h1,h2,ht;
 	h1 = 0.92;
 	h2 = 0.97;
 	ht = 0.94;
-	// position
 	fixeCouleur(0.10,0.50,0.10);
 	drawCarre(0.75,h1,0.85,h2); // bg Calques
 	fixeCouleur(1,1,1);
 	drawCarreVide(0.75,h1,0.85,h2);// gauche, bas, droite, haut
 	writeString(0.76,ht,"Calques");
 
-	//menu calque
-	fixeCouleur(0.4,0.4,0.4);
+	//sous menu calque
+	fixeCouleur(0.6,0.6,0.6);
 	drawCarre(0.64,0.40,0.98,0.88);// gauche, bas, droite, haut
 	fixeCouleur(0.1,0.1,0.1);
 	writeString(0.65,0.82,"Calque :");
@@ -115,32 +115,72 @@ void dessinMenuCalque() {
 	writeString(0.756,0.45,"+  = Operation =  *");
 }
 
+void dessinMenuHistogramme() {
+
+	/* marquer de position */
+	float h1,h2,ht;
+	h1 = 0.92;
+	h2 = 0.97;
+	ht = 0.94;
+	fixeCouleur(0.10,0.50,0.10);
+	drawCarre(0.85,h1,0.975,h2); // bg histogramme
+	fixeCouleur(1,1,1);
+	drawCarreVide(0.85,h1,0.975,h2);// gauche, bas, droite, haut
+	writeString(0.86,ht,"Histogramme");
+
+	drawCarreVide(0.75,0.31,0.84,0.36);// gauche, bas, droite, haut
+	drawCarreVide(0.75,0.26,0.84,0.31);// gauche, bas, droite, haut
+	drawCarreVide(0.75,0.21,0.84,0.26);// gauche, bas, droite, haut
+	drawCarreVide(0.75,0.16,0.84,0.21);// gauche, bas, droite, haut
 
 
-void clickMouse(int button,int state,int x,int y) {
-	//float widthWin = widthImg + 300;
-	//float x1, x2, y1, y2;
-	// button ajout de calque
-	if (button == GLUT_LEFT_BUTTON) {
-		if(state == GLUT_DOWN) {
+	writeString(0.64,0.33,"Canal :");
+	writeString(0.76,0.33,"Global");
+	writeString(0.76,0.28,"R");
+	writeString(0.76,0.23,"V");
+	writeString(0.76,0.18,"B");
 
-			//x1 = widthWin - (widthWin - 0.63*widthWin);
-			//cible du bouton ajout de calque (si image = image.ppm)
-			if (x > 609 && x < 691 && y > 18 && y < 45) {
-				fixeFonctionDessin(dessinMenuCalque);
-					printf("%d %d\n",x,y);
-
-			}
-			
-
-
-		}
-	
-	}
+	fixeCouleur(0.4,0.4,0.4);
+	drawCarre(0.68,0.09,0.92,0.14);// gauche, bas, droite, haut
+	fixeCouleur(1,1,1);
+	drawCarreVide(0.68,0.09,0.92,0.14);// gauche, bas, droite, haut
+	writeString(0.70,0.11,"Sauver l'histogramme");
 }
 
+void dessinMenuLut() {
+	
+	mondessin();
 
+	/* marquer de position */
+	float h1,h2,ht;
+	h1 = 0.92;
+	h2 = 0.97;
+	ht = 0.94;
+	fixeCouleur(0.10,0.50,0.10);
+	drawCarre(0.65,h1,0.75,h2); // bg effets
+	fixeCouleur(1,1,1);
+	drawCarreVide(0.65,h1,0.75,h2);// gauche, bas, droite, haut
+	writeString(0.66,ht,"Effets");
 
+	//sous menu calque
+	fixeCouleur(0.6,0.6,0.6);
+	drawCarre(0.64,0.40,0.98,0.88);// gauche, bas, droite, haut
+	fixeCouleur(0.1,0.1,0.1);
+	writeString(0.65,0.82,"Effets :");
+
+	drawCarreVide(0.74,0.80,0.96,0.85);// gauche, bas, droite, haut
+	drawCarreVide(0.74,0.75,0.96,0.80);// gauche, bas, droite, haut
+	drawCarreVide(0.74,0.70,0.96,0.75);// gauche, bas, droite, haut
+	drawCarreVide(0.74,0.65,0.96,0.70);// gauche, bas, droite, haut
+	drawCarreVide(0.74,0.60,0.96,0.65);// gauche, bas, droite, haut
+
+	writeString(0.76,0.82,"+ Contraste");
+	writeString(0.76,0.77,"- Contraste");
+	writeString(0.76,0.72,"+ Luminosite");
+	writeString(0.76,0.67,"- Luminosite");
+	writeString(0.76,0.62,"Effet Sepia");
+
+}
 
 
 void info(Calque* p_courant) {
