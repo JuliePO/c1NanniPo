@@ -50,6 +50,9 @@ Image* pf = &image_final;
 Image image_courant;
 Image* pic = &image_courant;
 
+
+
+
 /********** MAIN **********/
 int main(int argc, char** argv) {
 
@@ -62,6 +65,7 @@ int main(int argc, char** argv) {
 	int position; //Pour recuperer l'id
 	int red, green, blue; //Pour recuperer le nombre de rouge, vert, blue pour remplir un calque d'une couleur unie
 	int canal = 0; //Canal = 0 : global (1 : rouge, 2 : vert, 3 : bleu)
+	int menu = 0; //Permet d'appliquer la fonction clickMouse en fonction du menu affiché: 1 = Menu Effets; 2 = Menu Calque; 3 = Menu Histogramme
 	int switchCalque = 0; //  0 : image total && 1 : image du calque
 	char adress[100]; //Adresse des images de calque
 	char adressH[100]; //Adresse de l'histogramme
@@ -95,24 +99,110 @@ int main(int argc, char** argv) {
 	}
 
 	/********* Affichage de l'histogramme *********/
-	void AfficheHisto() {
+	void afficheHisto() {
+		//appel du menu principal
+		mondessin();
+		//appel du sous menu histogramme
+		dessinMenuHistogramme();
 
 		int i=0, j;
 		float value;
 
 		//Fond blanc de l'histogramme
-		fixeCouleur(255,255,255);
-		drawCarre(0.35,0,1,1);
+		fixeCouleur(0.7,0.8,0.7);
+		drawCarre(0.64,0.38,0.98,0.87);
 
 		//Battonnet noir pour afficher l'histogramme
 		fixeCouleur(0,0,0);
-		//Dessin un baton qui a la hauteur de la valeur en pourcentage
-		for(j=256; j>0; j--) {
+		//Dessin un baton qui a la hauteur de la valeur en pourcentage 
+		for(j=256; j>=0; j--) {
 
-			value = (histo->values[j])/100.0; //Met les valeurs en pourcentage
-			drawLigne((((0.6*i)/255)+0.4),0,(((0.6*i)/255)+0.4),value);
+			value = (0.473*((histo->values[j])/100.0))+0.40; //Met les valeurs en pourcentage
+			drawLigne((((0.34*i)/255)+0.64),0.38,(((0.34*i)/255)+0.64),value);
 			i++;
 		}
+	}
+
+	void ACTIONaddCalqueImg() {
+		//Recuperer l'adresse de l'image
+		printf("\nEntrez l'adresse de l'image (images/votre_image.ppm) : ");
+		scanf("%s", adress);
+
+		//Recuperer l'opacite
+		printf("Entrez l'opacite du calque (compris entre 0 et 1) : ");
+		scanf("%f", &opacity);
+
+		// Si l'opacite n'est pas compris entre 0 et 1 alors on redemande l'opacite jusqu'à que c'est bon
+		if(opacity < 0 || opacity > 1) {
+
+			while(opacity < 0 || opacity > 1) {
+				printf("Erreur entrez une opacite comprise entre 0 et 1 \n");
+				printf("Entrez l'opacite du calque : ");
+				scanf("%f", &opacity);
+			}
+		}
+
+		//Recuperer mode d'operation des calques
+		printf("\nEntrez le mode de melange du calque ( 0 = Addition && 1 = Multiplication) :  ");
+		scanf("%d", &mix); 
+
+		// Si l'opacite est différent de 0 ou 1 alors on redemande le mode d'operation jusqu'à que c'est bon
+		if(mix != 0 && mix != 1) {
+
+			while(mix != 0 && mix != 1){
+				printf("Erreur entrez 0 pour l'addition et 1 pour la multiplication \n");
+				printf("\nEntrez le mode de melange du calque ( 0 = Addition && 1 = Multiplication) :  ");
+				scanf("%d", &mix); 
+			}
+			
+		}
+
+		//Ajouter un calque avec l'image
+		addCalqueImg(pc, opacity, mix, adress);
+		//Le calque courant devient le calque qu'on vient d'ajouter
+		p_courant = pc->p_tail;
+		//Ajout de l'action dans l'historique
+		addHistory(ph, p_courant, 0);
+		addHistory(p_redo, p_courant, -1);
+	}
+
+	void ACTIONaddCalqueVide() {
+		//Recuperer l'opacite
+		printf("\nEntrez l'opacite du calque (compris entre 0 et 1): ");
+		scanf("%f", &opacity);
+
+		// Si l'opacite n'est pas compris entre 0 et 1 alors on redemande l'opacite jusqu'à que c'est bon
+		if(opacity < 0 || opacity > 1)  {
+
+			while(opacity < 0 || opacity > 1) {
+				printf("Erreur entrez une opacite comprise entre 0 et 1 \n");
+				printf("Entrez l'opacite du calque : ");
+				scanf("%f", &opacity);
+			}
+		}
+
+		//Recuperer mode d'operation des calques
+		printf("\nEntrez le mode de melange du calque ( 0 = Addition && 1 = Multiplication) :  ");
+		scanf("%d", &mix); 
+
+		// Si l'opacite est différent de 0 ou 1 alors on redemande le mode d'operation jusqu'à que c'est bon
+		if(mix != 0 && mix != 1) {
+
+			while(mix != 0 && mix != 1){
+				printf("Erreur entrez 0 pour l'addition et 1 pour la multiplication \n");
+				printf("\nEntrez le mode de melange du calque ( 0 = Addition && 1 = Multiplication) :  ");
+				scanf("%d", &mix); 
+			}
+			
+		}
+
+		//Ajoute le calque
+		addCalque(pc, opacity, mix);
+		//Le calque courant devient le calque qu'on vient d'ajouter
+		p_courant = pc->p_tail;
+		//Ajout de l'action dans l'historique
+		addHistory(ph, p_courant, 0);
+		addHistory(p_redo, p_courant, -2);
 	}
 
 	/****** GESTION TOUCHES CLAVIER ******/
@@ -157,88 +247,12 @@ int main(int argc, char** argv) {
 			//Touche n : Ajouter un nouveau calque vide
 			case 'n' :
 
-				//Recuperer l'opacite
-				printf("\nEntrez l'opacite du calque (compris entre 0 et 1): ");
-				scanf("%f", &opacity);
-
-				// Si l'opacite n'est pas compris entre 0 et 1 alors on redemande l'opacite jusqu'à que c'est bon
-				if(opacity < 0 || opacity > 1)  {
-
-					while(opacity < 0 || opacity > 1) {
-						printf("Erreur entrez une opacite comprise entre 0 et 1 \n");
-						printf("Entrez l'opacite du calque : ");
-						scanf("%f", &opacity);
-					}
-				}
-
-				//Recuperer mode d'operation des calques
-				printf("\nEntrez le mode de melange du calque ( 0 = Addition && 1 = Multiplication) :  ");
-				scanf("%d", &mix); 
-
-				// Si l'opacite est différent de 0 ou 1 alors on redemande le mode d'operation jusqu'à que c'est bon
-				if(mix != 0 && mix != 1) {
-
-					while(mix != 0 && mix != 1){
-						printf("Erreur entrez 0 pour l'addition et 1 pour la multiplication \n");
-						printf("\nEntrez le mode de melange du calque ( 0 = Addition && 1 = Multiplication) :  ");
-						scanf("%d", &mix); 
-					}
-					
-				}
-
-				//Ajoute le calque
-				addCalque(pc, opacity, mix);
-				//Le calque courant devient le calque qu'on vient d'ajouter
-				p_courant = pc->p_tail;
-				//Ajout de l'action dans l'historique
-				addHistory(ph, p_courant, 0);
-				addHistory(p_redo, p_courant, -2);
-
+				ACTIONaddCalqueVide();
 				break;
 
 			//Touche i : Ajouter un calque avec une image
 			case 'i' :	
-				
-				//Recuperer l'adresse de l'image
-				printf("\nEntrez l'adresse de l'image (images/votre_image.ppm) : ");
-				scanf("%s", adress);
-
-				//Recuperer l'opacite
-				printf("Entrez l'opacite du calque (compris entre 0 et 1) : ");
-				scanf("%f", &opacity);
-
-				// Si l'opacite n'est pas compris entre 0 et 1 alors on redemande l'opacite jusqu'à que c'est bon
-				if(opacity < 0 || opacity > 1) {
-
-					while(opacity < 0 || opacity > 1) {
-						printf("Erreur entrez une opacite comprise entre 0 et 1 \n");
-						printf("Entrez l'opacite du calque : ");
-						scanf("%f", &opacity);
-					}
-				}
-
-				//Recuperer mode d'operation des calques
-				printf("\nEntrez le mode de melange du calque ( 0 = Addition && 1 = Multiplication) :  ");
-				scanf("%d", &mix); 
-
-				// Si l'opacite est différent de 0 ou 1 alors on redemande le mode d'operation jusqu'à que c'est bon
-				if(mix != 0 && mix != 1) {
-
-					while(mix != 0 && mix != 1){
-						printf("Erreur entrez 0 pour l'addition et 1 pour la multiplication \n");
-						printf("\nEntrez le mode de melange du calque ( 0 = Addition && 1 = Multiplication) :  ");
-						scanf("%d", &mix); 
-					}
-					
-				}
- 
-				//Ajouter un calque avec l'image
-				addCalqueImg(pc, opacity, mix, adress);
-				//Le calque courant devient le calque qu'on vient d'ajouter
-				p_courant = pc->p_tail;
-				//Ajout de l'action dans l'historique
-				addHistory(ph, p_courant, 0);
-				addHistory(p_redo, p_courant, -1);
+				ACTIONaddCalqueImg();
 			
 				break;
 
@@ -395,7 +409,7 @@ int main(int argc, char** argv) {
 				
 			//Touche t : Afficher l'histogramme
 			case 't' : 
-				fixeFonctionDessin(AfficheHisto);
+				fixeFonctionDessin(afficheHisto);
 				break;
 
 
@@ -429,10 +443,10 @@ int main(int argc, char** argv) {
 
 			//Touche u rajouter une lut
 			case 'u' : 
-				printf("\nEntrer l'intensite : ");
-				scanf("%d", &intensite);
+				
 
-				addContraste(p_llut, intensite);
+				invert(p_llut);
+				printf("invert OK\n");
 				
 				break;
 
@@ -441,7 +455,6 @@ int main(int argc, char** argv) {
 					//Création du calque temporaire pour parcourrir la liste de calque
 					LUT *p_temp = p_llut->l_head;
 
-					printf("\n");
 					//Parcourt la liste de calque
 					while (p_temp != NULL) {
 						applyLUT(pic, p_temp);
@@ -454,6 +467,8 @@ int main(int argc, char** argv) {
 			case 'g' : 
 				//Afficher autre chose
 				fixeFonctionDessin(mondessin);
+				
+
 				break;
 
 			//Touche Escape : fin du programme
@@ -565,9 +580,79 @@ int main(int argc, char** argv) {
 
 	}
 
+	/* GESTION CLICKS SOURIS = BOUTONS*/
+	void clickMouse(int button,int state,int x,int y) {
+		int widthWin = pf->widthImg + 300; //= 512
+		int heightWin = pf->heightImg + 60;
+		// button ajout de calque
+		if (button == GLUT_LEFT_BUTTON) {
+			if(state == GLUT_DOWN) {
+
+
+				/*****header : Menu principal ****/
+
+				//bouton quitter 
+				if (x > (widthWin*0.02)  && x < (widthWin*0.05) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+					printf("Fin du programme\n");
+					//Supprimer les elements 
+					removeAll(p, pf, pic, pc, ph, histo);
+					//Fin du programme
+					exit(0);
+				}
+				if (x > (widthWin*0.07)  && x < (widthWin*0.16) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+					fixeFonctionDessin(dessinMenuLut);
+
+				}
+				//bt menu lut
+				if (x > (widthWin*0.65)  && x < (widthWin*0.75) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+					fixeFonctionDessin(dessinMenuLut);
+					menu=1;
+
+				}
+				//bt menu calque (si image = image.ppm)
+				if (x > (widthWin*0.75)  && x < (widthWin*0.85) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+					fixeFonctionDessin(dessinMenuCalque);
+					menu=2;
+					printf("%d\n", menu);
+
+				}
+				//bt menu histogramme
+				if (x > (widthWin*0.86)  && x < (widthWin*0.975) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+					fixeFonctionDessin(afficheHisto);
+					menu=3;
+				}
+
+					/******** Sous menu calque *************/
+
+
+					if (menu == 2) {
+						// navigation calque précédent
+						// navigation calque suivant
+						//bt Ajout de calque avec sans image
+						if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.79)) && y < (heightWin-(heightWin*0.74)) ) {
+							ACTIONaddCalqueVide();
+						}
+						//bt Ajout de calque avec une Image	
+						if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.74)) && y < (heightWin-(heightWin*0.69)) ) {
+							ACTIONaddCalqueImg();
+						}
+					}
+
+					
+
+
+
+			}
+		
+		}
+	}
+
+
 	//Fonction pour la gestion du clavier
 	fixeFonctionClavier(kbdFunc);
 	fixeFonctionClavierSpecial(kbdSpFunc);
+	fixeFonctionClicSouris(clickMouse);
+
 
 	//Fusion des calques
 	fusionCalque(pc, pf);
@@ -578,8 +663,12 @@ int main(int argc, char** argv) {
 	//Afficher les infos
 	info(p_courant);
 	//Creation de la fenetre
-	initGLIMAGIMP_IHM(pf->widthImg,pf->heightImg,pf->tabPixel,pf->widthImg + 300,pf->heightImg);
+	initGLIMAGIMP_IHM(pf->widthImg,pf->heightImg,pf->tabPixel,pf->widthImg + 300,pf->heightImg+60);
 
 
 	return 0;
 }
+
+
+
+
