@@ -96,9 +96,9 @@ int main(int argc, char** argv) {
 	/********* Affichage de l'histogramme *********/
 	void afficheHisto() {
 		//appel du menu principal
-		mondessin();
+		drawMain();
 		//appel du sous menu histogramme
-		dessinMenuHistogramme();
+		drawMenuHistogramme();
 
 		int i=0, j;
 		float value;
@@ -199,7 +199,88 @@ int main(int argc, char** argv) {
 		addHistory(ph, p_courant, 0);
 		addHistory(p_redo, p_courant, -2);
 	}
+	void ACTIONdelCurrentLayer(){
+		//Ajout de l'action dans l'historique
+		addHistory(ph, p_courant, 1);
 
+		//pointeur suppr = pointeur calque courant pour pouvoir changer de calque courant avant de supprimer le calque
+		p_suppr = p_courant;
+
+		//S'il reste plus d'un calque
+		if(pc->length > 1) {
+			//Si c'est le premier calque alors le calque courant devient le calque suivant
+			if(p_courant->p_prev == NULL) {
+				p_courant = p_courant->p_next;
+			}
+			//Sinon le calque courant devient le calque précédent
+			else {
+				p_courant = p_courant->p_prev;
+				printf("ID calque courant : %d \n", p_courant->id);
+			}
+			//Supprime le calque
+			removeCalque(pc, p_suppr);
+			printf("Le calque a bien été supprimé\n");
+		}
+		else
+			printf("Il reste un seul calque, impossible de le supprimer");
+	}
+
+	void ACTIONsaveImg(){
+		//Recuperer l'adresse de l'image finale
+		printf("\nEntrez l'adresse de l'image (images/votre_image.ppm) : ");
+		scanf("%s", adressF);
+
+		//Si la sauvegarde a été faite alors affiche l'adresse
+		if(saveImg(pf, adressF) == 1)
+			printf("L'image a bien ete enregistree dans %s\n", adressF);
+		else
+			printf("Ereur dans la sauvegarde de l'image\n");
+	}
+	void ACTIONlayerColor(){
+		//Récupère la valeur de rouge
+		printf("\nEntrer la valeur rouge (comprise entre 0 et 255) :");
+		scanf("%d", &red);
+
+		//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+		if(red < 0 || red > 255) {
+			while(red < 0 || red > 255) {
+				printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+				printf("Entrer la valeur rouge :");
+				scanf("%d", &red);
+			}
+		}
+
+		//Récupère la valeur de vert
+		printf("Entrer la valeur vert (comprise entre 0 et 255) :");
+		scanf("%d", &green);
+
+		//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+		if(green < 0 || green > 255) {
+			while(green < 0 || green > 255) {
+				printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+				printf("Entrer la valeur rouge :");
+				scanf("%d", &green);
+			}
+		}
+
+		//Récupère la valeur de bleu
+		printf("Entrer la valeur blue (comprise entre 0 et 255) :");
+		scanf("%d", &blue);
+
+		//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+		if(blue < 0 || blue > 255) {
+			while(blue < 0 || blue > 255) {
+				printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+				printf("Entrer la valeur rouge :");
+				scanf("%d", &blue);
+			}
+		}
+
+		//Rempli le calque par la couleur
+		remplirCalque(p_courant, red, green, blue);
+		//Ajout de l'action dans l'historique
+		addHistory(ph, p_courant, 4);
+	}
 	/****** GESTION TOUCHES CLAVIER ******/
 	void kbdFunc(unsigned char c, int x, int y) {
 	
@@ -244,54 +325,22 @@ int main(int argc, char** argv) {
 
 			//Touche n : Ajouter un nouveau calque vide
 			case 'n' :
-
 				ACTIONaddCalqueVide();
 				break;
 
 			//Touche i : Ajouter un calque avec une image
 			case 'i' :	
 				ACTIONaddCalqueImg();
-			
 				break;
 
 			//Touche a : Supprimer le calque courant
 			case 'a' :
-				//Ajout de l'action dans l'historique
-				addHistory(ph, p_courant, 1);
-
-				//pointeur suppr = pointeur calque courant pour pouvoir changer de calque courant avant de supprimer le calque
-				p_suppr = p_courant;
-
-				//S'il reste plus d'un calque
-				if(pc->length > 1) {
-					//Si c'est le premier calque alors le calque courant devient le calque suivant
-					if(p_courant->p_prev == NULL) {
-						p_courant = p_courant->p_next;
-					}
-					//Sinon le calque courant devient le calque précédent
-					else {
-						p_courant = p_courant->p_prev;
-						printf("ID calque courant : %d \n", p_courant->id);
-					}
-					//Supprime le calque
-					removeCalque(pc, p_suppr);
-					printf("Le calque a bien été supprimer\n");
-				}
-				else
-					printf("Il reste un seul calque, impossible de le supprimer");
+				ACTIONdelCurrentLayer();
 				break;
 
 			//Touche s : Sauvegarde de l'image final
 			case 's' :
-				//Recuperer l'adresse de l'image final
-				printf("\nEntrez l'adresse de l'image (images/votre_image.ppm) : ");
-				scanf("%s", adressF);
-
-				//Si la sauvegarde a été faite alors affiche l'adresse
-				if(saveImg(pf, adressF) == 1)
-					printf("L'image a bien ete enregistree dans %s\n", adressF);
-				else
-					printf("Ereur dans la sauvegarde de l'image\n");
+				ACTIONsaveImg();
 				break;
 
 			//Touche o : Modifier l'opacite du calque
@@ -339,50 +388,7 @@ int main(int argc, char** argv) {
 
 			//Touche r : Remplir le calque d'une couleur unie
 			case 'r' :
-
-				//Récupère la valeur de rouge
-				printf("\nEntrer la valeur rouge (comprise entre 0 et 255) :");
-				scanf("%d", &red);
-
-				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
-				if(red < 0 || red > 255) {
-					while(red < 0 || red > 255) {
-						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-						printf("Entrer la valeur rouge :");
-						scanf("%d", &red);
-					}
-				}
-
-				//Récupère la valeur de vert
-				printf("Entrer la valeur vert (comprise entre 0 et 255) :");
-				scanf("%d", &green);
-
-				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
-				if(green < 0 || green > 255) {
-					while(green < 0 || green > 255) {
-						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-						printf("Entrer la valeur rouge :");
-						scanf("%d", &green);
-					}
-				}
-
-				//Récupère la valeur de bleu
-				printf("Entrer la valeur blue (comprise entre 0 et 255) :");
-				scanf("%d", &blue);
-
-				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
-				if(blue < 0 || blue > 255) {
-					while(blue < 0 || blue > 255) {
-						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-						printf("Entrer la valeur rouge :");
-						scanf("%d", &blue);
-					}
-				}
-
-				//Rempli le calque par la couleur
-				remplirCalque(p_courant, red, green, blue);
-				//Ajout de l'action dans l'historique
-				addHistory(ph, p_courant, 4);
+				ACTIONlayerColor();
 				break;
 
 			/******** HISTORIQUE ******/
@@ -540,6 +546,7 @@ int main(int argc, char** argv) {
 
 			//Touche g : Colorisation de l'image
 			case 'g' : 
+
 				printf("Entrer une valeur de rouge (entre 0 et 255) : ");
 				scanf("%d", &r);
 
@@ -589,11 +596,6 @@ int main(int argc, char** argv) {
 				//Ajout de l'action dans l'historique
 				//addHistory(ph, p_courant, 7);
 				break;
-
-			//Touche espace : supprimer une lut
-			/*case 32 :
-				printf("test");
-				break;*/
 
 			//Touche Escape : fin du programme
 			case 27 :
@@ -717,7 +719,6 @@ int main(int argc, char** argv) {
 		if (button == GLUT_LEFT_BUTTON) {
 			if(state == GLUT_DOWN) {
 
-
 				/*****header : Menu principal ****/
 
 				//bouton quitter 
@@ -728,19 +729,20 @@ int main(int argc, char** argv) {
 					//Fin du programme
 					exit(0);
 				}
+				//bt sauver
 				if (x > (widthWin*0.07)  && x < (widthWin*0.16) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
-					fixeFonctionDessin(dessinMenuLut);
+					ACTIONsaveImg();
 
 				}
 				//bt menu lut
 				if (x > (widthWin*0.65)  && x < (widthWin*0.75) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
-					fixeFonctionDessin(dessinMenuLut);
+					fixeFonctionDessin(drawMenuLut);
 					menu=1;
 
 				}
 				//bt menu calque (si image = image.ppm)
 				if (x > (widthWin*0.75)  && x < (widthWin*0.85) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
-					fixeFonctionDessin(dessinMenuCalque);
+					fixeFonctionDessin(drawMenuLayer);
 					menu=2;
 					printf("%d\n", menu);
 
@@ -751,29 +753,103 @@ int main(int argc, char** argv) {
 					menu=3;
 				}
 
-					/******** Sous menu calque *************/
+				/******** Sous menu calque *************/
 
-
-					if (menu == 2) {
-						// navigation calque précédent
-						// navigation calque suivant
-						//bt Ajout de calque avec sans image
-						if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.79)) && y < (heightWin-(heightWin*0.74)) ) {
-							ACTIONaddCalqueVide();
+				if (menu == 2) {
+					// navigation calque précédent
+					if (x > (widthWin*0.74)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.85)) && y < (heightWin-(heightWin*0.80)) ) {
+						if(p_courant->p_prev == NULL)
+							printf("Premier calque, impossible d'aller plus loin\n");
+						else {
+							p_courant = p_courant->p_prev; //Le calque courant devient le calque précédent
+							printf("ID calque courant : %d \n", p_courant->id);
 						}
-						//bt Ajout de calque avec une Image	
-						if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.74)) && y < (heightWin-(heightWin*0.69)) ) {
-							ACTIONaddCalqueImg();
-						}
+					}			
+					// navigation calque suivant
+					if (x > (widthWin*0.86)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.85)) && y < (heightWin-(heightWin*0.80)) ) {
+						//Si c'est le dernier calque
+						if(p_courant->p_next == NULL)
+							printf("Dernier calque, impossible d'aller plus loin\n");
+						else {
+							p_courant = p_courant->p_next; //Le calque courant devient le calque suivant
+							printf("ID calque courant : %d \n", p_courant->id);
+						}					
 					}
-
-					
-
-
-
+					//bt Ajout de calque avec sans image
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.79)) && y < (heightWin-(heightWin*0.74)) ) {
+						ACTIONaddCalqueImg();
+					}
+					//bt Ajout de calque avec une Image	
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.74)) && y < (heightWin-(heightWin*0.69)) ) {
+						ACTIONaddCalqueVide();
+					}
+					//bt Suppression du calque courrent
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.69)) && y < (heightWin-(heightWin*0.64)) ) {
+						ACTIONdelCurrentLayer();
+					}
+					//bt modification de l'opacité
+					//diminution (bt -)
+					if (x > (widthWin*0.74)  && x < (widthWin*0.78) && y > (heightWin-(heightWin*0.60)) && y < (heightWin-(heightWin*0.55)) ) {
+						//Si l'opacite est à 0 (minimum)
+						if(p_courant->opacity <= 0)
+							printf("Opacite est dejà à 0\n");
+						else {
+							p_courant->opacity -= 0.1; //Diminuer de 0.1 l'opacite de calque
+							printf("Opacite : %f\n", p_courant->opacity);
+						}
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 2);				
+					}
+					// ajout d'opacité (bt +)
+					if (x > (widthWin*0.92)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.60)) && y < (heightWin-(heightWin*0.55)) ) {
+						//Si l'opacite est à 1 (maximum)
+						if(p_courant->opacity >= 1)
+							printf("Opacite est dejà à 100\n");
+						else {
+							p_courant->opacity += 0.1; //Augmente de 0.1 l'opacite de calque
+							printf("Opacite : %f\n", p_courant->opacity); 
+						}
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 2);
+					}
+					//remplir le calque d'une couleur unie
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.54)) && y < (heightWin-(heightWin*0.49)) ) {
+						ACTIONlayerColor();
+					}
+					// changer le mode d'opération du calque
+					// addition 0
+					if (x > (widthWin*0.74)  && x < (widthWin*0.78) && y > (heightWin-(heightWin*0.48)) && y < (heightWin-(heightWin*0.43)) ) {
+						mix = 0;
+						//Modification du mode d'operation du calque
+						modifMix(p_courant, mix);
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 3);
+					}
+					// multiplication 1
+					if (x > (widthWin*0.92)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.48)) && y < (heightWin-(heightWin*0.43)) ) {
+						mix = 1;
+						//Modification du mode d'operation du calque
+						modifMix(p_courant, mix);
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 3);					
+					}
+				}
 			}
-		
 		}
+
+		//Si switchCalque = 0 (mode image final)
+        if(switchCalque == 0) {
+           fusionCalque(pc, pf); //Fusion des calques
+           histo = createHistogramme(pf, canal); //Redefinition de l'histogramme
+           actualiseImage(pf->tabPixel); //Actualiser l'image
+        }
+  	 	//Sinon (mode calque courant)
+		else {
+           calqueCourant(p_courant, pic); //Application des effets sur le calque courant
+           histo = createHistogramme(pic, canal); //Redefinition de l'histogramme
+           actualiseImage(pic->tabPixel); //Actualiset l'image 		
+       	}
+
 	}
 
 
