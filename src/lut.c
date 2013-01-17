@@ -1,37 +1,24 @@
 #include <stdlib.h>
 #include <stdio.h>
-//Appel de la structure d'une lut
-
-#include "lut.h"
+#include <string.h>
+//Appel de la structure de l'image
 #include "image.h"
+//Appel de la structure de la lut
+#include "lut.h"
 
-
-//test en local
-/*#include "../include/lut.h"
-#include "../include/image.h"
-#include "../include/calque.h"*/
-
-
-
-/************* Création d'une nouvelle liste de lut *************/
-LLUT* new_LLUT(void) {
+/************* Création d'une nouvelle liste de calque *************/
+LLut* new_LLut(LLut* p_llut) {
 	
-	//Alloue de la mémoire 
-	LLUT *p_lut = malloc(sizeof *p_lut);
-	if (p_lut != NULL) {
-		p_lut->length = 0;
-		p_lut->l_head = NULL;
-		p_lut->l_tail = NULL;
+	if (p_llut != NULL) {
+		p_llut->length = 0;
+		p_llut->l_head = NULL;
+		p_llut->l_tail = NULL;
 	}
-	return p_lut;
+	return p_llut;
 }
 
-/*********************************************************************/
-
-
-
-//initialisation de la lut
-int initLUT(LLUT* p_llut, LUT* new_lut) {
+/************* Ajout d'une lut dans la liste de lut *************/
+int addLUT(LLut* p_llut, Lut* new_lut) {
 
 	if (p_llut != NULL)	{
 
@@ -88,29 +75,21 @@ int initLUT(LLUT* p_llut, LUT* new_lut) {
 	
 	//on retourne la liste
 	return 1;
-}	
+}
 
-
-
-
-
-
-
-//application d'une LUT sur l'image
+/************* Application d'une LUT sur l'image *************/
 // il s'agit de remplacer les valeurs des pixels de l'image par celles de la lut
-void applyLUT(Image* img, LUT* lut) {
+void applyLUT(Image* img, Lut* lut) {
 	int i;
 	for(i=0; i<((img->heightImg)*(img->widthImg)*3); i+=3){
-		img->tabPixel[i]=(unsigned char)(lut->tabLutR[(int)img->tabPixel[i]]);
-		img->tabPixel[i+1]=(unsigned char)(lut->tabLutV[(int)img->tabPixel[i+1]]);
-		img->tabPixel[i+2]=(unsigned char)(lut->tabLutB[(int)img->tabPixel[i+2]]);
+		img->tabPixel[i]=(lut->tabLutR[img->tabPixel[i]]);
+		img->tabPixel[i+1]=(lut->tabLutV[img->tabPixel[i+1]]);
+		img->tabPixel[i+2]=(lut->tabLutB[img->tabPixel[i+2]]);
 	}
 }
 
-
-
 /************* Supprimer une lut selon sa position *************/
-LLUT* removeLut(LLUT* p_llut, int position) {
+LLut* removeLut(LLut* p_llut, int position) {
 
 	// On vérifie si notre liste a été allouée
 	if (p_llut != NULL) {
@@ -122,7 +101,7 @@ LLUT* removeLut(LLUT* p_llut, int position) {
 			if(p_llut->length > 1) {
 
 				//Création d'un lut temporaire
-				LUT *p_tmp = p_llut->l_head;
+				Lut *p_tmp = p_llut->l_head;
 
 				// Parcours de la liste de lut, tant que id est inférieur à la position souhaitée
 				while (p_tmp != NULL && (p_tmp->id) <= position) {
@@ -147,7 +126,7 @@ LLUT* removeLut(LLUT* p_llut, int position) {
 							p_llut->l_head->id = 0;
 						
 							//Création d'un lut temporaire pour parcourir la liste de lut
-							LUT *p_temp = p_llut->l_head->l_next;
+							Lut *p_temp = p_llut->l_head->l_next;
 							int i = 0;
 
 							// Parcours de la liste de lut, tant que i est inférieur à la position souhaitée
@@ -166,7 +145,7 @@ LLUT* removeLut(LLUT* p_llut, int position) {
 							p_tmp->l_prev->l_next = p_tmp->l_next;
 
 							//Création d'une lut temporaire pour parcourir la liste de lut à partir de la lut suivante du lut que l'on veut supprimer
-							LUT *p_temp = p_tmp->l_next;
+							Lut *p_temp = p_tmp->l_next;
 							int i = p_tmp->l_prev->id;
 
 							// Parcours de la liste de lut, tant que i est inférieur à la position souhaitée
@@ -199,12 +178,80 @@ LLUT* removeLut(LLUT* p_llut, int position) {
 	return p_llut; 
 }
 
+/************* Copie liste de lut pour l'historique *************/
+int copyLLut(LLut* p_llut, LLut* new_llut) {
+	
+	if(p_llut != NULL) {
+		
+		if(new_llut != NULL) {
 
+			//Création d'une lut temporaire pour parcourir la liste de lut
+			Lut *lut_tmp = p_llut->l_head;
 
+			//Parcourt la liste de lut 
+			while (lut_tmp != NULL) {
+				
+				Lut *new_lut = malloc(sizeof *new_lut);
 
+				if (new_lut != NULL) {
+		
+					addLUT(new_llut,new_lut);
 
+					if(copyLut(lut_tmp, new_lut) == 0) {
+						printf("Probleme au moment de la copie des lut\n");
+						return 0;
+					}
 
+				}
+				else {
+					printf("Erreur d'allocation de la lut");
+					return 0;
+				}
+			    	lut_tmp = lut_tmp->l_next;
+			}
+		}
+		else {
+			printf("Cette liste de lut n'existe pas\n");
+			return 0;
+		}
+	}
+	else {
+		printf("Cette liste de lut n'existe pas\n");
+		return 0;
+	}
 
+	return 1;
+
+}
+
+/************* Copie d'une lut *************/
+int copyLut(Lut* p_lut, Lut* new_lut) {
+	int i;
+	
+	if(p_lut != NULL) {
+		
+		if(new_lut != NULL) {
+			
+			new_lut->id = p_lut->id;
+					
+			//Copie les tableaux
+			for(i=0;i<256;i++) {
+				new_lut->tabLutR[i] = p_lut->tabLutR[i];
+				new_lut->tabLutV[i] = p_lut->tabLutV[i];
+				new_lut->tabLutB[i] = p_lut->tabLutB[i];
+			}
+
+		}
+		else {
+			printf("La lut n'existe pas\n");
+			return 0;
+		}
+	}
+	else {
+		printf("La lut n'existe pas\n");
+		return 0;
+	}
+}
 
 /******Effets**********/
 
@@ -213,13 +260,13 @@ LLUT* removeLut(LLUT* p_llut, int position) {
 //il s'agit d'ajouté une valeur positive choisie aux valeurs des pixels
 //pour gagner en luminosité
 
-void addLum(LLUT* p_llut, int nb){
+void addLum(LLut* p_llut, int nb){
 
-	LUT *new_lut = malloc(sizeof *new_lut);
+	Lut *new_lut = malloc(sizeof *new_lut);
 
 	if (new_lut != NULL) {
 		
-		initLUT(p_llut,new_lut);
+		addLUT(p_llut,new_lut);
 
 		int i;
 	 	for(i=0;i<256;i++) {
@@ -252,13 +299,13 @@ void addLum(LLUT* p_llut, int nb){
 
 //il s'agit d'ajouté une valeur négative choisie aux valeurs des pixels 
 //pour diminuer la luminosité
-void dimLum(LLUT* p_llut, int nb){
+void dimLum(LLut* p_llut, int nb){
 
-	LUT *new_lut = malloc(sizeof *new_lut);
+	Lut *new_lut = malloc(sizeof *new_lut);
 
 	if (new_lut != NULL) {
 		
-		initLUT(p_llut,new_lut);
+		addLUT(p_llut,new_lut);
 
 		int i;
  
@@ -290,7 +337,6 @@ void dimLum(LLUT* p_llut, int nb){
 }
 
 
-
 // effets sur le contraste :
 // le contraste joue sur une différence de luminescence
 // Augmenter un contraste ou le diminuer c'est jouer entre 2 plages de luminescences
@@ -299,12 +345,12 @@ void dimLum(LLUT* p_llut, int nb){
 
 
 
-void addContraste(LLUT* p_llut, int nb) {
-	LUT *new_lut = malloc(sizeof *new_lut);
+void addContraste(LLut* p_llut, int nb) {
+	Lut *new_lut = malloc(sizeof *new_lut);
 
 	if (new_lut != NULL) {
 		
-		initLUT(p_llut,new_lut);
+		addLUT(p_llut,new_lut);
 		int i;
 		
 		for(i=0;i<256;i++) {
@@ -357,13 +403,13 @@ void addContraste(LLUT* p_llut, int nb) {
 
 // pour diminuer le contrast on fait le processus inverse
 
-void dimContraste(LLUT* p_llut, int nb) {
+void dimContraste(LLut* p_llut, int nb) {
 
-	LUT *new_lut = malloc(sizeof *new_lut);
+	Lut *new_lut = malloc(sizeof *new_lut);
 
 	if (new_lut != NULL) {
 		
-		initLUT(p_llut,new_lut);
+		addLUT(p_llut,new_lut);
 		int i;
 
 		for(i=0;i<256;i++) {
@@ -406,19 +452,16 @@ void dimContraste(LLUT* p_llut, int nb) {
 	else {
 		printf("Erreur d'allocation de la lut \n");
 	}
-}	
-
-
-
+}
 
 //couleur en négatifs, inversion des valeur des pixel par rapport à la 
 //gamme de valeurs possible en RVB de 0 a 255
-void invert(LLUT* p_llut) {	
-	LUT *new_lut = malloc(sizeof *new_lut);
+void invert(LLut* p_llut) {	
+	Lut *new_lut = malloc(sizeof *new_lut);
 
 	if (new_lut != NULL) {
 		
-		initLUT(p_llut,new_lut);
+		addLUT(p_llut,new_lut);
 		int i;
 	   	for (i=0; i<256; i++) {
 	   		new_lut->tabLutR[i] = 255-new_lut->tabLutR[i];
@@ -432,6 +475,7 @@ void invert(LLUT* p_llut) {
 } 	
 
 /*Effet Sepia*/
+// Effet noir et blanc
 void B_W(Image* img) {
 	
 	int i;
@@ -443,13 +487,14 @@ void B_W(Image* img) {
 	}
 }
 
-void colorize(LLUT* p_llut, int R, int V, int B) {
+//Colorisation
+void colorize(LLut* p_llut, int R, int V, int B) {
 
-	LUT *new_lut = malloc(sizeof *new_lut);
+	Lut *new_lut = malloc(sizeof *new_lut);
 
 	if (new_lut != NULL) {
 		
-		initLUT(p_llut,new_lut);
+		addLUT(p_llut,new_lut);
 
 		int i;
 		for (i=0; i<256; i++) {
@@ -481,16 +526,25 @@ void colorize(LLUT* p_llut, int R, int V, int B) {
 	}
 }
 
-void sepia (LUT* lut, Image* img) {
+void sepia (Lut* lut, Image* img) {
 	B_W(img);
 	colorize(lut, 100, 50, 0);
 }
 
-/*
 
-int main(int argc, char const *argv[]) {
+/************** Déssallocation de la liste de lut **************/
+void removeLLut(LLut* p_llut) {
+	//Si la liste n'est pas vide
+	if (p_llut->length != 0) {
 
-	printf("ça compile \n");
-	return 0;
+		//Tant que la liste n'est pas vide
+		while (p_llut->l_head != NULL) {
+
+			Lut *lut_tmp = p_llut->l_head;
+			p_llut->l_head = lut_tmp->l_next;
+			free(lut_tmp);
+		}
+		
+	}
+	free(p_llut);
 }
-*/

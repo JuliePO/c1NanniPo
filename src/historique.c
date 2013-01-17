@@ -29,6 +29,10 @@ LHistorique* initHistory (void) {
 *  2 : modification de l'opacite						*
 *  3 : modification du mode de melange						*
 *  4 : Remplissage d'un calque							*
+*  5 : Ajout d'une lut à la liste de lut					*
+*  6 : Supprimer une lut							*
+*  7 : Ajout de la lut sepia							*
+*  8 : Suppression de la lut sepia						*
 *										*/
 
 
@@ -70,28 +74,48 @@ int addHistory (LHistorique* pile, Calque* p_courant, int action) {
 							return 0;
 						}
 
-						//Ajoute le nouveau calque à la pile
-						new_event->calqueH = new_calque;
-						new_event->action = action;
+						//Création de la liste de lut
+						LLut* new_llut = malloc(sizeof *new_llut);
 
-						// Cas où notre liste est vide (pointeur vers la tête de liste est NULL) et id = 0
-						if (pile->length == 0) {
+						// On vérifie si le malloc n'a pas échoué
+						if(new_llut != NULL) {
+				
+							//Initialisation de la liste de lut
+							new_llut = new_LLut(new_llut);
+							new_calque->p_llut = new_llut;
+
+							if(copyLLut(p_courant->p_llut, new_llut) == 0) {
+								printf("Probleme au moment de la copie de la liste de luts\n");
+								return 0;
+							}
+
+							//Ajoute le nouveau calque à la pile
+							new_event->calqueH = new_calque;
+							new_event->action = action;
+
+							// Cas où notre liste est vide (pointeur vers la tête de liste est NULL) et id = 0
+							if (pile->length == 0) {
 							
-							new_event->prev = NULL;
+								new_event->prev = NULL;
 	
-						}
+							}
 
-						// Cas où des éléments sont déjà présents dans la  liste
+							// Cas où des éléments sont déjà présents dans la  liste
+							else {
+								//Fait pointer cet évènement vers le sommet de la pile
+								new_event->prev = pile->head;
+							}
+
+							//Fait pointer le sommet de la pile vers cet évènement
+							pile->head = new_event;
+
+							//Augmente la taille de la pile
+							pile->length++;		
+						}
 						else {
-							//Fait pointer cet évènement vers le sommet de la pile
-							new_event->prev = pile->head;
+							printf("Erreur d'allocation pour la liste de lut");
+							return 0;
 						}
-
-						//Fait pointer le sommet de la pile vers cet évènement
-						pile->head = new_event;
-
-						//Augmente la taille de la pile
-						pile->length++;	
 					}
 					else {
 						printf("Erreur d'allocation pour le calque courant\n");
@@ -240,7 +264,17 @@ void AfficheHistory (LHistorique* pile) {
 
 			case 4 : //Modification du mode de melange
 				id = p_temp->calqueH->id;
-				printf("Remplissage du calque %d\n", id);
+				printf("Remplissage ou passage en noir et blanc du calque %d\n", id);
+				break;
+
+			case 5 : //Ajout d'une lut
+				id = p_temp->calqueH->id;
+				printf("Ajout d'une lut dans le liste du luts du calque %d\n", id);
+				break;
+
+			case 6 : //Suppression de lut
+				id = p_temp->calqueH->id;
+				printf("Suppression de la derniere lut du calque %d\n", id);
 				break;
 
 
@@ -253,7 +287,7 @@ void AfficheHistory (LHistorique* pile) {
 
 
 /********* Annuler une action ********/
-void cancelHistory (LHistorique* pile, LCalque* p_lcalque, LHistorique* redo) {
+int cancelHistory (LHistorique* pile, LCalque* p_lcalque, LHistorique* redo) {
 
 	// On vérifie si notre liste a été allouée
 	if (pile != NULL) {
@@ -280,20 +314,101 @@ void cancelHistory (LHistorique* pile, LCalque* p_lcalque, LHistorique* redo) {
 
 					returnImage(tmp_event->calqueH->image_src);
 
-					if(addHistory(redo, tmp_event->calqueH, 0) == 0)
-						printf("problemen au moment de l'ajout de l'element dans l'historique redo\n");
+					//Ajout dans l'historique
+					if(addHistory(redo, tmp_event->calqueH, 0) == 0) {
+						printf("probleme au moment de l'ajout de l'element dans l'historique redo\n");
+						return 0;
+					}
 
-					addCalqueImgId(p_lcalque, tmp_event->calqueH->opacity, tmp_event->calqueH->mix, tmp_event->calqueH->image_src, tmp_event->calqueH->id);
+					addCalqueImgId(p_lcalque, tmp_event->calqueH->opacity, tmp_event->calqueH->mix, tmp_event->calqueH->image_src, tmp_event->calqueH->id, tmp_event->calqueH->p_llut);
 
 				}
-
+				//Ajout de calque
 				else if(pile->head->action == 0) {
 
-					if(addHistory(redo, p_lcalque->p_tail, 1) == 0)
-						printf("problemen au moment de l'ajout de l'element dans l'historique redo\n");
+					//Ajout dans l'historique
+					if(addHistory(redo, p_lcalque->p_tail, 1) == 0) {
+						printf("probleme au moment de l'ajout de l'element dans l'historique redo\n");
+						return 0;
+					}
 
 					removeCalque(p_lcalque, p_lcalque->p_tail); //car le calque ajouter sera toujours en fin de liste
 					
+				}
+				//Ajout d'une lut
+				else if(pile->head->action == 5) {
+
+					//Création d'un calque temporaire pour parcourir la liste de calque
+					Calque *p_tmp = p_lcalque->p_head;
+
+					// Parcours de la liste de calque
+					while (p_tmp != NULL) {
+
+						if (position == (p_tmp->id)) {
+							break;
+						}
+						p_tmp = p_tmp->p_next;
+					}
+
+					//Ajout dans l'historique
+					if(addHistory(redo, p_tmp, 6) == 0) {
+						printf("probleme au moment de l'ajout de l'element dans l'historique redo\n");
+						return 0;
+					}
+
+					removeLut(p_tmp->p_llut, p_tmp->p_llut->l_tail->id);
+
+					
+				}
+				//Suppression d'une lut
+				else if(pile->head->action == 6) {
+
+					//Tant que l'historique n'est pas vide : on parcourt l'historique
+					while(tmp_event != NULL){
+		
+						if (position == (tmp_event->calqueH->id)) {
+							break;
+						}
+						tmp_event = tmp_event->prev;
+					}
+
+					//Création d'un calque temporaire pour parcourir la liste de calque
+					Calque *p_tmp = p_lcalque->p_head;
+
+					// Parcours de la liste de calque
+					while (p_tmp != NULL) {
+
+						if (position == (p_tmp->id)) {
+							break;
+						}
+						p_tmp = p_tmp->p_next;
+					}
+
+					//Ajout dans l'historique
+					if(addHistory(redo, p_tmp, 5) == 0) {
+						printf("probleme au moment de l'ajout de l'element dans l'historique redo\n");
+						return 0;
+					}
+
+					//Création de la nouvelle lut
+					Lut *new_lut = malloc(sizeof *new_lut);
+					
+					//On vérifie que l'allocation a été faite
+					if (new_lut != NULL) {
+
+						//Ajout de la lut à la liste de lut
+						addLUT(p_tmp->p_llut,new_lut);
+
+						//Copie la lut avec l'ancienne lut
+						if(copyLut(tmp_event->calqueH->p_llut->l_tail, new_lut) == 0) {
+							printf("Probleme au moment de la copie de la lut");
+							return 0;
+						}
+					}
+					else {
+						printf("Erreur au moment de la création de la lut\n");
+						return 0;
+					}
 				}
 				else {
 					//Tant que l'historique n'est pas vide : on parcourt l'historique
@@ -314,20 +429,27 @@ void cancelHistory (LHistorique* pile, LCalque* p_lcalque, LHistorique* redo) {
 						if (position == (p_tmp->id)) {	
 							int action;
 
-							if(p_tmp->opacity != tmp_event->calqueH->opacity)
+							//Modification de l'opacite
+							if(p_tmp->opacity != tmp_event->calqueH->opacity) {
 								action = 2;
-							else if(p_tmp->mix != tmp_event->calqueH->mix) 
+								p_tmp->opacity = tmp_event->calqueH->opacity;
+							} 
+							//Modification du mode d'operation
+							else if(p_tmp->mix != tmp_event->calqueH->mix) {
 								action = 3;
-							else 
+								p_tmp->mix = tmp_event->calqueH->mix;
+							}
+							//Remplissage ou passage en noir et blanc
+							else {
 								action = 4;
+								p_tmp->image_src = tmp_event->calqueH->image_src;
+							}
 
-							if(addHistory(redo, p_tmp, action) == 0)
+							//Ajout dans l'historique
+							if(addHistory(redo, p_tmp, action) == 0) {
 								printf("probleme au moment de l'ajout de l'element dans l'historique redo\n");	
-
-							p_tmp->opacity = tmp_event->calqueH->opacity; 
-							p_tmp->mix = tmp_event->calqueH->mix; 	
-							p_tmp->image_src = tmp_event->calqueH->image_src; 
-
+								return 0;
+							}
 						}
 						p_tmp = p_tmp->p_next;
 					}
@@ -351,15 +473,21 @@ void cancelHistory (LHistorique* pile, LCalque* p_lcalque, LHistorique* redo) {
 					pile->length--;
 
 			}
-			else 
+			else {
 				printf("Erreur d'allocation pour le liste de calque\n");
+				return 0;
+			}
 
 		}
-		else 
+		else {
 			printf("Erreur : l'historique est vide, impossible de faire un retour\n");
+			return 0;
+		}
 	}
-	else 
+	else {
 		printf("Erreur : l'historique n'existe pas\n");
+		return 0;
+	}
 
 }
 

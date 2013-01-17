@@ -2,58 +2,52 @@
 #define LUT_H
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "image.h"
-#include "calque.h"
 
-/************* Structure du LUT *************/
-typedef struct LUT {
+/************* STRUCTURE DU CALQUE *************/
+typedef struct Lut {
 
-	//numero de la lut
+	//Le numéro de la lut (premiere lut = 0)
 	int id;
-
+	
 	// Définition de 3 tableaux pour chacune des composantes 
 	// dont es valeurs vont de 0 à 255
 	unsigned char tabLutR[256];
 	unsigned char tabLutV[256];
-	unsigned char tabLutB[256];
+	unsigned char tabLutB[256];	
 
-	//pointeurs sur les Lut de la chaine
-	struct LUT *l_prev; //lut précédent
-	struct LUT *l_next; //lut suivant
+	//Lut 
+	struct Lut *l_prev; //lut précédent
+	struct Lut *l_next; //lut suivant
+}Lut;
 
-}LUT;
-
-//ensemble des LUT
-
-typedef struct LLUT {
+/************* STRUCTURE DE LA LISTE DE LUT *************/
+typedef struct LLut {
 
 	//Taille de la liste
 	size_t length;
 
 	//Pointeur
-	LUT *l_head; //pointeur vers le premier element
-	LUT *l_tail; //pointeur vers le dernier element
-}LLUT;
+	Lut *l_head; //pointeur vers le premier element
+	Lut *l_tail; //pointeur vers le dernier element
+}LLut;
 
-/************* Appel des fonctions *************/
-LLUT* new_LLUT(void);
-int initLUT(LLUT*, LUT*);
-void applyLUT(Image*, LUT*);
-LLUT* removeLut(LLUT*, int);
+/************* Appel de fonction *************/
+LLut* new_LLut(LLut*);
+int addLUT(LLut*, Lut*);
+void applyLUT(Image*, Lut*);
+LLut* removeLut(LLut*, int);
+int copyLLut(LLut*, LLut*);
+int copyLut(Lut*, Lut*);
 
-////effets sur l'images
-
-//effets sur le contrast
-void addContraste(LLUT*, int);
-void dimContraste(LLUT*, int);
-//effets sur la luminosité
-void addLum(LLUT*, int);
-void dimLum(LLUT*, int);
-//effets sur les couleurs
-void invert(LLUT*);
+void addLum(LLut*, int);
+void dimLum(LLut*, int);
+void addContraste(LLut*, int);
+void dimContraste(LLut*, int);
+void invert(LLut*);
 void B_W(Image*);
-void colorize(LLUT*, int, int, int);
-void sepia (LUT*, Image*);
+void colorize(LLut*, int, int, int);
+void sepia (Lut*, Image*);
 
+void removeLLut(LLut*);
 #endif
