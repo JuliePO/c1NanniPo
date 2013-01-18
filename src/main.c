@@ -104,11 +104,19 @@ int main(int argc, char** argv) {
 		float value;
 
 		//Fond blanc de l'histogramme
-		fixeCouleur(0.7,0.8,0.7);
+		fixeCouleur(0.8,0.8,0.8);
 		drawCarre(0.64,0.38,0.98,0.87);
 
 		//Battonnet noir pour afficher l'histogramme
-		fixeCouleur(0,0,0);
+		if (canal == 0)
+			fixeCouleur(0,0,0);	
+		else if (canal == 1)
+			fixeCouleur(0.5,0.1,0.1);
+		else if (canal == 2)
+			fixeCouleur(0.1,0.5,0.1);
+		else if (canal == 3)
+			fixeCouleur(0.1,0.1,0.5);
+
 		//Dessin un baton qui a la hauteur de la valeur en pourcentage 
 		for(j=256; j>=0; j--) {
 
@@ -559,7 +567,7 @@ int main(int argc, char** argv) {
 					}
 				}
 
-				printf("Entrer une valeur de rouge (entre 0 et 255) : ");
+				printf("Entrer une valeur de vert (entre 0 et 255) : ");
 				scanf("%d", &v);
 
 				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
@@ -571,7 +579,7 @@ int main(int argc, char** argv) {
 					}
 				}
 
-				printf("Entrer une valeur de rouge (entre 0 et 255) : ");
+				printf("Entrer une valeur de bleu (entre 0 et 255) : ");
 				scanf("%d", &b);
 
 				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
@@ -641,7 +649,6 @@ int main(int argc, char** argv) {
 			case GLUT_KEY_F2 :
 				afficheLLut(p_courant->p_llut);
 				break;
-
 			//Touche FLECHE BAS : Aller sur le calque précédent
 			case GLUT_KEY_DOWN :
 				//Si c'est le premier calque
@@ -744,7 +751,6 @@ int main(int argc, char** argv) {
 				if (x > (widthWin*0.75)  && x < (widthWin*0.85) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
 					fixeFonctionDessin(drawMenuLayer);
 					menu=2;
-					printf("%d\n", menu);
 
 				}
 				//bt menu histogramme
@@ -757,6 +763,32 @@ int main(int argc, char** argv) {
 
 
 				if (menu == 1) {
+
+					// bt + contraste
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.85)) && y < (heightWin-(heightWin*0.80)) ) {
+						printf("contraste1 %d\n", menu);
+					}
+					// bt - Contraste 
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.80)) && y < (heightWin-(heightWin*0.75)) ) {
+						printf("contraste2 %d\n", menu);
+
+					}
+					// bt + Luminosité
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.75)) && y < (heightWin-(heightWin*0.70)) ) {
+						printf("luminosité1 %d\n", menu);
+					}
+					// bt - luminosité
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.70)) && y < (heightWin-(heightWin*0.65)) ) {
+						printf("luminosité2 %d\n", menu);
+
+					}
+					// bt noir et blanc
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.65)) && y < (heightWin-(heightWin*0.60)) ) {
+						printf("noir et blanc %d\n", menu);
+					}
+
+					// bt color
+					// bt sépia
 
 				}
 
@@ -841,17 +873,38 @@ int main(int argc, char** argv) {
 						//Ajout de l'action dans l'historique
 						addHistory(ph, p_courant, 3);					
 					}
+				}
 
-					/**** Sous menu de l'historique******/
-					if(menu==3){
-						if (x > (widthWin*0.68)  && x < (widthWin*0.92) && y > (heightWin-(heightWin*0.14)) && y < (heightWin-(heightWin*0.09)) ) {
-							//Récupere l'adresse de l'image
-							printf("\nEntrez l'adresse de l'image (images/votre_image.ppm) : ");
-							scanf("%s", adressH);			
-							//Sauvegarde de l'histogramme
-							SaveHisto(histo, adressH);
-						}
+				/******* Sous menu de l'historique******/
 
+				if(menu == 3) {
+
+					//bit changer de cannal:
+					//global
+					if (x > (widthWin*0.75)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.36)) && y < (heightWin-(heightWin*0.31)) ) {
+						canal = 0;
+					}
+					//R
+					if (x > (widthWin*0.75)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.31)) && y < (heightWin-(heightWin*0.26)) ) {
+						canal = 1;
+					}
+					//V
+					if (x > (widthWin*0.75)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.26)) && y < (heightWin-(heightWin*0.21)) ) {
+						canal = 2;
+
+					}
+					//B
+					if (x > (widthWin*0.75)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.21)) && y < (heightWin-(heightWin*0.16)) ) {
+						canal = 3;
+
+					}
+					// bt sauvegarder l'historique
+					if (x > (widthWin*0.68)  && x < (widthWin*0.92) && y > (heightWin-(heightWin*0.14)) && y < (heightWin-(heightWin*0.09)) ) {
+						//Récupere l'adresse de l'image
+						printf("\nEntrez l'adresse de l'image (images/votre_image.ppm) : ");
+						scanf("%s", adressH);			
+						//Sauvegarde de l'histogramme
+						SaveHisto(histo, adressH);
 					}
 				}
 			}
@@ -879,7 +932,7 @@ int main(int argc, char** argv) {
 	fixeFonctionClicSouris(clickMouse);
 
 	//Affichage des dessins (histogramme, boutons)
-	//fixeFonctionDessin(mondessin);
+	fixeFonctionDessin(drawMain);
 
 	//Fusion des calques
 	fusionCalque(pc, pf);

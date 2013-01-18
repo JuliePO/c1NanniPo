@@ -173,12 +173,14 @@ void drawMenuLut() {
 	drawCarreVide(0.74,0.70,0.96,0.75);// gauche, bas, droite, haut
 	drawCarreVide(0.74,0.65,0.96,0.70);// gauche, bas, droite, haut
 	drawCarreVide(0.74,0.60,0.96,0.65);// gauche, bas, droite, haut
+	drawCarreVide(0.74,0.55,0.96,0.60);// gauche, bas, droite, haut
 
 	writeString(0.76,0.82,"+ Contraste");
 	writeString(0.76,0.77,"- Contraste");
 	writeString(0.76,0.72,"+ Luminosite");
 	writeString(0.76,0.67,"- Luminosite");
-	writeString(0.76,0.62,"Effet Sepia");
+	writeString(0.76,0.62,"Noir et Blanc");
+	writeString(0.76,0.57,"Effet Sepia");
 
 }
 
