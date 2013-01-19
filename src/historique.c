@@ -10,7 +10,7 @@
 LHistorique* initHistory (void) {
 
 	//Alloue de la mémoire 
-	LHistorique *pile= malloc(sizeof *pile);
+	LHistorique *pile= malloc(sizeof(LHistorique));
 	if (pile != NULL) {
 
 		pile->length = 0;
@@ -31,8 +31,6 @@ LHistorique* initHistory (void) {
 *  4 : Remplissage d'un calque							*
 *  5 : Ajout d'une lut à la liste de lut					*
 *  6 : Supprimer une lut							*
-*  7 : Ajout de la lut sepia							*
-*  8 : Suppression de la lut sepia						*
 *										*/
 
 
@@ -42,19 +40,19 @@ int addHistory (LHistorique* pile, Calque* p_courant, int action) {
 	if (pile != NULL) {
 	
 		//Création d'un nouvel élément dans l'historique
-		Historique* new_event = malloc(sizeof *new_event);
+		Historique* new_event = malloc(sizeof(Historique));
 		
 		// On vérifie si le malloc n'a pas échoué
 		if (new_event != NULL) {
 
 			//Création d'un nouveau calque
-			Calque* new_calque = malloc(sizeof *new_calque); 
+			Calque* new_calque = malloc(sizeof(Calque)); 
 			
 			// On vérifie si notre calque a été allouée
 			if (new_calque != NULL) {
 
 				//Création de la nouvelle image
-				Image* new_img = malloc(sizeof *new_img);
+				Image* new_img = malloc(sizeof(Image));
 
 				if(new_img != NULL) {
 				
@@ -67,15 +65,8 @@ int addHistory (LHistorique* pile, Calque* p_courant, int action) {
 						new_calque->p_prev = p_courant->p_prev;
 						new_calque->p_next = p_courant->p_next;
 
-						new_calque->image_src = new_img;
-
-						if(copyImg(new_img, p_courant->image_src) == 0) {
-							printf("Probleme au moment de la copie de l'image\n");
-							return 0;
-						}
-
 						//Création de la liste de lut
-						LLut* new_llut = malloc(sizeof *new_llut);
+						LLut* new_llut = malloc(sizeof(LLut));
 
 						// On vérifie si le malloc n'a pas échoué
 						if(new_llut != NULL) {
@@ -83,11 +74,16 @@ int addHistory (LHistorique* pile, Calque* p_courant, int action) {
 							//Initialisation de la liste de lut
 							new_llut = new_LLut(new_llut);
 							new_calque->p_llut = new_llut;
+							new_llut = copyLLut(p_courant->p_llut, new_llut);
+							//Retire le calque fantome en trop
+							removeLut(new_llut, new_llut->l_head->id);
 
-							if(copyLLut(p_courant->p_llut, new_llut) == 0) {
-								printf("Probleme au moment de la copie de la liste de luts\n");
+							//Copie de l'image
+							if(copyImg(new_img, p_courant->image_src) == 0) {
+								printf("Probleme au moment de la copie de l'image\n");
 								return 0;
 							}
+							new_calque->image_src = new_img;
 
 							//Ajoute le nouveau calque à la pile
 							new_event->calqueH = new_calque;
@@ -276,18 +272,6 @@ void AfficheHistory (LHistorique* pile) {
 				id = p_temp->calqueH->id;
 				printf("Suppression de la derniere lut du calque %d\n", id);
 				break;
-
-			case 7 : //Suppression de lut
-				id = p_temp->calqueH->id;
-				printf("Ajout d'une lut dans le liste du luts du calque %d\n", id);
-				break;
-
-			case 8 : //Suppression de lut
-				id = p_temp->calqueH->id;
-				printf("Suppression de la derniere lut du calque %d\n", id);
-				break;
-
-
 		}
 		p_temp = p_temp->prev;
 
@@ -332,22 +316,6 @@ int cancelHistory (LHistorique* pile, LCalque* p_lcalque, LHistorique* redo) {
 
 					addCalqueImgId(p_lcalque, tmp_event->calqueH->opacity, tmp_event->calqueH->mix, tmp_event->calqueH->image_src, tmp_event->calqueH->id, tmp_event->calqueH->p_llut);
 
-				}
-				//Ajout de calque
-				else if(pile->head->action == 0) {
-
-					//Ajout dans l'historique
-					if(addHistory(redo, p_lcalque->p_tail, 1) == 0) {
-						printf("probleme au moment de l'ajout de l'element dans l'historique redo\n");
-						return 0;
-					}
-
-					removeCalque(p_lcalque, p_lcalque->p_tail); //car le calque ajouter sera toujours en fin de liste
-					
-				}
-				//Ajout d'une lut
-				else if(pile->head->action == 5) {
-
 					//Création d'un calque temporaire pour parcourir la liste de calque
 					Calque *p_tmp = p_lcalque->p_head;
 
@@ -360,18 +328,24 @@ int cancelHistory (LHistorique* pile, LCalque* p_lcalque, LHistorique* redo) {
 						p_tmp = p_tmp->p_next;
 					}
 
+					//Retire les lut fantome en trop
+					removeLut(p_tmp->p_llut, p_tmp->p_llut->l_head->id);
+
+				}
+				//Ajout de calque
+				else if(pile->head->action == 0) {
+
 					//Ajout dans l'historique
-					if(addHistory(redo, p_tmp, 6) == 0) {
+					if(addHistory(redo, p_lcalque->p_tail, 1) == 0) {
 						printf("probleme au moment de l'ajout de l'element dans l'historique redo\n");
 						return 0;
 					}
 
-					removeLut(p_tmp->p_llut, p_tmp->p_llut->l_tail->id);
-
+					removeCalque(p_lcalque, p_lcalque->p_tail); //car le calque ajouté sera toujours en fin de liste
 					
 				}
-				//Suppression d'une lut
-				else if(pile->head->action == 6) {
+				//Ajout d'une lut
+				else if(pile->head->action == 5) {
 
 					//Tant que l'historique n'est pas vide : on parcourt l'historique
 					while(tmp_event != NULL){
@@ -394,11 +368,48 @@ int cancelHistory (LHistorique* pile, LCalque* p_lcalque, LHistorique* redo) {
 						p_tmp = p_tmp->p_next;
 					}
 
+					p_tmp->image_src = tmp_event->calqueH->image_src;
+
+					removeLut(p_tmp->p_llut, p_tmp->p_llut->l_tail->id);
+
 					//Ajout dans l'historique
-					if(addHistory(redo, p_tmp, 5) == 0) {
+					if(addHistory(redo, p_tmp, 6) == 0) {
 						printf("probleme au moment de l'ajout de l'element dans l'historique redo\n");
 						return 0;
 					}
+
+					
+				}
+				//Suppression d'une lut
+				else if(pile->head->action == 6) {
+
+					tmp_event = pile->head;
+
+					//Tant que l'historique n'est pas vide : on parcourt l'historique
+					while(tmp_event != NULL){
+		
+						if ((position == (tmp_event->calqueH->id) && (tmp_event->action) == 5) || (position == (tmp_event->calqueH->id) && (tmp_event->action) == -2)) {
+							break;
+						}
+						tmp_event = tmp_event->prev;
+					}
+
+					//Création d'un calque temporaire pour parcourir la liste de calque
+					Calque *p_tmp = p_lcalque->p_head;
+
+					// Parcours de la liste de calque
+					while (p_tmp != NULL) {
+
+						if (position == (p_tmp->id)) {
+							break;
+						}
+						p_tmp = p_tmp->p_next;
+					}
+
+
+					p_tmp->image_src = tmp_event->calqueH->image_src;
+
+					afficheLLut(tmp_event->calqueH->p_llut);
 
 					//Création de la nouvelle lut
 					Lut *new_lut = malloc(sizeof *new_lut);
@@ -410,13 +421,17 @@ int cancelHistory (LHistorique* pile, LCalque* p_lcalque, LHistorique* redo) {
 						addLUT(p_tmp->p_llut,new_lut);
 
 						//Copie la lut avec l'ancienne lut
-						if(copyLut(tmp_event->calqueH->p_llut->l_tail, new_lut) == 0) {
-							printf("Probleme au moment de la copie de la lut");
-							return 0;
-						}
+						new_lut = copyLut(tmp_event->calqueH->p_llut->l_tail, new_lut);
+						
 					}
 					else {
 						printf("Erreur au moment de la création de la lut\n");
+						return 0;
+					}
+
+					//Ajout dans l'historique
+					if(addHistory(redo, p_tmp, 5) == 0) {
+						printf("probleme au moment de l'ajout de l'element dans l'historique redo\n");
 						return 0;
 					}
 				}
@@ -506,6 +521,44 @@ void redoHistory (LHistorique* redo, LCalque* p_lcalque, LHistorique* pile) {
 	cancelHistory (redo, p_lcalque, pile);
 }
 
+
+/******** Récupération d'une image **********/
+int recupImg(LHistorique* pile, Calque* p_courant) {
+	
+	// On vérifie si notre liste a été allouée
+	if (pile != NULL) {
+		
+		Historique* tmp_event = pile->head;
+		int position = p_courant->id;
+	
+		// On vérifie si notre liste a été allouée
+		if (p_courant != NULL) {
+
+			//Tant que l'historique n'est pas vide : on parcourt l'historique
+			while(tmp_event != NULL){
+		
+				if (position == (tmp_event->calqueH->id) && (tmp_event->action) != 5) {
+					break;
+				}
+				tmp_event = tmp_event->prev;
+			}
+
+			p_courant->image_src = tmp_event->calqueH->image_src;
+
+				
+		}
+		else {
+			printf("Erreur de calque courant\n");
+			return 0;
+		}
+	}
+	else {
+		printf("Erreur : l'historique n'existe pas\n");
+		return 0;
+	}
+
+}
+
 /********* Désalocation de l'historique *********/
 void removeHistory (LHistorique* pile) {
 	// Si l'historique n'est pas vide
@@ -516,10 +569,10 @@ void removeHistory (LHistorique* pile) {
 
 			Historique* event = pile->head;
 			freeTabImg(event->calqueH->image_src);
+			removeLLut(event->calqueH->p_llut);
 			free(event->calqueH);
 			pile->head = event->prev;
 			free(event);
-			
 		}
 	}
 	free(pile);

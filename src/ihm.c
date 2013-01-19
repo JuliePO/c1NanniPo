@@ -194,34 +194,48 @@ void info(Calque* p_courant) {
 
 void help(void) {
 	printf("\n\n/-------------- MENU PRINCIPAL --------------/\n\n");
-	printf("[p] : Afficher l'ID du calque courant\n");
+	printf("[W] : Afficher l'ID du calque courant\n");
 	printf("[FLECHE HAUT] : Aller sur le calque suivant\n");
 	printf("[FLECHE BAS] : Aller sur le calque précédent\n");
-	printf("[q] : Aller sur un calque précis en donnant ID\n");
-	printf("[c] : Afficher l'image courante ou l'image finale\n");
-	printf("[l] : Afficher la liste de calque\n");
+	printf("[n] : Aller sur un calque précis en donnant ID\n");
+	printf("[w] : Afficher l'image courante ou l'image finale\n");
+	printf("[a] : Afficher la liste de calque\n");
 	printf("[ESQ] : Quitter IMAGIMP\n");
 
 	printf("\n\n/-------------- MENU CALQUE --------------/\n\n");
-	printf("[n] : Ajouter un calque vide\n");
-	printf("[i] : Ajouter un calque avec une image\n");
-	printf("[a] : Supprimer le calque courant\n");
-	printf("[s] : Sauvegarder l'image finale\n");
+	printf("[N] : Ajouter un calque vide\n");
+	printf("[I] : Ajouter un calque avec une image\n");
+	printf("[R] : Supprimer le calque courant\n");
+	printf("[S] : Sauvegarder l'image finale\n");
 	
 	printf("\n\n[o] : Modifier l'opacite du calque courant.\n");
 	printf("[m] : Modifier le mode d'opération du calque courant.\n");
 	printf("[FLECHE GAUCHE] : Diminuer l'opacité du calque de 0 à 1\n");
 	printf("[FLECHE DROITE] : Augmenter l'opacité du calque de 0 à 1\n");
-	printf("[r] : Remplir le calque d'une couleur unie\n");
+	printf("[G] : Remplir le calque d'une couleur unie\n");
+
+	printf("\n\n/-------------- MENU EFFETS : LUT --------------/\n\n");
+	printf("[A] : Afficher la liste de luts du calque courant\n");
+	printf("[L] : Augmentation de la luminosite de l'image du calque courant\n");
+	printf("[l] : Diminution de la luminosite de l'image du calque courant\n");
+	printf("[C] : Augmentation du contrate de l'image du calque courant\n");
+	printf("[c] : Diminution du contraste de l'image du calque courant\n");
+	printf("[v] : Inversion des couleurs de l'image du claque courant\n");
+	printf("[b] : Passage noir et blanc de l'image du calque courant\n");
+	printf("[g] : Coloriser l'image du calque courant\n");
+	printf("[s] : Appliquer sepia sur le calque courant\n");
+	printf("[r] : Supprimer la derniere lut de la liste de luts du calque courant\n");
 
 	printf("\n\n/-------------- MENU HISTORIQUE --------------/\n\n");
-	printf("[x] : Afficher l'historique\n");
+	printf("[h] : Afficher l'historique\n");
+	printf("[H] : Afficher l'historique redo\n");
 	printf("[z] : Annuler la derniere action\n");
+	printf("[Z] : Redo\n");
 
 	printf("\n\n/-------------- MENU HISTOGRAMME --------------/\n\n");
 	printf("[t] : Afficher l'histogramme\n");
-	printf("[w] : Changer le canal d'écoute de l'histogramme\n");
-	printf("[h] : Sauvegarder l'histogramme en image ppm\n");
+	printf("[x] : Changer le canal d'écoute de l'histogramme\n");
+	printf("[T] : Sauvegarder l'histogramme en image ppm\n");
 }
 
 void removeAll(Image* p, Image* pf, Image* pic, LCalque* pc, LHistorique* ph, LHistorique* p_redo, Histogramme* histo) {

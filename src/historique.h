@@ -31,5 +31,6 @@ int addHistory (LHistorique*, Calque*, int);
 void AfficheHistory (LHistorique*);
 int cancelHistory (LHistorique*, LCalque*, LHistorique*);
 void redoHistory (LHistorique*, LCalque*, LHistorique*);
+int recupImg(LHistorique*, Calque*);
 void removeHistory (LHistorique*);
 #endif

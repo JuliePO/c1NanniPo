@@ -37,7 +37,7 @@ LLut* new_LLut(LLut*);
 int addLUT(LLut*, Lut*);
 void applyLUT(Image*, Lut*);
 LLut* removeLut(LLut*, int);
-LLut* copyLLut(LLut*, LLut*);
+int copyLLut(LLut*, LLut*);
 Lut* copyLut(Lut*, Lut*);
 void afficheLLut(LLut*);
 

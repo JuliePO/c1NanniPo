@@ -11,13 +11,13 @@
 LCalque* new_LCalque(void) {
 	
 	//Alloue de la mémoire 
-	LCalque *p_calque = malloc(sizeof *p_calque);
-	if (p_calque != NULL) {
-		p_calque->length = 0;
-		p_calque->p_head = NULL;
-		p_calque->p_tail = NULL;
+	LCalque *p_lcalque = malloc(sizeof(LCalque));
+	if (p_lcalque != NULL) {
+		p_lcalque->length = 0;
+		p_lcalque->p_head = NULL;
+		p_lcalque->p_tail = NULL;
 	}
-	return p_calque;
+	return p_lcalque;
 }
 
 /************* Ajouter un calque à la liste  avec une image *************/
@@ -26,34 +26,34 @@ int addCalqueImg(LCalque* p_lcalque, float opacity, int mix, char* nameImg) {
 	// On vérifie si notre liste a été allouée
 	if (p_lcalque != NULL) {
 		//Création d'un nouveau calque
-		Calque* new_calque = malloc(sizeof *new_calque); 
+		Calque* new_calque = malloc(sizeof(Calque)); 
 
 		// On vérifie si le malloc n'a pas échoué
 		if (new_calque != NULL) {
 
-			//Création de la liste de lut
-			LLut* new_llut = malloc(sizeof *new_llut);
-
-			// On vérifie si le malloc n'a pas échoué
-			if(new_llut != NULL) {
-				
-				//Initialisation de la liste de lut
-				new_llut = new_LLut(new_llut);
-				new_calque->p_llut = new_llut;
-
-				//Création de la nouvelle image
-				Image* new_img = malloc(sizeof *new_img);
+			//Création de la nouvelle image
+			Image* new_img = malloc(sizeof(Image));
 		
-				//On vérifie si le malloc pour l'image n'a pas échoué
-				if (new_img != NULL) {
+			//On vérifie si le malloc pour l'image n'a pas échoué
+			if (new_img != NULL) {
 
-					if(openImg(new_img, nameImg) == 1) {
+				if(openImg(new_img, nameImg) == 1) {
 
-						new_calque->opacity = opacity; 
-						new_calque->mix = mix; 
+					new_calque->opacity = opacity; 
+					new_calque->mix = mix; 
+					new_calque->image_src = new_img;
+
+					//Création de la liste de lut
+					LLut* new_llut = malloc(sizeof(LLut));
+
+					// On vérifie si le malloc n'a pas échoué
+					if(new_llut != NULL) {
+				
+						//Initialisation de la liste de lut
+						new_llut = new_LLut(new_llut);
+						new_calque->p_llut = new_llut;
 
 						returnImage(new_img);
-						new_calque->image_src = new_img;
 
 						new_calque->p_next = NULL; 
 
@@ -65,7 +65,9 @@ int addCalqueImg(LCalque* p_lcalque, float opacity, int mix, char* nameImg) {
 							 // Pointe la tête de la liste sur le nouveau calque
 							p_lcalque->p_head = new_calque;
 							// Pointe la fin de la liste sur le nouveau calque
-							p_lcalque->p_tail = new_calque; 
+							p_lcalque->p_tail = new_calque;
+							//Pointer vers le calque suivant à NULL car on rajoute à la fin de la liste	
+							new_calque->p_next = NULL;
 						}
 						// Cas où des éléments sont déjà présents dans la  liste
 						else {
@@ -77,22 +79,24 @@ int addCalqueImg(LCalque* p_lcalque, float opacity, int mix, char* nameImg) {
 							new_calque->p_prev = p_lcalque->p_tail; 
 							// Pointe la fin de la liste sur le nouveau calque
 							p_lcalque->p_tail = new_calque; 
+							//Pointer vers le calque suivant à NULL car on rajoute à la fin de la liste	
+							new_calque->p_next = NULL;
 						}
 						// On augmente de 1 la taille de la liste
 						p_lcalque->length++; 
 					}
 					else  {
-						printf("Problème avec l'ouverture d'image\n");
+						printf("Probleme avec la liste de lut\n");
 						return 0;
 					}
 				}
 				else {
-					printf("probleme d'image\n");
+					printf("Problème avec l'ouverture d'image\n");
 					return 0;
 				}
 			}
 			else {
-				printf("Probleme avec la liste de lut\n");
+				printf("probleme d'image\n");
 				return 0;
 			}
 		}
@@ -117,9 +121,9 @@ int addCalque(LCalque* p_lcalque, float opacity, int mix) {
 	// On vérifie si notre liste a été allouée
 	if (p_lcalque != NULL) {
 		//Création d'un nouveau calque
-		Calque* new_calque = malloc(sizeof *new_calque); 
+		Calque* new_calque = malloc(sizeof(Calque)); 
 		//Création de la nouvelle image
-		Image* new_img = malloc(sizeof *new_img);
+		Image* new_img = malloc(sizeof(Image));
 		
 		//On vérifie si le malloc pour l'image n'a pas échoué
 		if (new_img != NULL) {
@@ -144,7 +148,7 @@ int addCalque(LCalque* p_lcalque, float opacity, int mix) {
 			if (new_calque != NULL) {
 
 				//Création de la liste de lut
-				LLut* new_llut = malloc(sizeof *new_llut);
+				LLut* new_llut = malloc(sizeof(LLut));
 
 				// On vérifie si le malloc n'a pas échoué
 				if(new_llut != NULL) {
@@ -155,6 +159,8 @@ int addCalque(LCalque* p_lcalque, float opacity, int mix) {
 
 					new_calque->opacity = opacity; 
 					new_calque->mix = mix; 
+
+					//Pointer vers le calque suivant à NULL car on rajoute à la fin de la liste	
 					new_calque->p_next = NULL; 
 
 					returnImage(new_img);
@@ -201,15 +207,15 @@ int addCalqueImgId(LCalque* p_lcalque, float opacity, int mix, Image* img, int i
 	// On vérifie si notre liste a été allouée
 	if (p_lcalque != NULL) {
 		//Création d'un nouveau calque
-		Calque* new_calque = malloc(sizeof *new_calque); 
+		Calque* new_calque = malloc(sizeof(Calque)); 
 
 		// On vérifie si le malloc n'a pas échoué
 		if (new_calque != NULL) {
 			new_calque->opacity = opacity; 
-			new_calque->mix = mix; 
+			new_calque->mix = mix;
 
 			//Création de la nouvelle image
-			Image* new_img = malloc(sizeof *new_img);
+			Image* new_img = malloc(sizeof(Image));
 			if(copyImg(new_img, img) == 0) {
 				printf("Probleme au moment de la copie de l'image\n");
 				return 0;
@@ -219,17 +225,15 @@ int addCalqueImgId(LCalque* p_lcalque, float opacity, int mix, Image* img, int i
 			new_calque->image_src = new_img;
 
 			//Création de la liste de lut
-			LLut* new_llut = malloc(sizeof *new_llut);
+			LLut* new_llut = malloc(sizeof(LLut));
 
 			// On vérifie si le malloc n'a pas échoué
 			if(new_llut != NULL) {
 				
 				//Initialisation de la liste de lut
 				new_llut = new_LLut(new_llut);
-				if(copyLLut(p_llut, new_llut) == 0) {
-					printf("Probleme au moment de la copie de la liste de calque\n");
-					return 0;
-				}
+				new_llut = copyLLut(p_llut, new_llut);
+
 				new_calque->p_llut = new_llut;
 
 				new_calque->id = id;
@@ -438,6 +442,7 @@ void afficheLCalque(LCalque* p_lcalque) {
 			printf("\n");
 		    	p_temp = p_temp->p_next;
 		}
+
 		free(p_temp);
 	}
 }
@@ -567,9 +572,12 @@ int calqueCourant(Calque* p_courant, Image* courant_img) {
 }
 
 /************ Fusionner les calques *************/
-int fusionCalque(LCalque* p_lcalque, Image* final_img) {
+Image* fusionCalque(LCalque* p_lcalque) {
 
 	int i, res;
+
+	//Création de la nouvelle image
+	Image* final_img = malloc(sizeof(Image));
 	
 	//Propriété de l'image
 	final_img->magicNumber[0] = 'P';
@@ -587,8 +595,7 @@ int fusionCalque(LCalque* p_lcalque, Image* final_img) {
 		if (p_lcalque != NULL) {
 		
 			//Vérifie qu'il y a plus d'un calque
-			if(p_lcalque->length + 1) {
-
+			if(p_lcalque->length > 1) {
 			
 				//Création d'un calque temporaire pour parcourir la liste de calque
 				Calque *p_tmp = p_lcalque->p_head;
@@ -611,6 +618,7 @@ int fusionCalque(LCalque* p_lcalque, Image* final_img) {
 
 						//Parcourt la liste de lut et application des lut
 						while (lut_tmp != NULL) {
+
 							applyLUT(final_img, lut_tmp);
 						    	lut_tmp = lut_tmp->l_next;
 						}
@@ -622,7 +630,7 @@ int fusionCalque(LCalque* p_lcalque, Image* final_img) {
 						if(p_tmp->mix == 0) {
 
 							for(i=0; i< ((p_lcalque->p_head->image_src->widthImg) * (p_lcalque->p_head->image_src->heightImg)* 3); i++) {
-									//final_img->tabPixel[i] = (final_img->tabPixel[i]) + (p_tmp->image_src->tabPixel[i]) * (p_tmp->opacity);				
+									//final_img->tabPixel[i] = (final_img->tabPixel[i]) + (p_tmp->image_src->tabPixel[i]) * (p_tmp->opacity);								
 									res = final_img->tabPixel[i] + (p_tmp->opacity)* (p_tmp->image_src->tabPixel[i]);
 									res= valeur_propre(res);
 									final_img->tabPixel[i] = res;
@@ -644,6 +652,7 @@ int fusionCalque(LCalque* p_lcalque, Image* final_img) {
 
 						//Parcourt la liste de lut et application des lut
 						while (lut_tmp != NULL) {
+
 							applyLUT(final_img, lut_tmp);
 						    	lut_tmp = lut_tmp->l_next;
 						}
@@ -660,34 +669,36 @@ int fusionCalque(LCalque* p_lcalque, Image* final_img) {
 			else {
 			
 				//Parcours le tableau de pixel et multiplie par son opacite : pour le premier calque
-				for(i=0; i< ((p_lcalque->p_head->image_src->widthImg) * (p_lcalque->p_head->image_src->heightImg)* 3); i++) {
+				int h= (p_lcalque->p_head->image_src->widthImg) * (p_lcalque->p_head->image_src->heightImg)* 3;
+
+				for(i=0; i< h; i++) {
 
 					final_img->tabPixel[i] = (p_lcalque->p_head->image_src->tabPixel[i]) * (p_lcalque->p_head->opacity);
 
 				}
 
 				//Création d'une lut temporaire pour parcourrir la liste de lut
-				Lut *lut_tmp = p_lcalque->p_head->p_llut->l_head;
+				Lut *lut_tmp = p_lcalque->p_head->p_llut->l_head->l_next;
 
 				//Parcourt la liste de lut et application des lut
 				while (lut_tmp != NULL) {
+					
 					applyLUT(final_img, lut_tmp);
 				    	lut_tmp = lut_tmp->l_next;
 				}
-
 			}
 		}
 		else {
 			printf("Cette liste de calque n'existe pas");
-			return 0;
+			return NULL;
 		}
 	}
 	else {
 		printf("Problème d'allocation memoire pour l'image");
-		return 0;
+		return NULL;
 	}
 
-	return 1;
+	return final_img;
 }
 
 int valeur_propre(int res) {
@@ -787,7 +798,7 @@ void removeLCalque(LCalque* p_lcalque) {
 
 			Calque *p_temp = p_lcalque->p_head;
 			freeTabImg(p_temp->image_src);
-			removeLLut(p_temp->p_llut);
+			//removeLLut(p_temp->p_llut);
 			p_lcalque->p_head = p_temp->p_next;
 			free(p_temp);
 		}

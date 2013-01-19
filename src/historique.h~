@@ -29,7 +29,7 @@ typedef struct LHistorique {
 LHistorique* initHistory (void);
 int addHistory (LHistorique*, Calque*, int);
 void AfficheHistory (LHistorique*);
-void cancelHistory (LHistorique*, LCalque*, LHistorique*);
+int cancelHistory (LHistorique*, LCalque*, LHistorique*);
 void redoHistory (LHistorique*, LCalque*, LHistorique*);
 void removeHistory (LHistorique*);
 #endif
