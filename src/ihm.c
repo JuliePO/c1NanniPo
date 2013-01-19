@@ -162,9 +162,11 @@ void drawMenuLut() {
 	drawCarreVide(0.65,h1,0.75,h2);// gauche, bas, droite, haut
 	writeString(0.66,ht,"Effets");
 
-	//sous menu calque
+	//sous menu effet (luts)
+	//background du menu
 	fixeCouleur(0.6,0.6,0.6);
-	drawCarre(0.64,0.40,0.98,0.88);// gauche, bas, droite, haut
+	drawCarre(0.64,0.30,0.98,0.88);// gauche, bas, droite, haut
+	//titre de menu
 	fixeCouleur(0.1,0.1,0.1);
 	writeString(0.65,0.82,"Effets :");
 
@@ -174,13 +176,24 @@ void drawMenuLut() {
 	drawCarreVide(0.74,0.65,0.96,0.70);// gauche, bas, droite, haut
 	drawCarreVide(0.74,0.60,0.96,0.65);// gauche, bas, droite, haut
 	drawCarreVide(0.74,0.55,0.96,0.60);// gauche, bas, droite, haut
+	drawCarreVide(0.74,0.50,0.96,0.55);// gauche, bas, droite, haut
+	drawCarreVide(0.74,0.45,0.96,0.50);// gauche, bas, droite, haut
+
+	drawCarreVide(0.65,0.37,0.96,0.42);// gauche, bas, droite, haut
+	drawCarreVide(0.65,0.32,0.96,0.37);// gauche, bas, droite, haut
 
 	writeString(0.76,0.82,"+ Contraste");
 	writeString(0.76,0.77,"- Contraste");
 	writeString(0.76,0.72,"+ Luminosite");
 	writeString(0.76,0.67,"- Luminosite");
-	writeString(0.76,0.62,"Noir et Blanc");
+	writeString(0.76,0.62,"Negatif couleurs");
 	writeString(0.76,0.57,"Effet Sepia");
+	writeString(0.76,0.52,"Noir et Blanc");
+	writeString(0.76,0.47,"Coloriser l'image");
+
+	writeString(0.66,0.39,"Voir tous les effets appliques");
+	writeString(0.66,0.34,"Supprimer dernier effet");
+
 
 }
 
@@ -228,8 +241,8 @@ void help(void) {
 
 	printf("\n\n/-------------- MENU HISTORIQUE --------------/\n\n");
 	printf("[h] : Afficher l'historique\n");
-	printf("[H] : Afficher l'historique redo\n");
-	printf("[z] : Annuler la derniere action\n");
+	printf("[H] : Afficher l'historique (redo)\n");
+	printf("[z] : Annuler la derniere action Undo\n");
 	printf("[Z] : Redo\n");
 
 	printf("\n\n/-------------- MENU HISTOGRAMME --------------/\n\n");

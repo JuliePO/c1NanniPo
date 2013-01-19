@@ -126,7 +126,7 @@ int main(int argc, char** argv) {
 					if(intensite < 0 || intensite > 255) {
 						while(intensite < 0 || intensite > 255) {
 							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-							printf("Entrer une valeur d'intensite :");
+							printf("Entrez une valeur d'intensite :");
 							scanf("%d", &intensite);
 						}
 					}
@@ -143,7 +143,7 @@ int main(int argc, char** argv) {
 					if(intensite < 0 || intensite > 255) {
 						while(intensite < 0 || intensite > 255) {
 							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-							printf("Entrer une valeur d'intensite :");
+							printf("Entrez une valeur d'intensite :");
 							scanf("%d", &intensite);
 						}
 					}
@@ -160,7 +160,7 @@ int main(int argc, char** argv) {
 					if(intensite < 0 || intensite > 255) {
 						while(intensite < 0 || intensite > 255) {
 							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-							printf("Entrer une valeur d'intensite :");
+							printf("Entrez une valeur d'intensite :");
 							scanf("%d", &intensite);
 						}
 					}
@@ -177,7 +177,7 @@ int main(int argc, char** argv) {
 					if(intensite < 0 || intensite > 255) {
 						while(intensite < 0 || intensite > 255) {
 							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-							printf("Entrer une valeur d'intensite :");
+							printf("Entrez une valeur d'intensite :");
 							scanf("%d", &intensite);
 						}
 					}
@@ -358,40 +358,40 @@ int main(int argc, char** argv) {
 	/********* Action de remplissage du calque courant *********/
 	void ACTIONlayerColor(){
 		//Récupère la valeur de rouge
-		printf("\nEntrer la valeur rouge (comprise entre 0 et 255) :");
+		printf("\nEntrez la valeur rouge (comprise entre 0 et 255) :");
 		scanf("%d", &red);
 
 		//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 		if(red < 0 || red > 255) {
 			while(red < 0 || red > 255) {
 				printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-				printf("Entrer la valeur rouge :");
+				printf("Entrez la valeur rouge :");
 				scanf("%d", &red);
 			}
 		}
 
 		//Récupère la valeur de vert
-		printf("Entrer la valeur vert (comprise entre 0 et 255) :");
+		printf("Entrez la valeur vert (comprise entre 0 et 255) :");
 		scanf("%d", &green);
 
 		//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 		if(green < 0 || green > 255) {
 			while(green < 0 || green > 255) {
 				printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-				printf("Entrer la valeur rouge :");
+				printf("Entrez la valeur rouge :");
 				scanf("%d", &green);
 			}
 		}
 
 		//Récupère la valeur de bleu
-		printf("Entrer la valeur blue (comprise entre 0 et 255) :");
+		printf("Entrez la valeur blue (comprise entre 0 et 255) :");
 		scanf("%d", &blue);
 
 		//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 		if(blue < 0 || blue > 255) {
 			while(blue < 0 || blue > 255) {
 				printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-				printf("Entrer la valeur rouge :");
+				printf("Entrez la valeur rouge :");
 				scanf("%d", &blue);
 			}
 		}
@@ -419,7 +419,50 @@ int main(int argc, char** argv) {
 		}
 
 	}
+	/********** Action de colorisation de l'image *****************/
+	void ACTIONimgColor(){
+		printf("Entrez une valeur de rouge (entre 0 et 255) : ");
+		scanf("%d", &r);
 
+		//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+		if(r < 0 || r > 255) {
+			while(r < 0 || r > 255) {
+				printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+				printf("Entrez une valeur de rouge :");
+				scanf("%d", &r);
+			}
+		}
+
+		printf("Entrez une valeur de vert (entre 0 et 255) : ");
+		scanf("%d", &v);
+
+		//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+		if(v < 0 || v > 255) {
+			while(v < 0 || v > 255) {
+				printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+				printf("Entrez une valeur de vert :");
+				scanf("%d", &v);
+			}
+		}
+
+		printf("Entrez une valeur de bleu (entre 0 et 255) : ");
+		scanf("%d", &b);
+
+		//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+		if(b < 0 || b > 255) {
+			while(b < 0 || b > 255) {
+				printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+				printf("Entrez une valeur de bleu :");
+				scanf("%d", &b);
+			}
+		}
+
+		colorize(p_courant->p_llut, r, v, b);
+		//Ajout de l'action dans l'historique
+		addHistory(ph, p_courant, 5);
+		//Création d'un element de l'historique redo fantome (avec aucune action)
+		addHistory(p_redo, p_courant, -2);
+	}
 	/****** GESTION TOUCHES CLAVIER ******/
 	void kbdFunc(unsigned char c, int x, int y) {
 	
@@ -434,7 +477,7 @@ int main(int argc, char** argv) {
 
 			//Touche n : Naviger dans la liste de calque
 			case 'n' : 
-				printf("\nEntrer l'id du calque :");
+				printf("\nEntrez l'id du calque :");
 				scanf("%d", &position);
 
 				//Le calque courant devient le calque qui a l'id entré par l'utilisateur
@@ -565,7 +608,7 @@ int main(int argc, char** argv) {
 				//Le canal avant changement
 				printf("Canal : %d", canal);
 				//Récupère le nouveau canal
-				printf("Entrer le nouveau canal (0 : global, 1 : rouge, 2 : vert, 3 : bleu) : ");
+				printf("Entrez le nouveau canal (0 : global, 1 : rouge, 2 : vert, 3 : bleu) : ");
 				scanf("%d", &canal);
 
 				//Si le canal n'est pas 0, 1, 2 ou 3 alors on redemande jusqu'à que c'est bon
@@ -573,7 +616,7 @@ int main(int argc, char** argv) {
 
 					while(canal != 0 && canal != 1 && canal != 2 && canal != 3) {
 						printf("Erreur entrez une valeur (0 : global, 1 : rouge, 2 : vert, 3 : bleu)\n");
-						printf("Entrer le canal :");
+						printf("Entrez le canal :");
 						scanf("%d", &canal);
 					}
 				}
@@ -597,14 +640,14 @@ int main(int argc, char** argv) {
 
 			//Touche L : Ajout de luminosite
 			case 'L' : 
-				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
+				printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
 				scanf("%d", &intensite);
 
 				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 				if(intensite < 0 || intensite > 255) {
 					while(intensite < 0 || intensite > 255) {
 						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-						printf("Entrer une valeur d'intensite :");
+						printf("Entrez une valeur d'intensite :");
 						scanf("%d", &intensite);
 					}
 				}
@@ -618,14 +661,14 @@ int main(int argc, char** argv) {
 				break;
 			//Touche l : Diminution de la luminosite
 			case 'l' :
-				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
+				printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
 				scanf("%d", &intensite);
 
 				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 				if(intensite < 0 || intensite > 255) {
 					while(intensite < 0 || intensite > 255) {
 						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-						printf("Entrer une valeur d'intensite :");
+						printf("Entrez une valeur d'intensite :");
 						scanf("%d", &intensite);
 					}
 				}
@@ -640,14 +683,14 @@ int main(int argc, char** argv) {
 
 			//Touche C : Ajout de contraste
 			case 'C' :
-				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
+				printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
 				scanf("%d", &intensite);
 
 				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 				if(intensite < 0 || intensite > 255) {
 					while(intensite < 0 || intensite > 255) {
 						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-						printf("Entrer une valeur d'intensite :");
+						printf("Entrez une valeur d'intensite :");
 						scanf("%d", &intensite);
 					}
 				}
@@ -662,14 +705,14 @@ int main(int argc, char** argv) {
 
 			//Touche c : Diminution du contraste
 			case 'c' :
-				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
+				printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
 				scanf("%d", &intensite);
 					
 				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 				if(intensite < 0 || intensite > 255) {
 					while(intensite < 0 || intensite > 255) {
 						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-						printf("Entrer une valeur d'intensite :");
+						printf("Entrez une valeur d'intensite :");
 						scanf("%d", &intensite);
 					}
 				}
@@ -700,48 +743,7 @@ int main(int argc, char** argv) {
 
 			//Touche g : Colorisation de l'image
 			case 'g' : 
-
-				printf("Entrer une valeur de rouge (entre 0 et 255) : ");
-				scanf("%d", &r);
-
-				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
-				if(r < 0 || r > 255) {
-					while(r < 0 || r > 255) {
-						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-						printf("Entrer une valeur de rouge :");
-						scanf("%d", &r);
-					}
-				}
-
-				printf("Entrer une valeur de vert (entre 0 et 255) : ");
-				scanf("%d", &v);
-
-				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
-				if(v < 0 || v > 255) {
-					while(v < 0 || v > 255) {
-						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-						printf("Entrer une valeur de vert :");
-						scanf("%d", &v);
-					}
-				}
-
-				printf("Entrer une valeur de bleu (entre 0 et 255) : ");
-				scanf("%d", &b);
-
-				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
-				if(b < 0 || b > 255) {
-					while(b < 0 || b > 255) {
-						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
-						printf("Entrer une valeur de bleu :");
-						scanf("%d", &b);
-					}
-				}
-
-				colorize(p_courant->p_llut, r, v, b);
-				//Ajout de l'action dans l'historique
-				addHistory(ph, p_courant, 5);
-				//Création d'un element de l'historique redo fantome (avec aucune action)
-				addHistory(p_redo, p_courant, -2);
+				ACTIONimgColor();
 				break;
 
 			//Touche s : Sepia
@@ -790,19 +792,6 @@ int main(int argc, char** argv) {
 				help();
 				break;
 
-<<<<<<< HEAD
-			//Touche F2 : Afficher la liste de luts du calque courant
-			case GLUT_KEY_F2 :
-				afficheLLut(p_courant->p_llut);
-				break;
-||||||| merged common ancestors
-			//Touche F2 : Afficher la liste de luts du calque courant
-			case GLUT_KEY_F2 :
-				afficheLLut(p_courant->p_llut);
-				break;
-
-=======
->>>>>>> cdca7918b06b294f8907d3df80bffd636a48d334
 			//Touche FLECHE BAS : Aller sur le calque précédent
 			case GLUT_KEY_DOWN :
 				//Si c'est le premier calque
@@ -873,7 +862,7 @@ int main(int argc, char** argv) {
 
 				/*****header : Menu principal ****/
 
-				//bouton quitter 
+				// bouton quitter 
 				if (x > (widthWin*0.02)  && x < (widthWin*0.05) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
 					printf("Fin du programme\n");
 					//Supprimer les elements 
@@ -881,24 +870,46 @@ int main(int argc, char** argv) {
 					//Fin du programme
 					exit(0);
 				}
-				//bt sauver
+				// bt sauver
 				if (x > (widthWin*0.07)  && x < (widthWin*0.16) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
 					ACTIONsaveImg();
 
 				}
-				//bt menu lut
+
+				/***Gestion de l'historique**/
+				// bt Undo
+				if (x > (widthWin*0.195)  && x < (widthWin*0.28) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+					cancelHistory(ph, pc, p_redo);
+					ACTIONActualisation();
+
+				}
+				// bt Afficher l'historique
+				if (x > (widthWin*0.28)  && x < (widthWin*0.40) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+					AfficheHistory(ph);
+
+				}
+				// bt Redo
+				if (x > (widthWin*0.40)  && x < (widthWin*0.48) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+					redoHistory (p_redo, pc, ph);
+					ACTIONActualisation();
+
+				}
+
+
+				/***menu principal***/
+				// bt menu lut
 				if (x > (widthWin*0.65)  && x < (widthWin*0.75) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
 					fixeFonctionDessin(drawMenuLut);
 					menu=1;
 
 				}
-				//bt menu calque (si image = image.ppm)
+				// bt menu calque (si image = image.ppm)
 				if (x > (widthWin*0.75)  && x < (widthWin*0.85) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
 					fixeFonctionDessin(drawMenuLayer);
 					menu=2;
 
 				}
-				//bt menu histogramme
+				// bt menu histogramme
 				if (x > (widthWin*0.86)  && x < (widthWin*0.975) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
 					fixeFonctionDessin(afficheHisto);
 					menu=3;
@@ -911,30 +922,175 @@ int main(int argc, char** argv) {
 
 					// bt + contraste
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.85)) && y < (heightWin-(heightWin*0.80)) ) {
-						printf("contraste1 %d\n", menu);
+						printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
+						scanf("%d", &intensite);
+
+						//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+						if(intensite < 0 || intensite > 255) {
+							while(intensite < 0 || intensite > 255) {
+								printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+								printf("Entrez une valeur d'intensite :");
+								scanf("%d", &intensite);
+							}
+						}
+
+						addContraste(p_courant->p_llut, intensite);
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 5);
+						//Création d'un element de l'historique redo fantome (avec aucune action)
+						addHistory(p_redo, p_courant, -2);
+
+						//Actualisation de l'image					
+						ACTIONActualisation();
 					}
-					// bt - Contraste 
+					
+
+					// [ bt - Contraste ]
+
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.80)) && y < (heightWin-(heightWin*0.75)) ) {
-						printf("contraste2 %d\n", menu);
+						printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
+						scanf("%d", &intensite);
+							
+						//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+						if(intensite < 0 || intensite > 255) {
+							while(intensite < 0 || intensite > 255) {
+								printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+								printf("Entrez une valeur d'intensite :");
+								scanf("%d", &intensite);
+							}
+						}
+
+						dimContraste(p_courant->p_llut, intensite);
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 5);
+						//Création d'un element de l'historique redo fantome (avec aucune action)
+						addHistory(p_redo, p_courant, -2);
+
+						// Actualisation de l'image
+						ACTIONActualisation();
 
 					}
-					// bt + Luminosité
+
+
+					// [ bt + Luminosité ]
+
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.75)) && y < (heightWin-(heightWin*0.70)) ) {
 						printf("luminosité1 %d\n", menu);
+						printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
+						scanf("%d", &intensite);
+
+						//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+						if(intensite < 0 || intensite > 255) {
+							while(intensite < 0 || intensite > 255) {
+								printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+								printf("Entrez une valeur d'intensite :");
+								scanf("%d", &intensite);
+							}
+						}
+
+						addLum(p_courant->p_llut, intensite);
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 5);
+						//Création d'un element de l'historique redo fantome (avec aucune action)
+						addHistory(p_redo, p_courant, -2);
+
+						//Actualisation de l'image
+						ACTIONActualisation();
 					}
-					// bt - luminosité
+
+
+					// [ bt - luminosité ]
+
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.70)) && y < (heightWin-(heightWin*0.65)) ) {
-						printf("luminosité2 %d\n", menu);
+						printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
+						scanf("%d", &intensite);
 
+						//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+						if(intensite < 0 || intensite > 255) {
+							while(intensite < 0 || intensite > 255) {
+								printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+								printf("Entrez une valeur d'intensite :");
+								scanf("%d", &intensite);
+							}
+						}
+
+						dimLum(p_courant->p_llut, intensite);
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 5);
+						//Création d'un element de l'historique redo fantome (avec aucune action)
+						addHistory(p_redo, p_courant, -2);
+
+						//Actualiser l'image
+						ACTIONActualisation();
 					}
-					// bt noir et blanc
+
+
+
+					// [ bt Négatif couleurs ]
+
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.65)) && y < (heightWin-(heightWin*0.60)) ) {
-						printf("noir et blanc %d\n", menu);
+						invert(p_courant->p_llut);
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 5);
+						//Création d'un element de l'historique redo fantome (avec aucune action)
+						addHistory(p_redo, p_courant, -2);					
+						//Actualisation img
+						ACTIONActualisation();
 					}
 
-					// bt color
-					// bt sépia
 
+					// [ bt Sepia ]
+
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.60)) && y < (heightWin-(heightWin*0.55)) ) {
+						sepia(p_courant->p_llut, p_courant->image_src);
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 5);
+						//Création d'un element de l'historique redo fantome (avec aucune action)
+						addHistory(p_redo, p_courant, -2);					
+						//actualisation img
+						ACTIONActualisation();
+					}
+
+
+					// [ bt Noir et blanc ]
+
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.55)) && y < (heightWin-(heightWin*0.50)) ) {
+						B_W(p_courant->image_src);
+						//Ajout de l'action dans l'historique
+						addHistory(ph, p_courant, 4);		
+						//Actualisation img
+						ACTIONActualisation();			
+					}
+
+
+					// [ bt Colorisation  ]
+
+					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.50)) && y < (heightWin-(heightWin*0.45)) ) {
+						//appel de la fonction de colorisation
+						ACTIONimgColor();
+						//actualisation de l'image
+						ACTIONActualisation();
+					}
+
+
+					// [ bt Voir tous les effets appliques  ]
+
+					if (x > (widthWin*0.65)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.42)) && y < (heightWin-(heightWin*0.37)) ) {
+						afficheLLut(p_courant->p_llut);
+						//actualisation img
+						ACTIONActualisation();
+					}
+
+
+					// [ bt supprimer dernier effet appliqué  ]
+
+					if (x > (widthWin*0.65)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.37)) && y < (heightWin-(heightWin*0.32)) ) {
+						p_courant->p_llut = removeLut(p_courant->p_llut, p_courant->p_llut->l_tail->id);
+						recupImg(ph, p_courant);
+						addHistory(ph, p_courant, 6);	
+						//actualisation de l'image
+						ACTIONActualisation();
+					}
 				}
 
 
@@ -1044,19 +1200,24 @@ int main(int argc, char** argv) {
 					//global
 					if (x > (widthWin*0.75)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.36)) && y < (heightWin-(heightWin*0.31)) ) {
 						canal = 0;
+						//actualisation de l'image
+						ACTIONActualisation();
 					}
 					//R
 					if (x > (widthWin*0.75)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.31)) && y < (heightWin-(heightWin*0.26)) ) {
 						canal = 1;
+						ACTIONActualisation();
 					}
 					//V
 					if (x > (widthWin*0.75)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.26)) && y < (heightWin-(heightWin*0.21)) ) {
 						canal = 2;
+						ACTIONActualisation();
 
 					}
 					//B
 					if (x > (widthWin*0.75)  && x < (widthWin*0.84) && y > (heightWin-(heightWin*0.21)) && y < (heightWin-(heightWin*0.16)) ) {
 						canal = 3;
+						ACTIONActualisation();
 
 					}
 					// bt sauvegarder l'historique
