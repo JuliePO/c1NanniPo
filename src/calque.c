@@ -556,10 +556,9 @@ Image* fusionCalque(LCalque* p_lcalque) {
 						//Si le mode de fusion est une ADDITION
 						if(p_tmp->mix == 0) {
 
-							for(i=0; i< ((p_lcalque->p_head->image_src->widthImg) * (p_lcalque->p_head->image_src->heightImg)* 3); i++) {
-									//final_img->tabPixel[i] = (final_img->tabPixel[i]) + (p_tmp->image_src->tabPixel[i]) * (p_tmp->opacity);								
+							for(i=0; i< ((p_lcalque->p_head->image_src->widthImg) * (p_lcalque->p_head->image_src->heightImg)* 3); i++) {				
 									res = final_img->tabPixel[i] + (p_tmp->opacity)* (p_tmp->image_src->tabPixel[i]);
-									res= valeur_propre(res);
+									res= verifValue(res);
 									final_img->tabPixel[i] = res;
 							}
 						}
@@ -628,11 +627,16 @@ Image* fusionCalque(LCalque* p_lcalque) {
 	return final_img;
 }
 
-int valeur_propre(int res) {
+int verifValue(int res) {
+
+	//Si ça dépasse 255
 	if(res>255)
 		return 255;
+	//Si c'est inférieur à 0
 	else if(res<=0)
 		return 0;
+	else
+		return res;
 }
 
 /************* Supprimer un calque selon sa position *************/
