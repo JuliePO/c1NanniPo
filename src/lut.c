@@ -261,13 +261,16 @@ LLut* copyLLut(LLut* p_llut, LLut* new_llut) {
 Lut* copyLut(Lut* p_lut, Lut* new_lut) {
 	int i;
 	
+	// test si la lut à copier existe
 	if(p_lut != NULL) {
 		
+		// test si la copie existe
 		if(new_lut != NULL) {
 			
+			// copie des id
 			new_lut->id = p_lut->id;
 					
-			//Copie les tableaux
+			// Copie les tableaux
 			for(i=0;i<256;i++) {
 				new_lut->tabLutR[i] = p_lut->tabLutR[i];
 				new_lut->tabLutV[i] = p_lut->tabLutV[i];
@@ -287,37 +290,48 @@ Lut* copyLut(Lut* p_lut, Lut* new_lut) {
 	return new_lut;
 }
 
-/******Effets**********/
 
 
-//luminosité
-//il s'agit d'ajouté une valeur positive choisie aux valeurs des pixels
+
+/***********   Effets   **********/
+
+
+
+//*******Ajout luminosité**********/
+//il s'agit d'ajouter une valeur positive choisie aux valeurs des pixels
 //pour gagner en luminosité
 
 void addLum(LLut* p_llut, int nb){
 
+	//allocation memoire d'une nouvelle lut
 	Lut *new_lut = malloc(sizeof(Lut));
 
+	// test si le maloc s'est bien passé
 	if (new_lut != NULL) {
-		
+		//ajout de la lut à la liste
 		addLUT(p_llut,new_lut);
 
+		//Definition des valeurs
 		int i;
 	 	for(i=0;i<256;i++) {
+
+	 		//pour les rouges
 	 		if((new_lut->tabLutR[i]+nb)<0)
 	 			new_lut->tabLutR[i] = 0;
 	 		else if((new_lut->tabLutR[i]+nb)>255)
 	 			new_lut->tabLutR[i] = 255;
 	 		else
 	 			new_lut->tabLutR[i] = new_lut->tabLutR[i]+nb;
-	 			
+	 		
+	 		//pour les verts
 	 		if((new_lut->tabLutV[i]+nb)<0)
 	 			new_lut->tabLutV[i] = 0;
 	 		else if((new_lut->tabLutV[i]+nb)>255)
 	 			new_lut->tabLutV[i] = 255;
 	 		else
 	 			new_lut->tabLutV[i] = new_lut->tabLutV[i]+nb;
-	 			
+	 		
+	 		//pour les bleus
 	 		if((new_lut->tabLutB[i]+nb)<0)
 	 			new_lut->tabLutB[i] = 0;
 	 		else if((new_lut->tabLutB[i]+nb)>255)
@@ -331,33 +345,42 @@ void addLum(LLut* p_llut, int nb){
 
 }
 
-//il s'agit d'ajouté une valeur négative choisie aux valeurs des pixels 
+/******Diminution de luminosité*********/
+
+//il s'agit d'ajouter une valeur négative choisie aux valeurs des pixels 
 //pour diminuer la luminosité
 void dimLum(LLut* p_llut, int nb){
-
+	
+	//allocation memoire d'une nouvelle lut
 	Lut *new_lut = malloc(sizeof(Lut));
 
+	// test si le maloc s'est bien passé
 	if (new_lut != NULL) {
-		
+		//ajout de la lut à la liste
 		addLUT(p_llut,new_lut);
 
+		//definition des valeurs
 		int i;
  
 	 	for(i=0;i<256;i++) {
+
+	 		//pour les rouges
 	 		if((new_lut->tabLutR[i]-nb)<0)
 	 			new_lut->tabLutR[i] = 0;
 	 		else if((new_lut->tabLutR[i]-nb)>255)
 	 			new_lut->tabLutR[i] = 255;
 	 		else
 	 			new_lut->tabLutR[i] = new_lut->tabLutR[i]-nb;
-	 			
+	 		
+	 		//pour les verts	
 	 		if((new_lut->tabLutV[i]-nb)<0)
 	 			new_lut->tabLutV[i] = 0;
 	 		else if((new_lut->tabLutV[i]-nb)>255)
 	 			new_lut->tabLutV[i] = 255;
 	 		else
 	 			new_lut->tabLutV[i] = new_lut->tabLutV[i]-nb;
-	 			
+	 		
+	 		//pour les bleus	
 	 		if((new_lut->tabLutB[i]-nb)<0)
 	 			new_lut->tabLutB[i] = 0;
 	 		else if((new_lut->tabLutB[i]-nb)>255)
@@ -371,80 +394,31 @@ void dimLum(LLut* p_llut, int nb){
 }
 
 
-// effets sur le contraste :
+/******** effets sur le contraste ****************/
 // le contraste joue sur une différence de luminescence
 // Augmenter un contraste ou le diminuer c'est jouer entre 2 plages de luminescences
+// donc 255/2 soit une plage de 128 valeurs
 // en accentuant leur rapport
 
 
 
-
-/*void addContraste(LLut* p_llut, int nb) {
-	Lut *new_lut = malloc(sizeof(Lut));
-
-	if (new_lut != NULL) {
-		
-		addLUT(p_llut,new_lut);
-		int i;
-		
-		for(i=0;i<256;i++) {
-
-			if(new_lut->tabLutR[i] < 128) {
-				// couche des rouges
-				if((new_lut->tabLutR[i]-nb)>128)
-					new_lut->tabLutR[i] = 128;
-				else
-					new_lut->tabLutR[i] = new_lut->tabLutR[i]-nb;
-				
-				// couche des verts
-				if((new_lut->tabLutV[i]-nb)>128)
-					new_lut->tabLutV[i] = 128;
-				else
-					new_lut->tabLutV[i] = new_lut->tabLutV[i]-nb;
-				
-				// couche des bleus
-				if((new_lut->tabLutB[i]-nb)>128)
-					new_lut->tabLutB[i] = 128;
-				else
-					new_lut->tabLutB[i] = new_lut->tabLutB[i]-nb;
-			}
-				
-			else if (new_lut->tabLutR[i] >= 128) {
-				// rouge
-				if((new_lut->tabLutR[i]+nb)<128)
-					new_lut->tabLutR[i] = 128;
-				else
-					new_lut->tabLutR[i] = new_lut->tabLutR[i]+nb;
-				
-				// vert	
-				if((new_lut->tabLutV[i]+nb)<128)
-					new_lut->tabLutV[i] = 128;
-				else
-					new_lut->tabLutV[i] = new_lut->tabLutV[i]+nb;
-				
-				// bleu	
-				if((new_lut->tabLutB[i]+nb)<128)
-					new_lut->tabLutB[i] = 128;
-				else
-					new_lut->tabLutB[i] = new_lut->tabLutB[i]+nb;
-			}
-		}
-	}
-	else {
-		printf("Erreur d'allocation de la lut \n");
-	}
-}*/
-
 void addContraste(LLut* p_llut, int nb) {
+
+	//allocation memoire d'une nouvelle lut
 	Lut *new_lut = malloc(sizeof(Lut));
 
+	// test si le maloc s'est bien passé
 	if (new_lut != NULL) {
 		
+		//ajout de la lut à laliste de luts
 		addLUT(p_llut,new_lut);
+
+		//determination des regles pour les valeurs a prendre
 		int i;
 
 		for(i=0;i<256;i++){
 
+			//pour les rouges
 			if(new_lut->tabLutR[i]<128){
 		   		if( new_lut->tabLutR[i]-nb <= 0 )
 		    			new_lut->tabLutR[i]=0;
@@ -458,6 +432,7 @@ void addContraste(LLut* p_llut, int nb) {
 		     			new_lut->tabLutR[i]=new_lut->tabLutR[i]+nb;
 			}
 
+			//pour les verts
 			if(new_lut->tabLutV[i]<128){
 		   		if( new_lut->tabLutV[i]-nb  <= 0 )
 		    			new_lut->tabLutV[i]=0;
@@ -471,7 +446,7 @@ void addContraste(LLut* p_llut, int nb) {
 		     			new_lut->tabLutV[i]=new_lut->tabLutV[i]+nb;
 			}
 
-
+			//pour les bleus
 			if(new_lut->tabLutB[i]<128){
 		   		if( new_lut->tabLutB[i]-nb  <= 0 )
 		    			new_lut->tabLutB[i]=0;
@@ -492,69 +467,21 @@ void addContraste(LLut* p_llut, int nb) {
 	}
 }	
 
-// pour diminuer le contrast on fait le processus inverse
-/*void dimContraste(LLut* p_llut, int nb) {
-
-	Lut *new_lut = malloc(sizeof(Lut));
-
-	if (new_lut != NULL) {
-		
-		addLUT(p_llut,new_lut);
-		int i;
-
-		for(i=0;i<256;i++) {
-
-			if(new_lut->tabLutR[i] < 128) {
-				if((new_lut->tabLutR[i]+nb)>128)
-					new_lut->tabLutR[i] = 128;
-				else
-					new_lut->tabLutR[i] = new_lut->tabLutR[i]+nb;
-					
-				if((new_lut->tabLutV[i]+nb)>128)
-					new_lut->tabLutV[i] = 128;
-				else
-					new_lut->tabLutV[i] = new_lut->tabLutV[i]+nb;
-					
-				if((new_lut->tabLutB[i]+nb)>128)
-					new_lut->tabLutB[i] = 128;
-				else
-					new_lut->tabLutB[i] = new_lut->tabLutB[i]+nb;
-			}
-				
-			else if (new_lut->tabLutR[i] >= 128) {
-				if((new_lut->tabLutR[i]-nb)<128)
-					new_lut->tabLutR[i] = 128;
-				else
-					new_lut->tabLutR[i] = new_lut->tabLutR[i]-nb;
-					
-				if((new_lut->tabLutV[i]-nb)<128)
-					new_lut->tabLutV[i] = 128;
-				else
-					new_lut->tabLutV[i] = new_lut->tabLutV[i]-nb;
-					
-				if((new_lut->tabLutB[i]-nb)<128)
-					new_lut->tabLutB[i] = 128;
-				else
-					new_lut->tabLutB[i] = new_lut->tabLutB[i]-nb;
-			}
-		}
-	}
-	else {
-		printf("Erreur d'allocation de la lut \n");
-	}
-}*/
 
 void dimContraste(LLut* p_llut, int nb) {
-
+	//allocation memoire pour une nouvelle lut
 	Lut *new_lut = malloc(sizeof(Lut));
-
+	//test si le malloc à fonctionné
 	if (new_lut != NULL) {
-		
+		// ajout de la nouvelle lut à la liste de luts
 		addLUT(p_llut,new_lut);
+
+		// définition des valeurs des tableaux 
 		int i;
 
  		for(i=0;i<256;i++){
 
+ 			//pour les rouges
   			if(new_lut->tabLutR[i]<128){
    				if(new_lut->tabLutR[i] + nb >= 128)
     					new_lut->tabLutR[i] = 128;
@@ -568,7 +495,7 @@ void dimContraste(LLut* p_llut, int nb) {
     					new_lut->tabLutR[i] = new_lut->tabLutR[i] - nb;
   			}
 
-
+  			//pour les verts
   			if(new_lut->tabLutV[i]<128){
    				if(new_lut->tabLutV[i] + nb >= 128)
     					new_lut->tabLutV[i] = 128;
@@ -582,7 +509,7 @@ void dimContraste(LLut* p_llut, int nb) {
     					new_lut->tabLutV[i] = new_lut->tabLutV[i] - nb;
   			}
 
-
+  			//pour les bleus
   			if(new_lut->tabLutB[i]<128){
    				if(new_lut->tabLutB[i] + nb >= 128)
     					new_lut->tabLutB[i] = 128;
@@ -599,19 +526,26 @@ void dimContraste(LLut* p_llut, int nb) {
 
 		}
 	}
+	//message d'erreur du malloc
 	else {
 		printf("Erreur d'allocation de la lut \n");
 	}
 }
 
+
+/*****************negatif********************/
 //couleur en négatifs, inversion des valeur des pixel par rapport à la 
 //gamme de valeurs possible en RVB de 0 a 255
-void invert(LLut* p_llut) {	
-	Lut *new_lut = malloc(sizeof(Lut));
 
+void invert(LLut* p_llut) {	
+	//allocation memoire
+	Lut *new_lut = malloc(sizeof(Lut));
+	// test si le malloc a fonctionné
 	if (new_lut != NULL) {
-		
+		//ajout de la lut à la liste
 		addLUT(p_llut,new_lut);
+
+		//definition des valeur des tableaux
 		int i;
 	   	for (i=0; i<256; i++) {
 	   		new_lut->tabLutR[i] = 255-i;
@@ -624,8 +558,12 @@ void invert(LLut* p_llut) {
 	}
 } 	
 
-/*Effet Sepia*/
-// Effet noir et blanc
+
+
+/*********Effet Sepia*********/
+// Effet noir et blanc directement sur les pixel de l'image
+// les valeurs des canaux doivent être egales pour un pixel
+
 void B_W(Image* img) {
 	
 	int i;
@@ -639,23 +577,27 @@ void B_W(Image* img) {
 
 //Colorisation
 void colorize(LLut* p_llut, int R, int V, int B) {
-
+	// creation d'une nouvelle lut : allocation mempire
 	Lut *new_lut = malloc(sizeof(Lut));
-
+	//test sur le malloc à fonctionné
 	if (new_lut != NULL) {
-		
+		//ajout de la lut à la liste de lut
 		addLUT(p_llut,new_lut);
 
+		// parcours des tableau de la structure lu
+		// et indication des valeurs a prendre
 		int i;
 		for (i=0; i<256; i++) {
 
+			//pour les rouges
 			if((new_lut->tabLutR[i]+R)<0)
 	 			new_lut->tabLutR[i] = 0;
 	 		else if((new_lut->tabLutR[i]+R)>255)
 	 			new_lut->tabLutR[i] = 255;
 	 		else
 	 			new_lut->tabLutR[i] = new_lut->tabLutR[i]+R;
-	 			
+	 		
+	 		//pour les verts	
 	 		if((new_lut->tabLutV[i]+V)<0)
 	 			new_lut->tabLutV[i] = 0;
 	 		else if((new_lut->tabLutV[i]+V)>255)
@@ -663,6 +605,7 @@ void colorize(LLut* p_llut, int R, int V, int B) {
 	 		else
 	 			new_lut->tabLutV[i] = new_lut->tabLutV[i]+V;
 	 			
+	 		//pour les bleus
 	 		if((new_lut->tabLutB[i]+B)<0)
 	 			new_lut->tabLutB[i] = 0;
 	 		else if((new_lut->tabLutB[i]+B)>255)
@@ -671,13 +614,17 @@ void colorize(LLut* p_llut, int R, int V, int B) {
 	   			new_lut->tabLutB[i] = new_lut->tabLutB[i]+B;
 		}
 	}
+	//message d'erreur
 	else {
 		printf("Erreur d'allocation de la lut \n");
 	}
 }
 
+// fonction sepia
 void sepia (LLut* p_llut, Image* img) {
+	// conversion de l'image en noir et blanc
 	B_W(img);
+	//colorisation de l'image en rouge/orange
 	colorize(p_llut, 100, 50, 0);
 }
 
