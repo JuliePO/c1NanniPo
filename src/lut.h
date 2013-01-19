@@ -41,10 +41,10 @@ LLut* copyLLut(LLut*, LLut*);
 Lut* copyLut(Lut*, Lut*);
 void afficheLLut(LLut*);
 
-void addLum(LLut*, int);
-void dimLum(LLut*, int);
-void addContraste(LLut*, int);
-void dimContraste(LLut*, int);
+void addLum(LLut*, float);
+void dimLum(LLut*, float);
+void addContraste(LLut*, float);
+void dimContraste(LLut*, float);
 void invert(LLut*);
 void B_W(Image*);
 void colorize(LLut*, int, int, int);
