@@ -100,14 +100,14 @@ int main(int argc, char** argv) {
 		//appel du sous menu histogramme
 		drawMenuHistogramme();
 
-		int i=0, j;
+		int i=256, j;
 		float value;
 
 		//Fond blanc de l'histogramme
 		fixeCouleur(0.8,0.8,0.8);
 		drawCarre(0.64,0.38,0.98,0.87);
 
-		//Battonnet noir pour afficher l'histogramme
+		//Battonnet noir/rouge/vert ou bleu pour afficher l'histogramme selon son canal d'écoute
 		if (canal == 0)
 			fixeCouleur(0,0,0);	
 		else if (canal == 1)
@@ -118,11 +118,14 @@ int main(int argc, char** argv) {
 			fixeCouleur(0.1,0.1,0.5);
 
 		//Dessin un baton qui a la hauteur de la valeur en pourcentage 
-		for(j=256; j>=0; j--) {
+		for(j=256; j>0; j--) {
 
-			value = (0.473*((histo->values[j])/100.0))+0.40; //Met les valeurs en pourcentage
-			drawLigne((((0.34*i)/255)+0.64),0.38,(((0.34*i)/255)+0.64),value);
-			i++;
+			value =1-(((histo->values[j])*0.38/100.0)+0.24); //Met les valeurs en pourcentage
+			//printf("%f\n",value );
+			if (value > 0) { //on ne garde que ls valeurs positives
+				drawLigne((((0.34*i)/255)+0.64),0.38,(((0.34*i)/255)+0.64),value);
+				i--;
+			}				
 		}
 	}
 
