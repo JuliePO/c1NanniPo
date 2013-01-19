@@ -301,7 +301,7 @@ Lut* copyLut(Lut* p_lut, Lut* new_lut) {
 //il s'agit d'ajouter une valeur positive choisie aux valeurs des pixels
 //pour gagner en luminosité
 
-void addLum(LLut* p_llut, int nb){
+void addLum(LLut* p_llut, float nb){
 
 	//allocation memoire d'une nouvelle lut
 	Lut *new_lut = malloc(sizeof(Lut));
@@ -349,7 +349,7 @@ void addLum(LLut* p_llut, int nb){
 
 //il s'agit d'ajouter une valeur négative choisie aux valeurs des pixels 
 //pour diminuer la luminosité
-void dimLum(LLut* p_llut, int nb){
+void dimLum(LLut* p_llut, float nb){
 	
 	//allocation memoire d'une nouvelle lut
 	Lut *new_lut = malloc(sizeof(Lut));
@@ -402,7 +402,7 @@ void dimLum(LLut* p_llut, int nb){
 
 
 
-void addContraste(LLut* p_llut, int nb) {
+void addContraste(LLut* p_llut, float nb) {
 
 	//allocation memoire d'une nouvelle lut
 	Lut *new_lut = malloc(sizeof(Lut));
@@ -468,7 +468,7 @@ void addContraste(LLut* p_llut, int nb) {
 }	
 
 
-void dimContraste(LLut* p_llut, int nb) {
+void dimContraste(LLut* p_llut, float nb) {
 	//allocation memoire pour une nouvelle lut
 	Lut *new_lut = malloc(sizeof(Lut));
 	//test si le malloc à fonctionné

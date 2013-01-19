@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
 	char adress[100]; //Adresse des images de calque
 	char adressH[100]; //Adresse de l'histogramme
 	char adressF[100]; //Adresse de l'image final
-	int intensite; //Pour les modifications de luminosite et de contraste
+	float intensite; //Pour les modifications de luminosite et de contraste
 	int r, v, b; //Pour la colorisation 
 
 	/****** INITIALISATION DES ELEMENTS *****/
@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
 						while(intensite < 0 || intensite > 255) {
 							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 							printf("Entrez une valeur d'intensite :");
-							scanf("%d", &intensite);
+							scanf("%f", &intensite);
 						}
 					}
 
@@ -150,7 +150,7 @@ int main(int argc, char** argv) {
 						while(intensite < 0 || intensite > 255) {
 							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 							printf("Entrez une valeur d'intensite :");
-							scanf("%d", &intensite);
+							scanf("%f", &intensite);
 						}
 					}
 
@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
 						while(intensite < 0 || intensite > 255) {
 							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 							printf("Entrez une valeur d'intensite :");
-							scanf("%d", &intensite);
+							scanf("%f", &intensite);
 						}
 					}
 
@@ -190,7 +190,7 @@ int main(int argc, char** argv) {
 						while(intensite < 0 || intensite > 255) {
 							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 							printf("Entrez une valeur d'intensite :");
-							scanf("%d", &intensite);
+							scanf("%f", &intensite);
 						}
 					}
 
@@ -664,14 +664,14 @@ int main(int argc, char** argv) {
 			//Touche L : Ajout de luminosite
 			case 'L' : 
 				printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
-				scanf("%d", &intensite);
+				scanf("%f", &intensite);
 
 				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 				if(intensite < 0 || intensite > 255) {
 					while(intensite < 0 || intensite > 255) {
 						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 						printf("Entrez une valeur d'intensite :");
-						scanf("%d", &intensite);
+						scanf("%f", &intensite);
 					}
 				}
 
@@ -685,14 +685,14 @@ int main(int argc, char** argv) {
 			//Touche l : Diminution de la luminosite
 			case 'l' :
 				printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
-				scanf("%d", &intensite);
+				scanf("%f", &intensite);
 
 				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 				if(intensite < 0 || intensite > 255) {
 					while(intensite < 0 || intensite > 255) {
 						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 						printf("Entrez une valeur d'intensite :");
-						scanf("%d", &intensite);
+						scanf("%f", &intensite);
 					}
 				}
 
@@ -707,14 +707,14 @@ int main(int argc, char** argv) {
 			//Touche C : Ajout de contraste
 			case 'C' :
 				printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
-				scanf("%d", &intensite);
+				scanf("%f", &intensite);
 
 				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 				if(intensite < 0 || intensite > 255) {
 					while(intensite < 0 || intensite > 255) {
 						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 						printf("Entrez une valeur d'intensite :");
-						scanf("%d", &intensite);
+						scanf("%f", &intensite);
 					}
 				}
 
@@ -729,14 +729,14 @@ int main(int argc, char** argv) {
 			//Touche c : Diminution du contraste
 			case 'c' :
 				printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
-				scanf("%d", &intensite);
+				scanf("%f", &intensite);
 					
 				//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 				if(intensite < 0 || intensite > 255) {
 					while(intensite < 0 || intensite > 255) {
 						printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 						printf("Entrez une valeur d'intensite :");
-						scanf("%d", &intensite);
+						scanf("%f", &intensite);
 					}
 				}
 
@@ -961,14 +961,14 @@ int main(int argc, char** argv) {
 					// bt + contraste
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.85)) && y < (heightWin-(heightWin*0.80)) ) {
 						printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
-						scanf("%d", &intensite);
+						scanf("%f", &intensite);
 
 						//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 						if(intensite < 0 || intensite > 255) {
 							while(intensite < 0 || intensite > 255) {
 								printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 								printf("Entrez une valeur d'intensite :");
-								scanf("%d", &intensite);
+								scanf("%f", &intensite);
 							}
 						}
 
@@ -987,14 +987,14 @@ int main(int argc, char** argv) {
 
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.80)) && y < (heightWin-(heightWin*0.75)) ) {
 						printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
-						scanf("%d", &intensite);
+						scanf("%f", &intensite);
 							
 						//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 						if(intensite < 0 || intensite > 255) {
 							while(intensite < 0 || intensite > 255) {
 								printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 								printf("Entrez une valeur d'intensite :");
-								scanf("%d", &intensite);
+								scanf("%f", &intensite);
 							}
 						}
 
@@ -1015,14 +1015,14 @@ int main(int argc, char** argv) {
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.75)) && y < (heightWin-(heightWin*0.70)) ) {
 						printf("luminosité1 %d\n", menu);
 						printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
-						scanf("%d", &intensite);
+						scanf("%f", &intensite);
 
 						//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 						if(intensite < 0 || intensite > 255) {
 							while(intensite < 0 || intensite > 255) {
 								printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 								printf("Entrez une valeur d'intensite :");
-								scanf("%d", &intensite);
+								scanf("%f", &intensite);
 							}
 						}
 
@@ -1041,14 +1041,14 @@ int main(int argc, char** argv) {
 
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.70)) && y < (heightWin-(heightWin*0.65)) ) {
 						printf("Entrez un entier pour une valeur d'intensite (entre 0 et 255) : ");
-						scanf("%d", &intensite);
+						scanf("%f", &intensite);
 
 						//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
 						if(intensite < 0 || intensite > 255) {
 							while(intensite < 0 || intensite > 255) {
 								printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
 								printf("Entrez une valeur d'intensite :");
-								scanf("%d", &intensite);
+								scanf("%f", &intensite);
 							}
 						}
 
