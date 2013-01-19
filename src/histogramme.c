@@ -90,7 +90,7 @@ void SaveHisto(Histogramme* histo, char* name) {
 	int i, j;
 	
 	//Création de la nouvelle image
-	Image* histogramme = malloc(sizeof *histogramme);
+	Image* histogramme = malloc(sizeof(Image));
 
 	if(histogramme != NULL) {
 

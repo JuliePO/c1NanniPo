@@ -122,6 +122,8 @@ void afficheLLut(LLut* p_llut) {
 		    	lut_tmp = lut_tmp->l_next;
 		}
 
+		printf("Tail ID : %d", p_llut->l_tail->id);
+
 		free(lut_tmp);
 	}
 }

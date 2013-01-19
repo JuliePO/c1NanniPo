@@ -82,15 +82,116 @@ int main(int argc, char** argv) {
 	p_courant = pc->p_head;
 
 	//Chargement de la première image
-	if(addCalqueImg(pc, 1, 0, argv[1]) == 1) {
+	if(addCalqueImg(pc, 1, 0, argv[1]) == 0) {
+		printf("Erreur : Probleme à l'ajout du premier calque\n");
+		exit(1);
+	}
+	else {
 		//Calque courant
-		p_courant = pc->p_head;
+		p_courant = pc->p_tail;
 		//Ajout à l'historique
 		addHistory(ph, p_courant, 0);
 	}
-	else {
-		printf("Erreur : Probleme à l'ajout du premier calque\n");
-		exit(1);
+
+	//Fusion des calques
+	pf = fusionCalque(pc);
+
+	/******* Application des lut s'il y en a qui sont passée en argument *********/
+	void fristLut() {
+		int i;
+
+		//Vérifie le nombre d'arguments (vérifie si des luts doivent être appliquées)
+		if(argc > 2) {
+
+			for(i = 2; i < argc; i++) {
+ 
+				if(strcmp(argv[i], "INVERT") == 0) {
+
+					invert(p_courant->p_llut);
+					addHistory(ph, p_courant, 5);
+
+				}
+				else if(strcmp(argv[i], "BW") == 0) {
+
+					B_W(p_courant->image_src);
+					addHistory(ph, p_courant, 4);
+
+				}
+				else if(strcmp(argv[i], "ADDLUM") == 0) {
+					
+					i++; //Augmente de un pour passer à l'argument suivant
+					intensite = atoi(argv[i]);
+
+					//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+					if(intensite < 0 || intensite > 255) {
+						while(intensite < 0 || intensite > 255) {
+							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+							printf("Entrer une valeur d'intensite :");
+							scanf("%d", &intensite);
+						}
+					}
+
+					addLum(p_courant->p_llut, intensite);
+					addHistory(ph, p_courant, 5);
+				}
+				else if(strcmp(argv[i], "DIMLUM") == 0) {
+
+					i++;  //Augmente de un pour passer à l'argument suivant
+					intensite = atoi(argv[i]);
+
+					//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+					if(intensite < 0 || intensite > 255) {
+						while(intensite < 0 || intensite > 255) {
+							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+							printf("Entrer une valeur d'intensite :");
+							scanf("%d", &intensite);
+						}
+					}
+
+					dimLum(p_courant->p_llut, intensite);
+					addHistory(ph, p_courant, 5);
+				}
+				else if(strcmp(argv[i], "ADDCON") == 0) {
+			
+					i++;  //Augmente de un pour passer à l'argument suivant
+					intensite = atoi(argv[i]);
+
+					//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+					if(intensite < 0 || intensite > 255) {
+						while(intensite < 0 || intensite > 255) {
+							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+							printf("Entrer une valeur d'intensite :");
+							scanf("%d", &intensite);
+						}
+					}
+
+					addContraste(p_courant->p_llut, intensite);
+					addHistory(ph, p_courant, 5);
+				}
+				else if(strcmp(argv[i], "DIMLUM") == 0) {
+
+					i++;  //Augmente de un pour passer à l'argument suivant
+					intensite = atoi(argv[i]);
+
+					//Si la valeur n'est pas comprise entre 0 et 255 alors on redemande jusqu'à que c'est bon
+					if(intensite < 0 || intensite > 255) {
+						while(intensite < 0 || intensite > 255) {
+							printf("Erreur entrez une valeur comprise entre 0 et 255 \n");
+							printf("Entrer une valeur d'intensite :");
+							scanf("%d", &intensite);
+						}
+					}
+
+					dimContraste(p_courant->p_llut, intensite);
+					addHistory(ph, p_courant, 5);
+				}
+				else {
+					printf("Erreur de lut\n Fin du programme\n");
+					exit(1);
+				}
+
+			}
+		}
 	}
 
 	/********* Affichage de l'histogramme *********/
@@ -117,7 +218,7 @@ int main(int argc, char** argv) {
 			i++;
 		}
 	}
-
+	/********* Action ajout d'un calque avec une image *********/
 	void ACTIONaddCalqueImg() {
 		//Recuperer l'adresse de l'image
 		printf("\nEntrez l'adresse de l'image (images/votre_image.ppm) : ");
@@ -153,7 +254,9 @@ int main(int argc, char** argv) {
 		}
 
 		//Ajouter un calque avec l'image
-		addCalqueImg(pc, opacity, mix, adress);
+		if(addCalqueImg(pc, opacity, mix, adress) == 0) {
+			printf("Erreur : Probleme à l'ajout du premier calque\n");
+		}
 		//Le calque courant devient le calque qu'on vient d'ajouter
 		p_courant = pc->p_tail;
 		//Ajout de l'action dans l'historique
@@ -161,6 +264,7 @@ int main(int argc, char** argv) {
 		addHistory(p_redo, p_courant, -1);
 	}
 
+	/********* Action d'ajouter un calque vide *********/
 	void ACTIONaddCalqueVide() {
 		//Recuperer l'opacite
 		printf("\nEntrez l'opacite du calque (compris entre 0 et 1): ");
@@ -199,6 +303,8 @@ int main(int argc, char** argv) {
 		addHistory(ph, p_courant, 0);
 		addHistory(p_redo, p_courant, -2);
 	}
+
+	/********* Action de supprimer le calque courant *********/
 	void ACTIONdelCurrentLayer(){
 		//Ajout de l'action dans l'historique
 		addHistory(ph, p_courant, 1);
@@ -225,6 +331,7 @@ int main(int argc, char** argv) {
 			printf("Il reste un seul calque, impossible de le supprimer");
 	}
 
+	/********* Action de sauvegarde de l'image finale *********/
 	void ACTIONsaveImg(){
 		//Recuperer l'adresse de l'image finale
 		printf("\nEntrez l'adresse de l'image (images/votre_image.ppm) : ");
@@ -236,6 +343,8 @@ int main(int argc, char** argv) {
 		else
 			printf("Ereur dans la sauvegarde de l'image\n");
 	}
+
+	/********* Action de remplissage du calque courant *********/
 	void ACTIONlayerColor(){
 		//Récupère la valeur de rouge
 		printf("\nEntrer la valeur rouge (comprise entre 0 et 255) :");
@@ -281,6 +390,25 @@ int main(int argc, char** argv) {
 		//Ajout de l'action dans l'historique
 		addHistory(ph, p_courant, 4);
 	}
+
+	/********* Action d'actualisation d'image et d'histogramme *********/
+	void ACTIONActualisation() {
+
+		//Si switchCalque = 0 (mode image final)
+		if(switchCalque == 0) {
+			pf = fusionCalque(pc); //Fusion des calques
+			histo = createHistogramme(pf, canal); //Redefinition de l'histogramme
+			actualiseImage(pf->tabPixel); //Actualiser l'image
+		}
+		//Sinon (mode calque courant)
+		else {
+			calqueCourant(p_courant, pic); //Application des effets sur le calque courant
+			histo = createHistogramme(pic, canal); //Redefinition de l'histogramme
+			actualiseImage(pic->tabPixel); //Actualiset l'image
+		}
+
+	}
+
 	/****** GESTION TOUCHES CLAVIER ******/
 	void kbdFunc(unsigned char c, int x, int y) {
 	
@@ -288,13 +416,13 @@ int main(int argc, char** argv) {
 
 			/******** CALQUES ******/
 
-			//Touche p : Afficher l'id du calque courant
-			case 'p' :
+			//Touche W : Afficher l'id du calque courant
+			case 'W' :
 				printf("\nID du calque courant : %d\n", p_courant->id);
 				break;
 
-			//Touche q : Naviger dans la liste de calque
-			case 'q' : 
+			//Touche n : Naviger dans la liste de calque
+			case 'n' : 
 				printf("\nEntrer l'id du calque :");
 				scanf("%d", &position);
 
@@ -304,8 +432,8 @@ int main(int argc, char** argv) {
 				printf("ID du calque courant : %d \n", p_courant->id);
 				break;
 
-			//Touche c : Changer le mode de vue : 0 = Image final et 1 = calque courant
-			case 'c' :
+			//Touche w : Changer le mode de vue : 0 = Image final et 1 = calque courant
+			case 'w' :
 				//Si le mode de vu est en mode image final alors il change en mode calque courant
 				if(switchCalque == 0) {
 					switchCalque = 1;
@@ -318,28 +446,28 @@ int main(int argc, char** argv) {
 				}
 				break;
 
-			//Touche l : Afficher la liste de calque
-			case 'l' :
+			//Touche a : Afficher la liste de calque
+			case 'a' :
 				afficheLCalque(pc);
 				break;
 
-			//Touche n : Ajouter un nouveau calque vide
-			case 'n' :
+			//Touche N : Ajouter un nouveau calque vide
+			case 'N' :
 				ACTIONaddCalqueVide();
 				break;
 
-			//Touche i : Ajouter un calque avec une image
-			case 'i' :	
+			//Touche I : Ajouter un calque avec une image
+			case 'I' :	
 				ACTIONaddCalqueImg();
 				break;
 
-			//Touche a : Supprimer le calque courant
-			case 'a' :
+			//Touche R : Supprimer le calque courant
+			case 'R' :
 				ACTIONdelCurrentLayer();
 				break;
 
-			//Touche s : Sauvegarde de l'image final
-			case 's' :
+			//Touche S : Sauvegarde de l'image final
+			case 'S' :
 				ACTIONsaveImg();
 				break;
 
@@ -386,15 +514,15 @@ int main(int argc, char** argv) {
 				addHistory(ph, p_courant, 3);
 				break;
 
-			//Touche r : Remplir le calque d'une couleur unie
-			case 'r' :
+			//Touche G : Remplir le calque d'une couleur unie
+			case 'G' :
 				ACTIONlayerColor();
 				break;
 
 			/******** HISTORIQUE ******/
 
-			//Touche x : Afficher l'historique
-			case 'x' :
+			//Touche h : Afficher l'historique
+			case 'h' :
 				AfficheHistory(ph);
 				break;
 			//Touche z : Annuler la derniere action
@@ -402,13 +530,13 @@ int main(int argc, char** argv) {
 				//Annule la derniere action
 				cancelHistory(ph, pc, p_redo);
 				break;
-			//Touche d : Redo
-			case 'd' : 
+			//Touche Z : Redo
+			case 'Z' : 
 				redoHistory (p_redo, pc, ph);
 				break;
 
-			//Touche f : Affiche Historique redo
-			case 'f' :
+			//Touche H : Affiche Historique redo
+			case 'H' :
 				AfficheHistory(p_redo);
 				printf("taille : %d\n\n", p_redo->length);
 				break;
@@ -421,8 +549,8 @@ int main(int argc, char** argv) {
 				break;
 
 
-			//Touche w : Changement de canal d'écoute pour l'histogramme
-			case 'w' :
+			//Touche x : Changement de canal d'écoute pour l'histogramme
+			case 'x' :
 				//Le canal avant changement
 				printf("Canal : %d", canal);
 				//Récupère le nouveau canal
@@ -440,8 +568,8 @@ int main(int argc, char** argv) {
 				}
 				break;
 
-			//Touche h : Sauvegarde de l'histogramme en image ppm
-			case 'h' : 
+			//Touche T : Sauvegarde de l'histogramme en image ppm
+			case 'T' : 
 				//Récupere l'adresse de l'image
 				printf("\nEntrez l'adresse de l'image (images/votre_image.ppm) : ");
 				scanf("%s", adressH);			
@@ -451,8 +579,13 @@ int main(int argc, char** argv) {
 
 			/******** EFFETS : LUT ******/
 
-			//Touche u : Ajout de luminosite
-			case 'u' : 
+			//Touche A : Afficher la liste de luts du calque courant
+			case 'A' :
+				afficheLLut(p_courant->p_llut);
+				break;
+
+			//Touche L : Ajout de luminosite
+			case 'L' : 
 				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
 				scanf("%d", &intensite);
 
@@ -468,10 +601,12 @@ int main(int argc, char** argv) {
 				addLum(p_courant->p_llut, intensite);
 				//Ajout de l'action dans l'historique
 				addHistory(ph, p_courant, 5);
+				//Création d'un element de l'historique redo fantome (avec aucune action)
+				addHistory(p_redo, p_courant, -2);
 
 				break;
-			//Touche y : Diminution de la luminosite
-			case 'y' :
+			//Touche l : Diminution de la luminosite
+			case 'l' :
 				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
 				scanf("%d", &intensite);
 
@@ -487,11 +622,13 @@ int main(int argc, char** argv) {
 				dimLum(p_courant->p_llut, intensite);
 				//Ajout de l'action dans l'historique
 				addHistory(ph, p_courant, 5);
+				//Création d'un element de l'historique redo fantome (avec aucune action)
+				addHistory(p_redo, p_courant, -2);
 
 				break; 
 
-			//Touche j : Ajout de contraste
-			case 'j' :
+			//Touche C : Ajout de contraste
+			case 'C' :
 				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
 				scanf("%d", &intensite);
 
@@ -507,11 +644,13 @@ int main(int argc, char** argv) {
 				addContraste(p_courant->p_llut, intensite);
 				//Ajout de l'action dans l'historique
 				addHistory(ph, p_courant, 5);
+				//Création d'un element de l'historique redo fantome (avec aucune action)
+				addHistory(p_redo, p_courant, -2);
 
 				break;
 
-			//Touche k : Diminution du contraste
-			case 'k' :
+			//Touche c : Diminution du contraste
+			case 'c' :
 				printf("Entrer un entier pour une valeur d'intensite (entre 0 et 255) : ");
 				scanf("%d", &intensite);
 					
@@ -527,6 +666,8 @@ int main(int argc, char** argv) {
 				dimContraste(p_courant->p_llut, intensite);
 				//Ajout de l'action dans l'historique
 				addHistory(ph, p_courant, 5);
+				//Création d'un element de l'historique redo fantome (avec aucune action)
+				addHistory(p_redo, p_courant, -2);
 
 				break;
 
@@ -535,6 +676,8 @@ int main(int argc, char** argv) {
 				invert(p_courant->p_llut);
 				//Ajout de l'action dans l'historique
 				addHistory(ph, p_courant, 5);
+				//Création d'un element de l'historique redo fantome (avec aucune action)
+				addHistory(p_redo, p_courant, -2);
 				break;
 
 			//Touche b : Passage de l'image en noir et blanc
@@ -586,15 +729,24 @@ int main(int argc, char** argv) {
 				colorize(p_courant->p_llut, r, v, b);
 				//Ajout de l'action dans l'historique
 				addHistory(ph, p_courant, 5);
+				//Création d'un element de l'historique redo fantome (avec aucune action)
+				addHistory(p_redo, p_courant, -2);
 				break;
 
-			//Touche e : Sepia
-			case 'e' :
-				p_courant->p_llut = removeLut(p_courant->p_llut, p_courant->p_llut->l_tail->id);
-				addHistory(ph, p_courant, 6);
-				//sepia(p_courant->p_llut, p_courant->image_src);
+			//Touche s : Sepia
+			case 's' :
+				sepia(p_courant->p_llut, p_courant->image_src);
 				//Ajout de l'action dans l'historique
-				//addHistory(ph, p_courant, 7);
+				addHistory(ph, p_courant, 5);
+				//Création d'un element de l'historique redo fantome (avec aucune action)
+				addHistory(p_redo, p_courant, -2);
+				break;
+
+			//Touche r : Supprimer la derniere lut
+			case 'r' :
+				p_courant->p_llut = removeLut(p_courant->p_llut, p_courant->p_llut->l_tail->id);
+				recupImg(ph, p_courant);
+				addHistory(ph, p_courant, 6);
 				break;
 
 			//Touche Escape : fin du programme
@@ -613,18 +765,8 @@ int main(int argc, char** argv) {
 				printf("Touche non attribuer\n");
 		}
 		
-		//Si switchCalque = 0 (mode image final)
-		if(switchCalque == 0) {
-			fusionCalque(pc, pf); //Fusion des calques
-			histo = createHistogramme(pf, canal); //Redefinition de l'histogramme
-			actualiseImage(pf->tabPixel); //Actualiser l'image
-		}
-		//Sinon (mode calque courant)
-		else {
-			calqueCourant(p_courant, pic); //Application des effets sur le calque courant
-			histo = createHistogramme(pic, canal); //Redefinition de l'histogramme
-			actualiseImage(pic->tabPixel); //Actualiset l'image
-		}
+		//Actualisation de l'image
+		ACTIONActualisation();
 
 	}
 
@@ -635,11 +777,6 @@ int main(int argc, char** argv) {
 			//Touche F1 : Afficher l'aide
 			case GLUT_KEY_F1 :
 				help();
-				break;
-
-			//Touche F2 : Afficher la liste de luts du calque courant
-			case GLUT_KEY_F2 :
-				afficheLLut(p_courant->p_llut);
 				break;
 
 			//Touche FLECHE BAS : Aller sur le calque précédent
@@ -673,9 +810,11 @@ int main(int argc, char** argv) {
 				else {
 					p_courant->opacity -= 0.1; //Diminuer de 0.1 l'opacite de calque
 					printf("Opacite : %f\n", p_courant->opacity);
+					//Ajout de l'action dans l'historique
+					addHistory(ph, p_courant, 2);
+					//Actualisation de l'image
+					ACTIONActualisation();
 				}
-				//Ajout de l'action dans l'historique
-				addHistory(ph, p_courant, 2);
 				break;
 
 			//Touche FLECHE DE DROITE : Augmente l'opacite du calque
@@ -686,27 +825,16 @@ int main(int argc, char** argv) {
 				else {
 					p_courant->opacity += 0.1; //Augmente de 0.1 l'opacite de calque
 					printf("Opacite : %f\n", p_courant->opacity); 
+					//Ajout de l'action dans l'historique
+					addHistory(ph, p_courant, 2);
+					//Actualisation de l'image
+					ACTIONActualisation();
 				}
-				//Ajout de l'action dans l'historique
-				addHistory(ph, p_courant, 2);
 				break;
 
 			//Les autres touches
 			default :
 				printf("Touche non attribuer\n");
-		}
-
-		//Si switchCalque = 0 (mode image final)
-		if(switchCalque == 0) {
-			fusionCalque(pc, pf); //Fusion des calques
-			histo = createHistogramme(pf, canal); //Redefinition de l'histogramme
-			actualiseImage(pf->tabPixel); //Actualiser l'image
-		}
-		//Sinon (mode calque courant)
-		else {
-			calqueCourant(p_courant, pic); //Application des effets sur le calque courant
-			histo = createHistogramme(pic, canal); //Redefinition de l'histogramme
-			actualiseImage(pic->tabPixel); //Actualiset l'image
 		}
 
 	}
@@ -778,14 +906,20 @@ int main(int argc, char** argv) {
 					//bt Ajout de calque avec sans image
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.79)) && y < (heightWin-(heightWin*0.74)) ) {
 						ACTIONaddCalqueImg();
+						//Actualisation de l'image
+						ACTIONActualisation();
 					}
 					//bt Ajout de calque avec une Image	
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.74)) && y < (heightWin-(heightWin*0.69)) ) {
 						ACTIONaddCalqueVide();
+						//Actualisation de l'image
+						ACTIONActualisation();
 					}
 					//bt Suppression du calque courrent
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.69)) && y < (heightWin-(heightWin*0.64)) ) {
 						ACTIONdelCurrentLayer();
+						//Actualisation de l'image
+						ACTIONActualisation();
 					}
 					//bt modification de l'opacité
 					//diminution (bt -)
@@ -796,6 +930,8 @@ int main(int argc, char** argv) {
 						else {
 							p_courant->opacity -= 0.1; //Diminuer de 0.1 l'opacite de calque
 							printf("Opacite : %f\n", p_courant->opacity);
+							//Actualisation de l'image
+							ACTIONActualisation();
 						}
 						//Ajout de l'action dans l'historique
 						addHistory(ph, p_courant, 2);				
@@ -807,7 +943,9 @@ int main(int argc, char** argv) {
 							printf("Opacite est dejà à 100\n");
 						else {
 							p_courant->opacity += 0.1; //Augmente de 0.1 l'opacite de calque
-							printf("Opacite : %f\n", p_courant->opacity); 
+							printf("Opacite : %f\n", p_courant->opacity);
+							//Actualisation de l'image
+							ACTIONActualisation(); 
 						}
 						//Ajout de l'action dans l'historique
 						addHistory(ph, p_courant, 2);
@@ -815,6 +953,8 @@ int main(int argc, char** argv) {
 					//remplir le calque d'une couleur unie
 					if (x > (widthWin*0.74)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.54)) && y < (heightWin-(heightWin*0.49)) ) {
 						ACTIONlayerColor();
+						//Actualisation de l'image
+						ACTIONActualisation();
 					}
 					// changer le mode d'opération du calque
 					// addition 0
@@ -824,6 +964,8 @@ int main(int argc, char** argv) {
 						modifMix(p_courant, mix);
 						//Ajout de l'action dans l'historique
 						addHistory(ph, p_courant, 3);
+						//Actualisation de l'image
+						ACTIONActualisation();
 					}
 					// multiplication 1
 					if (x > (widthWin*0.92)  && x < (widthWin*0.96) && y > (heightWin-(heightWin*0.48)) && y < (heightWin-(heightWin*0.43)) ) {
@@ -831,24 +973,13 @@ int main(int argc, char** argv) {
 						//Modification du mode d'operation du calque
 						modifMix(p_courant, mix);
 						//Ajout de l'action dans l'historique
-						addHistory(ph, p_courant, 3);					
+						addHistory(ph, p_courant, 3);	
+						//Actualisation de l'image
+						ACTIONActualisation();				
 					}
 				}
 			}
 		}
-
-		//Si switchCalque = 0 (mode image final)
-        if(switchCalque == 0) {
-           fusionCalque(pc, pf); //Fusion des calques
-           histo = createHistogramme(pf, canal); //Redefinition de l'histogramme
-           actualiseImage(pf->tabPixel); //Actualiser l'image
-        }
-  	 	//Sinon (mode calque courant)
-		else {
-           calqueCourant(p_courant, pic); //Application des effets sur le calque courant
-           histo = createHistogramme(pic, canal); //Redefinition de l'histogramme
-           actualiseImage(pic->tabPixel); //Actualiset l'image 		
-       	}
 
 	}
 
@@ -859,10 +990,12 @@ int main(int argc, char** argv) {
 	fixeFonctionClicSouris(clickMouse);
 
 	//Affichage des dessins (histogramme, boutons)
-	//fixeFonctionDessin(mondessin);
+	fixeFonctionDessin(drawMain);
 
+	//Application des lut s'il y en a qui sont passée en argument
+	fristLut();
 	//Fusion des calques
-	fusionCalque(pc, pf);
+	pf = fusionCalque(pc);
 	//Creation de l'histogramme
 	histo = createHistogramme(pf, 0);
 	//Création d'un element de l'historique redo fantome (avec aucune action)
