@@ -108,7 +108,10 @@ int main(int argc, char** argv) {
 				if(strcmp(argv[i], "INVERT") == 0) {
 
 					invert(p_courant->p_llut);
+					//Ajout de l'action dans l'historique
 					addHistory(ph, p_courant, 5);
+					//Création d'un element de l'historique redo fantome (avec aucune action)
+					addHistory(p_redo, p_courant, -2);
 
 				}
 				else if(strcmp(argv[i], "BW") == 0) {
@@ -132,7 +135,10 @@ int main(int argc, char** argv) {
 					}
 
 					addLum(p_courant->p_llut, intensite);
+					//Ajout de l'action dans l'historique
 					addHistory(ph, p_courant, 5);
+					//Création d'un element de l'historique redo fantome (avec aucune action)
+					addHistory(p_redo, p_courant, -2);
 				}
 				else if(strcmp(argv[i], "DIMLUM") == 0) {
 
@@ -149,7 +155,10 @@ int main(int argc, char** argv) {
 					}
 
 					dimLum(p_courant->p_llut, intensite);
+					//Ajout de l'action dans l'historique
 					addHistory(ph, p_courant, 5);
+					//Création d'un element de l'historique redo fantome (avec aucune action)
+					addHistory(p_redo, p_courant, -2);
 				}
 				else if(strcmp(argv[i], "ADDCON") == 0) {
 			
@@ -166,7 +175,10 @@ int main(int argc, char** argv) {
 					}
 
 					addContraste(p_courant->p_llut, intensite);
+					//Ajout de l'action dans l'historique
 					addHistory(ph, p_courant, 5);
+					//Création d'un element de l'historique redo fantome (avec aucune action)
+					addHistory(p_redo, p_courant, -2);
 				}
 				else if(strcmp(argv[i], "DIMLUM") == 0) {
 
@@ -183,7 +195,18 @@ int main(int argc, char** argv) {
 					}
 
 					dimContraste(p_courant->p_llut, intensite);
+					//Ajout de l'action dans l'historique
 					addHistory(ph, p_courant, 5);
+					//Création d'un element de l'historique redo fantome (avec aucune action)
+					addHistory(p_redo, p_courant, -2);
+				}
+				else if(strcmp(argv[i], "SEPIA") == 0) {
+
+					sepia(p_courant->p_llut, p_courant->image_src);
+					//Ajout de l'action dans l'historique
+					addHistory(ph, p_courant, 5);
+					//Création d'un element de l'historique redo fantome (avec aucune action)
+					addHistory(p_redo, p_courant, -2);
 				}
 				else {
 					printf("Erreur de lut\n Fin du programme\n");
@@ -825,8 +848,6 @@ int main(int argc, char** argv) {
 					printf("Opacite : %f\n", p_courant->opacity);
 					//Ajout de l'action dans l'historique
 					addHistory(ph, p_courant, 2);
-					//Actualisation de l'image
-					ACTIONActualisation();
 				}
 				break;
 
@@ -840,8 +861,6 @@ int main(int argc, char** argv) {
 					printf("Opacite : %f\n", p_courant->opacity); 
 					//Ajout de l'action dans l'historique
 					addHistory(ph, p_courant, 2);
-					//Actualisation de l'image
-					ACTIONActualisation();
 				}
 				break;
 
@@ -849,6 +868,9 @@ int main(int argc, char** argv) {
 			default :
 				printf("Touche non attribuer\n");
 		}
+
+		//Actualisation de l'image
+		ACTIONActualisation();
 
 	}
 
@@ -1104,6 +1126,8 @@ int main(int argc, char** argv) {
 						else {
 							p_courant = p_courant->p_prev; //Le calque courant devient le calque précédent
 							printf("ID calque courant : %d \n", p_courant->id);
+							//Actualisation de l'image
+							ACTIONActualisation();
 						}
 					}			
 					// navigation calque suivant
@@ -1114,6 +1138,8 @@ int main(int argc, char** argv) {
 						else {
 							p_courant = p_courant->p_next; //Le calque courant devient le calque suivant
 							printf("ID calque courant : %d \n", p_courant->id);
+							//Actualisation de l'image
+							ACTIONActualisation();
 						}					
 					}
 					//bt Ajout de calque avec sans image

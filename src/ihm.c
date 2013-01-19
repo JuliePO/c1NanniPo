@@ -8,9 +8,6 @@
 #include "historique.h"
 #include "histogramme.h"
 
-
-
-
 void drawMain() {	
 
 	/*header main-menu*/

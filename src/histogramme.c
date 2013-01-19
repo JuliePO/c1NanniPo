@@ -144,21 +144,6 @@ void SaveHisto(Histogramme* histo, char* name) {
 	
 }
 
-/*void main(void) {
-
-	Image image;
-	Image* p = &image;
-	char name[]="../images/daisuke.ppm";
-	openImg(p, name);
-
-	Histogramme* histo;
-
-	histo = createHistogramme(p, 2);
-
-	char name2[]="../images/histo.ppm";
-	SaveHisto(histo, name2);
-}*/
-
 /********* Calcule de la valeur maximal de l'histogramme ************/
 int maxHisto(Image* img, Histogramme* histo) {
 	int i, maxValueH = 0;
