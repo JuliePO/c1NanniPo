@@ -52,8 +52,24 @@ Pour installer le programme suivez les consignes suivantes (si vous vous trouvez
 
 3 - Retourner à la racine du projet et lancer le programme :
 
+		$ cd ..
 		$ ./bin/imagimp images/votreimage.ppm 
 		(remplacer votreimage par le nom de votre image)
+
+		Vous pouvez appliquer des effets sur l'image pour cela il suffit de rajouter informations suivantes juste après l'adresse de votre image :
+
+		1) INVERT : inverser les couleurs de l'image
+		2) BW : Mettre en noir et blanc
+		3) ADDLUM 10 : Augmenter la luminosité de 10 (remplacer 10 par le nombre que vous souhaitez)
+		4) DIMLUM 10 : Diminuer la luminosité de 10 (remplacer 10 par le nombre que vous souhaitez)
+		5) ADDCON 10 : Augmenter le contraste de 10 (remplacer 10 par le nombre que vous souhaitez)
+		6) DIMCON 10 : Diminuer le contraste de 10 (remplacer 10 par le nombre que vous souhaitez)
+		7) SEPIA : Effet sepia
+
+		Par exemple pour inverser les couleurs de l'image et augmenter la luminosite de l'image de 10 il faut écrire :
+
+		$ ./bin/imagimp images/votreimage.ppm INVERT ADDLUM 10
+		
 
 Si vous rencontrez cette erreur lors de l'exécution de votre programme :
 

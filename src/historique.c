@@ -141,87 +141,6 @@ int addHistory (LHistorique* pile, Calque* p_courant, int action) {
 	}
 }
 
-/*void main (void) {
-
-	LHistorique historique;
-	LHistorique* ph = &historique;
-	ph = initHistory();
-
-	LCalque calque;
-	LCalque* pc = &calque;
-	pc = new_LCalque();
-
-	Image image;
-	Image* p = &image;
-	char name[]="../images/image.ppm";
-	openImg(p, name);
-
-	pc = addCalqueImg(pc, 0, 0, p);
-	addHistory(ph, pc, 0, 0);
-
-	pc = addCalque(pc, 0, 0);
-	addHistory(ph, pc, 1, 0);
-
-	pc = addCalque(pc, 0, 1);
-	addHistory(ph, pc, 2, 0);
-
-	modifMix(pc, 0, 1);
-	addHistory(ph, pc, 0, 3);
-
-	modifOpacity(pc, 0, 0.55);
-	addHistory(ph, pc, 0, 2);
-
-	modifOpacity(pc, 1, 1);
-	addHistory(ph, pc, 1, 2);
-
-	pc = removeCalque(pc, 2);
-	addHistory(ph, pc, 2, 1);
-
-	if (pc != NULL)
-	    {
-		Calque *p_temp = pc->p_head;
-
-		printf("\n\nListe des calques : \n\n");
-
-		while (p_temp != NULL)
-		{
-			printf("Opacite : %f\n", p_temp->opacity);
-			printf("ID : %d\n", p_temp->id);
-			printf("\n");
-		    fflush(stdout);
-		    p_temp = p_temp->p_next;
-		}
-
-		printf("\n\n");
-	    }
-
-
-	AfficheHistory(ph);
-
-	cancelHistory(ph, pc);
-
-	if (pc != NULL)
-	    {
-		Calque *p_temp = pc->p_head;
-
-		printf("\n\nListe des calques : \n\n");
-
-		while (p_temp != NULL)
-		{
-			printf("Opacite : %f\n", p_temp->opacity);
-			printf("ID : %d\n", p_temp->id);
-			printf("\n");
-		    fflush(stdout);
-		    p_temp = p_temp->p_next;
-		}
-
-		printf("\n\n");
-	    }
-
-	AfficheHistory(ph);
-
-	printf("\n");
-}*/
 
 /******** Afficher l'historique *******/
 void AfficheHistory (LHistorique* pile) {
@@ -568,7 +487,6 @@ void removeHistory (LHistorique* pile) {
 		while(pile->head != NULL){
 
 			Historique* event = pile->head;
-			freeTabImg(event->calqueH->image_src);
 			removeLLut(event->calqueH->p_llut);
 			free(event->calqueH);
 			pile->head = event->prev;

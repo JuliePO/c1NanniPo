@@ -27,6 +27,14 @@ all: $(BIN)
 $(BIN):$(OBJ)
 	@$(CC) -I$(INC) -o $@ $^ -fPIC -L$(LIBDIR) $(LDFLAGS) 
 	@echo "Compilation OK"
+	@echo "\n\nVous pouvez appliquer des effets sur l'image pour cela il suffit de rajouter informations suivantes juste après l'adresse de votre image :\n"
+	@echo "1) INVERT : inverser les couleurs de l'image\n"
+	@echo "2) BW : Mettre en noir et blanc"
+	@echo "3) ADDLUM 10 : Augmenter la luminosité de 10 (remplacer 10 par le nombre que vous souhaitez)\n"
+	@echo "4) DIMLUM 10 : Diminuer la luminosité de 10 (remplacer 10 par le nombre que vous souhaitez)\n"
+	@echo "5) ADDCON 10 : Augmenter le contraste de 10 (remplacer 10 par le nombre que vous souhaitez)\n"
+	@echo "6) DIMCON 10 : Diminuer le contraste de 10 (remplacer 10 par le nombre que vous souhaitez)\n"
+	@echo "7) SEPIA : Effet sepia"
 	@echo "\n\nPour executer le programme taper: $(BIN)$  images/votre_images.ppm\n\n"
 
 $(DIR_OBJ)/main.o: $(OBJ_MAIN)
