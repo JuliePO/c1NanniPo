@@ -614,9 +614,9 @@ void invert(LLut* p_llut) {
 		addLUT(p_llut,new_lut);
 		int i;
 	   	for (i=0; i<256; i++) {
-	   		new_lut->tabLutR[i] = 255-new_lut->tabLutR[i];
-	   		new_lut->tabLutV[i] = 255-new_lut->tabLutV[i];
-	   		new_lut->tabLutB[i] = 255-new_lut->tabLutB[i];
+	   		new_lut->tabLutR[i] = 255-i;
+	   		new_lut->tabLutV[i] = 255-i;
+	   		new_lut->tabLutB[i] = 255-i;
 	   	}
 	}
 	else {

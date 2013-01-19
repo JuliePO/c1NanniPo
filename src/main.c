@@ -881,6 +881,14 @@ int main(int argc, char** argv) {
 					menu=3;
 				}
 
+				/******** Sous menu lut *************/
+
+
+				if (menu == 1) {
+
+				}
+
+
 				/******** Sous menu calque *************/
 
 				if (menu == 2) {
@@ -976,6 +984,18 @@ int main(int argc, char** argv) {
 						addHistory(ph, p_courant, 3);	
 						//Actualisation de l'image
 						ACTIONActualisation();				
+					}
+
+					/**** Sous menu de l'historique******/
+					if(menu==3){
+						if (x > (widthWin*0.68)  && x < (widthWin*0.92) && y > (heightWin-(heightWin*0.14)) && y < (heightWin-(heightWin*0.09)) ) {
+							//Récupere l'adresse de l'image
+							printf("\nEntrez l'adresse de l'image (images/votre_image.ppm) : ");
+							scanf("%s", adressH);			
+							//Sauvegarde de l'histogramme
+							SaveHisto(histo, adressH);
+						}
+
 					}
 				}
 			}
