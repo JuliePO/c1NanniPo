@@ -11,6 +11,7 @@
 
 /************* Appel des fonctions *************/
 void drawMain();
+void drawSwitchF();
 void drawMenuLayer();
 void drawMenuHistogramme();
 void drawMenuLut();

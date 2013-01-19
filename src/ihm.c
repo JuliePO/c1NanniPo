@@ -37,16 +37,23 @@ void drawMain() {
 	// navigation dans l'historique
 	//style btn undo/redo
 	fixeCouleur(0.20,0.20,0.20);
-	drawCarre(0.195,h1,0.28,h2); // bg undo
-	drawCarre(0.28,h1,0.40,h2); // bg historique
-	drawCarre(0.40,h1,0.48,h2); // bg redo
+	drawCarre(0.185,h1,0.27,h2); // bg undo
+	drawCarre(0.27,h1,0.39,h2); // bg historique
+	drawCarre(0.39,h1,0.47,h2); // bg redo
 	fixeCouleur(1,1,1);
-	drawCarreVide(0.195,h1,0.28,h2);// gauche, bas, droite, haut
-	writeString(0.20,ht,"<- Undo");
-	drawCarreVide(0.28,h1,0.40,h2);// gauche, bas, droite, haut
-	writeString(0.29,ht,"Historique");
-	drawCarreVide(0.40,h1,0.48,h2);// gauche, bas, droite, haut
-	writeString(0.41,ht,"Redo ->");
+	drawCarreVide(0.185,h1,0.27,h2);// gauche, bas, droite, haut
+	writeString(0.19,ht,"<- Undo");
+	drawCarreVide(0.27,h1,0.39,h2);// gauche, bas, droite, haut
+	writeString(0.28,ht,"Historique");
+	drawCarreVide(0.39,h1,0.47,h2);// gauche, bas, droite, haut
+	writeString(0.40,ht,"Redo ->");
+	
+	// switch entre l'image courante et l'image finale
+	fixeCouleur(0.10,0.10,0.30);
+	drawCarre(0.49,h1,0.63,h2);// gauche, bas, droite, haut
+	fixeCouleur(1,1,1);
+	drawCarreVide(0.49,h1,0.63,h2);// gauche, bas, droite, haut
+	writeString(0.50,ht,"Img Courante");
 
 	// navigation entre les sous menus
 	fixeCouleur(0.20,0.20,0.20);
@@ -67,6 +74,72 @@ void drawMain() {
 
 
 }
+
+void drawSwitchF() {
+		/*header main-menu*/
+	// variable: h1 : hauteur du bas, h2 : hauteur du haut, ht : hauteur du text
+	float h1,h2,ht;
+	h1 = 0.92;
+	h2 = 0.97;
+	ht = 0.94;
+
+	fixeCouleur(0,0,0.6);
+
+	drawCarre(0,0.895,1,1); //background bleu
+	//style button quitter
+	fixeCouleur(0.78,0.10,0.234);
+	drawCarre(0.02,h1,0.05,h2);
+	fixeCouleur(163,163,163);
+	drawCarreVide(0.02,h1,0.05,h2);// gauche, bas, droite, haut
+	writeString(0.03,ht,"X");
+
+	//style btn sauvegarder
+	fixeCouleur(0.30,0.30,0.30);
+	drawCarre(0.07,h1,0.16,h2);
+	fixeCouleur(163,163,163);
+	drawCarreVide(0.07,h1,0.16,h2);// gauche, bas, droite, haut
+	writeString(0.08,ht,"Sauver");
+
+	// navigation dans l'historique
+	//style btn undo/redo
+	fixeCouleur(0.20,0.20,0.20);
+	drawCarre(0.185,h1,0.27,h2); // bg undo
+	drawCarre(0.27,h1,0.39,h2); // bg historique
+	drawCarre(0.39,h1,0.47,h2); // bg redo
+	fixeCouleur(1,1,1);
+	drawCarreVide(0.185,h1,0.27,h2);// gauche, bas, droite, haut
+	writeString(0.19,ht,"<- Undo");
+	drawCarreVide(0.27,h1,0.39,h2);// gauche, bas, droite, haut
+	writeString(0.28,ht,"Historique");
+	drawCarreVide(0.39,h1,0.47,h2);// gauche, bas, droite, haut
+	writeString(0.40,ht,"Redo ->");
+	
+	// switch entre l'image courante et l'image finale
+	fixeCouleur(0.10,0.10,0.80);
+	drawCarre(0.49,h1,0.63,h2);// gauche, bas, droite, haut
+	fixeCouleur(1,1,1);
+	drawCarreVide(0.49,h1,0.63,h2);// gauche, bas, droite, haut
+	writeString(0.50,ht,"Img Finale");
+
+	// navigation entre les sous menus
+	fixeCouleur(0.20,0.20,0.20);
+	drawCarre(0.65,h1,0.75,h2); // bg effets
+	drawCarre(0.75,h1,0.85,h2); // bg Calques
+	drawCarre(0.85,h1,0.975,h2); // bg histogramme
+	fixeCouleur(1,1,1);
+	drawCarreVide(0.65,h1,0.75,h2);// gauche, bas, droite, haut
+	writeString(0.66,ht,"Effets");
+	drawCarreVide(0.75,h1,0.85,h2);// gauche, bas, droite, haut
+	writeString(0.76,ht,"Calques");
+	drawCarreVide(0.85,h1,0.975,h2);// gauche, bas, droite, haut
+	writeString(0.86,ht,"Histogramme");
+
+	// bg sous-menu
+	fixeCouleur(0.2,0.2,0.2);
+	drawCarre(0.62,0,1,0.895);
+
+}
+
 void drawMenuLayer() {
 	
 	drawMain();

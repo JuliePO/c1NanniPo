@@ -900,23 +900,39 @@ int main(int argc, char** argv) {
 
 				/***Gestion de l'historique**/
 				// bt Undo
-				if (x > (widthWin*0.195)  && x < (widthWin*0.28) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+				if (x > (widthWin*0.185)  && x < (widthWin*0.27) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
 					cancelHistory(ph, pc, p_redo);
 					ACTIONActualisation();
 
 				}
 				// bt Afficher l'historique
-				if (x > (widthWin*0.28)  && x < (widthWin*0.40) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+				if (x > (widthWin*0.27)  && x < (widthWin*0.39) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
 					AfficheHistory(ph);
 
 				}
 				// bt Redo
-				if (x > (widthWin*0.40)  && x < (widthWin*0.48) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+				if (x > (widthWin*0.39)  && x < (widthWin*0.47) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
 					redoHistory (p_redo, pc, ph);
 					ACTIONActualisation();
 
 				}
 
+				/***Switch image courante/finale***/
+				// bt img courante
+				if (x > (widthWin*0.49)  && x < (widthWin*0.63) && y > (heightWin-(heightWin*0.97)) && y < (heightWin-(heightWin*0.92)) ) {
+					if(switchCalque == 0) {
+						switchCalque = 1;
+						fixeFonctionDessin(drawSwitchF);
+					}
+					//Sinon ça veut dire que le mode de vue est en mode calque courant donc change en mode image final
+					else {
+						switchCalque = 0;
+						fixeFonctionDessin(drawMain);
+					}					
+					ACTIONActualisation();
+				}
+
+				// bt img finale
 
 				/***menu principal***/
 				// bt menu lut
